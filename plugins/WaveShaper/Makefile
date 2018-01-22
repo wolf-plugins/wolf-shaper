@@ -14,13 +14,11 @@ NAME = spoonie-waveshaper
 
 OBJS_DSP = \
 	Structures/src/Graph.cpp.o \
-	WaveShaperPlugin.cpp.o \
-	Filter.cpp.o \
+	WaveShaperPlugin.cpp.o
 
 OBJS_UI  = \
 	Structures/src/Graph.cpp.o \
-	WaveShaperUI.cpp.o \
-	DistrhoArtworkNekobi.cpp.o
+	WaveShaperUI.cpp.o
 
 # --------------------------------------------------------------
 # Do some magic
