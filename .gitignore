@@ -1,0 +1,16 @@
+CMakeCache.txt
+CMakeFiles
+CMakeScripts
+Testing
+Makefile
+cmake_install.cmake
+install_manifest.txt
+.vscode
+b
+build_windows
+test
+compile_commands.json
+CTestTestfile.cmake
+bin
+*.kdev4 
+.kdev4
