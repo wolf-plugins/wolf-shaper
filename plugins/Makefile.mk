@@ -80,6 +80,7 @@ all:
 
 clean:
 	rm -f *.d *.o
+	rm -f Structures/src/*.d Structures/src/*.o
 	rm -rf $(TARGET_DIR)/$(NAME) $(TARGET_DIR)/$(NAME)-* $(TARGET_DIR)/$(NAME).lv2/
 
 # --------------------------------------------------------------
