@@ -33,18 +33,18 @@ class StandaloneWindow;
 
 class Window
 {
-  public:
-    /**
+public:
+#ifndef DGL_FILE_BROWSER_DISABLED
+   /**
       File browser options.
     */
-    struct FileBrowserOptions
-    {
-        const char *startDir;
-        const char *title;
+    struct FileBrowserOptions {
+        const char* startDir;
+        const char* title;
         uint width;
         uint height;
 
-        /**
+      /**
          File browser buttons.
 
          0 means hidden.
@@ -72,6 +72,7 @@ class Window
               height(0),
               buttons() {}
     };
+#endif // DGL_FILE_BROWSER_DISABLED
 
     explicit Window(Application &app);
     explicit Window(Application &app, Window &parent);
@@ -86,7 +87,9 @@ class Window
     void focus();
     void repaint() noexcept;
 
-    bool openFileBrowser(const FileBrowserOptions &options);
+#ifndef DGL_FILE_BROWSER_DISABLED
+    bool openFileBrowser(const FileBrowserOptions& options);
+#endif
 
     bool isVisible() const noexcept;
     void setVisible(bool yesNo);
@@ -123,7 +126,9 @@ class Window
     virtual void onReshape(uint width, uint height);
     virtual void onClose();
 
-    virtual void fileBrowserSelected(const char *filename);
+#ifndef DGL_FILE_BROWSER_DISABLED
+    virtual void fileBrowserSelected(const char* filename);
+#endif
 
   private:
     struct PrivateData;

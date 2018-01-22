@@ -1,6 +1,6 @@
 /*
  * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2016 Filipe Coelho <falktx@falktx.com>
+ * Copyright (C) 2012-2018 Filipe Coelho <falktx@falktx.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
@@ -15,8 +15,11 @@
  */
 
 #include "../NanoVG.hpp"
-#include "Resources.hpp"
 #include "WidgetPrivateData.hpp"
+
+#ifndef DGL_NO_SHARED_RESOURCES
+# include "Resources.hpp"
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -895,6 +898,7 @@ int NanoVG::textBreakLines(const char* string, const char* end, float breakRowWi
     return 0;
 }
 
+#ifndef DGL_NO_SHARED_RESOURCES
 void NanoVG::loadSharedResources()
 {
     if (nvgFindFont(fContext, NANOVG_DEJAVU_SANS_TTF) >= 0)
@@ -904,6 +908,7 @@ void NanoVG::loadSharedResources()
 
     nvgCreateFontMem(fContext, NANOVG_DEJAVU_SANS_TTF, (const uchar*)dejavusans_ttf, dejavusans_ttf_size, 0);
 }
+#endif
 
 // -----------------------------------------------------------------------
 
@@ -972,8 +977,18 @@ END_NAMESPACE_DGL
 
 #undef final
 
+#if defined(__GNUC__) && (__GNUC__ >= 6)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wmisleading-indentation"
+# pragma GCC diagnostic ignored "-Wshift-negative-value"
+#endif
+
 extern "C" {
 #include "nanovg/nanovg.c"
 }
+
+#if defined(__GNUC__) && (__GNUC__ >= 6)
+# pragma GCC diagnostic pop
+#endif
 
 // -----------------------------------------------------------------------

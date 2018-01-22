@@ -1,6 +1,6 @@
 /*
  * DISTRHO Plugin Framework (DPF)
- * Copyright (C) 2012-2016 Filipe Coelho <falktx@falktx.com>
+ * Copyright (C) 2012-2018 Filipe Coelho <falktx@falktx.com>
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
  * or without fee is hereby granted, provided that the above copyright notice and this
@@ -25,6 +25,11 @@
 
 #include "pugl/pugl.h"
 
+#if defined(__GNUC__) && (__GNUC__ >= 7)
+# pragma GCC diagnostic push
+# pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#endif
+
 #if defined(DISTRHO_OS_WINDOWS)
 #include "pugl/pugl_win.cpp"
 #elif defined(DISTRHO_OS_MAC)
@@ -35,6 +40,10 @@
 extern "C" {
 #include "pugl/pugl_x11.c"
 }
+#endif
+
+#if defined(__GNUC__) && (__GNUC__ >= 7)
+# pragma GCC diagnostic pop
 #endif
 
 #include "ApplicationPrivateData.hpp"
@@ -126,11 +135,14 @@ struct Window::PrivateData
 #if defined(DISTRHO_OS_WINDOWS)
         // TODO
 #elif defined(DISTRHO_OS_MAC)
-        // TODO
-        //[parentImpl->window orderWindow:NSWindowBelow relativeTo:[[mView window] windowNumber]];
+        [parentImpl->window orderWindow:NSWindowBelow relativeTo:[[mView window] windowNumber]];
 #else
         XSetTransientForHint(xDisplay, xWindow, parentImpl->win);
 #endif
+        return;
+
+        // maybe unused
+        (void)parentImpl;
     }
 
     PrivateData(Application &app, Window *const self, const intptr_t parentId)
@@ -201,7 +213,9 @@ struct Window::PrivateData
         puglSetSpecialFunc(fView, onSpecialCallback);
         puglSetReshapeFunc(fView, onReshapeCallback);
         puglSetCloseFunc(fView, onCloseCallback);
+#ifndef DGL_FILE_BROWSER_DISABLED
         puglSetFileSelectedFunc(fView, fileBrowserSelectedCallback);
+#endif
 
         puglCreateWindow(fView, nullptr);
 
@@ -637,10 +651,17 @@ struct Window::PrivateData
 
     void setTransientWinId(const uintptr_t winId)
     {
+        DISTRHO_SAFE_ASSERT_RETURN(winId != 0,);
+
 #if defined(DISTRHO_OS_WINDOWS)
     // TODO
 #elif defined(DISTRHO_OS_MAC)
-    // TODO
+        NSWindow* const window = [NSApp windowWithWindowNumber:winId];
+        DISTRHO_SAFE_ASSERT_RETURN(window != nullptr,);
+
+        [window addChildWindow:mWindow
+                       ordered:NSWindowAbove];
+        [mWindow makeKeyWindow];
 #else
         XSetTransientForHint(xDisplay, xWindow, static_cast<::Window>(winId));
 #endif
@@ -1052,10 +1073,12 @@ struct Window::PrivateData
         handlePtr->onPuglClose();
     }
 
-    static void fileBrowserSelectedCallback(PuglView *view, const char *filename)
+#ifndef DGL_FILE_BROWSER_DISABLED
+    static void fileBrowserSelectedCallback(PuglView* view, const char* filename)
     {
         handlePtr->fSelf->fileBrowserSelected(filename);
     }
+#endif
 
 #undef handlePtr
 
@@ -1115,7 +1138,8 @@ void Window::repaint() noexcept
 //     (void)name;
 // }
 
-bool Window::openFileBrowser(const FileBrowserOptions &options)
+#ifndef DGL_FILE_BROWSER_DISABLED
+bool Window::openFileBrowser(const FileBrowserOptions& options)
 {
 #ifdef SOFD_HAVE_X11
     using DISTRHO_NAMESPACE::String;
@@ -1180,6 +1204,7 @@ bool Window::openFileBrowser(const FileBrowserOptions &options)
     return false;
 #endif
 }
+#endif
 
 bool Window::isVisible() const noexcept
 {
@@ -1310,10 +1335,7 @@ void Window::onClose()
 {
 }
 
-//fork---------
 
-void Window::showCursor()
-{
 #if defined(DISTRHO_OS_WINDOWS)
     while(ShowCursor(true) < 0);
 
@@ -1356,9 +1378,12 @@ void Window::setCursorPos(int x, int y)
 
 //end fork------
 
+
+#ifndef DGL_FILE_BROWSER_DISABLED
 void Window::fileBrowserSelected(const char *)
 {
 }
+#endif
 
 bool Window::handlePluginKeyboard(const bool press, const uint key)
 {
