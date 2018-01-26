@@ -4,7 +4,7 @@
 namespace spoonie
 {
 template <typename T,
-typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
+          typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
 T clamp(const T &value, const T &min, const T &max)
 {
     return std::max(min, std::min(value, max));

@@ -40,7 +40,7 @@ class WaveShaper : public Plugin
 	};
 
 	WaveShaper()
-		: Plugin(paramCount, 2, 1)
+		: Plugin(paramCount, 0, 1)
 	{
 		parameters[paramPreGain] = 1.0f;
 		parameters[paramWet] = 1.0f;
@@ -154,32 +154,6 @@ class WaveShaper : public Plugin
 		parameters[index] = value;
 	}
 
-	void initProgramName(uint32_t index, String &programName) override
-	{
-		switch (index)
-		{
-		case 0:
-			programName = "Default";
-			break;
-		case 1:
-			programName = "Custom";
-			break;
-		}
-	}
-
-	void loadProgram(uint32_t index) override
-	{
-		switch (index)
-		{
-		case 0:
-			lineEditor->rebuildFromString("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
-			break;
-		case 1:
-			lineEditor->rebuildFromString("0X0P+0,0X1P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
-			break;
-		}
-	}
-
 	void initState(uint32_t index, String &stateKey, String &defaultStateValue) override
 	{
 		switch (index)
@@ -191,17 +165,6 @@ class WaveShaper : public Plugin
 
 		//fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, spoonie::CurveType::Exponential, 1.0f, 1.0f, 0.0f, spoonie::CurveType::Exponential);
 		defaultStateValue = String("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
-	}
-
-	String getState(const char *key) const override
-	{
-		static const String sFalse("false");
-
-		if (std::strcmp(key, "graph") == 0) { 
-			return String(lineEditor->serialize());
-		}
-
-		return sFalse;
 	}
 
 	void setState(const char *key, const char *value) override

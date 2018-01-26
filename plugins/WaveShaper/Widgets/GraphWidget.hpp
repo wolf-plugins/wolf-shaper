@@ -5,7 +5,9 @@
 #include "Window.hpp"
 
 #include "Graph.hpp"
-#include "VertexWidget.hpp"
+
+#include "GeometricalWidgets.hpp"
+#include "Mathf.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -17,10 +19,31 @@ class GraphWidget : public NanoWidget
           ui(ui)
     {
         setSize(ui->getWidth(), ui->getHeight());
-        vertexWidget = new VertexWidget(getParentWindow(), lineEditor.getVertexAtIndex(0));
+
+        vertexWidgets[0] = spoonie::Circle(0.0f, 0.0f, absoluteVertexSize);
+        vertexWidgets[1] = spoonie::Circle(1.0f, 1.0f, absoluteVertexSize);
+    }
+
+    void rebuildFromString(const char *serializedGraph)
+    {
+        lineEditor.rebuildFromString(serializedGraph);
+    }
+
+    void updateAnimations()
+    {
     }
 
   protected:
+    void flipY() //(0,0) at the bottom-left corner makes more sense for this plugin
+    {
+        transform(1.0f, 0.0f, 0.0f, -1.0f, 0.0f, getHeight());
+        normalizeCoordinates();
+    }
+
+    void normalizeCoordinates() {
+        glTranslatef(0.0f, 0.0f, -10.0f);
+    }
+
     void drawSubGrid()
     {
     }
@@ -157,22 +180,86 @@ class GraphWidget : public NanoWidget
 
         for (float i = 0; i < 1.0f; i += iteration)
         {
-            lineTo(i * width, height - lineEditor.getValueAt(i) * height);
+            lineTo(i * width, lineEditor.getValueAt(i) * height);
         }
 
-        lineTo(width, height - lineEditor.getValueAt(1.0f) * height);
+        lineTo(width, lineEditor.getValueAt(1.0f) * height);
 
         stroke();
 
         closePath();
     }
 
+    void drawVertex(int index)
+    {
+        const spoonie::Circle vertex = vertexWidgets[index];
+
+        const float posX = vertex.x * getWidth();
+        const float posY = vertex.y * getHeight();
+
+        beginPath();
+
+        fillColor(vertex.color);
+
+        strokeWidth(2.0f);
+        strokeColor(Color(0, 0, 0, 255));
+
+        circle(posX, posY, vertex.absoluteDiameter);
+
+        fill();
+        stroke();
+
+        closePath();
+    }
+
+    void drawTensionHandle(int index)
+    {
+        const float width = 8;
+        const float height = width;
+
+        beginPath();
+
+        fillColor(Color(255, 255, 255, 255));
+
+        strokeWidth(2.0f);
+        strokeColor(Color(0, 0, 0, 255));
+
+        const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(index);
+        const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(index + 1);
+
+        const float normalizedCenterX = (vertexLeft->x + vertexRight->x) / 2.0f;
+        const float centerX = normalizedCenterX * getWidth();
+
+        const float posY = lineEditor.getValueAt(normalizedCenterX) * getHeight();
+
+        circle(centerX, posY, width);
+
+        fill();
+        stroke();
+
+        closePath();
+    }
+
+    void drawGraphVertices()
+    {
+        for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
+        {
+            drawVertex(i);
+            drawTensionHandle(i);
+        }
+
+        drawVertex(lineEditor.getVertexCount() - 1);
+    }
+
     void onNanoDisplay() override
     {
+        flipY();
+
         drawBackground();
         drawGrid();
         drawGraphLine(3.0f, Color(169, 29, 239, 255)); //outer
         //drawGraphLine(1.0f, Color(245, 112, 188, 255)); //inner
+        drawGraphVertices();
     }
 
     bool onScroll(const ScrollEvent &ev) override
@@ -187,8 +274,28 @@ class GraphWidget : public NanoWidget
         return true;
     }
 
+    void insertVertex(float x, float y)
+    {
+        vertexWidgets[lineEditor.getVertexCount()] = spoonie::Circle(x, y, absoluteVertexSize);
+        lineEditor.insertVertex(x, y);
+
+        ui->setState("graph", lineEditor.serialize());
+
+        repaint();
+    }
+
     bool leftClick(const MouseEvent &ev)
     {
+        if (ev.press)
+        {
+            mouseDown = true;
+            mouseDownLocation = ev.pos;
+        }
+        else
+        {
+            mouseDown = false;
+        }
+
         return true;
     }
 
@@ -205,12 +312,9 @@ class GraphWidget : public NanoWidget
             const float height = getHeight();
 
             const float x = spoonie::normalize(ev.pos.getX(), width);
-            const float y = spoonie::normalize(height - ev.pos.getY(), height);
+            const float y = spoonie::normalize(ev.pos.getY(), height);
 
-            lineEditor.insertVertex(x, y);
-            ui->setState("graph", lineEditor.serialize());
-
-            repaint();
+            insertVertex(x, y);
         }
         else
         {
@@ -234,11 +338,61 @@ class GraphWidget : public NanoWidget
         return false;
     }
 
+    bool pointInCircle(spoonie::Circle circle, Point<float> point)
+    {
+        const float radius = circle.absoluteDiameter;
+
+        const float x = point.getX() * getWidth();
+        const float xo = circle.x * getWidth();
+
+        const float dx = std::abs(x - xo);
+
+        if (dx > radius)
+            return false;
+
+        const float y = point.getY() * getHeight();
+        const float yo = circle.y * getHeight();
+
+        const float dy = std::abs(y - yo);
+
+        if (dy > radius)
+            return false;
+
+        if (dx + dy <= radius)
+            return true;
+
+        return dx * dx + dy * dy <= radius * radius;
+    }
+
+    bool onMotion(const MotionEvent &ev) override
+    {
+        const float x = (float)ev.pos.getX() / (float)getWidth();
+        const float y = 1.0f - (float)ev.pos.getY() / (float)getHeight();
+        const Point<float> point = Point<float>(x, y);
+
+        for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+        {
+            if (pointInCircle(vertexWidgets[i], point))
+            {
+                vertexWidgets[i].color = Color(200, 150, 150, 255);
+                repaint();
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
   private:
     bool mouseDown;
     Point<int> mouseDownLocation;
+
     spoonie::Graph lineEditor;
-    VertexWidget* vertexWidget;
+    spoonie::Circle vertexWidgets[spoonie::maxVertices];
+    spoonie::Circle tensionHandles[spoonie::maxVertices - 1];
+
+    const float absoluteVertexSize = 8.0f;
     UI *ui;
 };
 

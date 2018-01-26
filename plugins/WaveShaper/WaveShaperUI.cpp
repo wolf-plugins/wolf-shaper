@@ -35,23 +35,10 @@ class WaveShaperUI : public UI
         repaint();
     }
 
-    void programLoaded(uint32_t index) override
-    {
-        switch (index)
-        {
-        case 0:
-            break;
-        case 1:
-            break;
-        }
-
-        repaint();
-    }
-
     void stateChanged(const char *key, const char *value) override
     {
         if (std::strcmp(key, "graph") == 0)
-            lineEditor.rebuildFromString(value);
+            graphWidget.rebuildFromString(value);
 
         repaint();
     }
@@ -60,13 +47,16 @@ class WaveShaperUI : public UI
     {
     }
 
+    void uiIdle() override 
+    {
+        graphWidget.updateAnimations();
+    }
+
   private:
     bool parameters[paramCount];
 
     bool mouseDown;
     Point<int> mouseDownLocation;
-
-    spoonie::Graph lineEditor;
 
     GraphWidget graphWidget;
 

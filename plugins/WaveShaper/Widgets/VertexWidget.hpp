@@ -10,13 +10,15 @@
 class VertexWidget : public NanoWidget
 {
   public:
-    VertexWidget(Window &parent, spoonie::Vertex *vertex)
+    VertexWidget(Window &parent, uint32_t vertexId)
         : NanoWidget(parent),
-          vertex(vertex)
+          vertexId(vertexId)
     {
         setSize(18, 18);
-        setVisible(true);
+        setVisible(false);
     }
+
+    uint32_t vertexId;
 
   protected:
     void onNanoDisplay() override
@@ -41,31 +43,6 @@ class VertexWidget : public NanoWidget
         closePath();
     }
 
-    static int inCircle(Circle<int> circle, Point<int> point)
-    {
-        const int x = point.getX();
-        const int y = point.getY();
-
-        const int xo = circle.getX();
-        const int yo = circle.getY();
-        const int radius = circle.getSize();
-
-        const int dx = abs(x - xo);
-
-        if (dx > radius)
-            return false;
-
-        const int dy = abs(y - yo);
-
-        if (dy > radius)
-            return false;
-
-        if (dx + dy <= radius)
-            return true;
-
-        return dx * dx + dy * dy <= radius * radius;
-    }
-
     bool leftClick(const MouseEvent &ev)
     {
         const int width = getWidth();
@@ -79,7 +56,6 @@ class VertexWidget : public NanoWidget
 
             if (inCircle(circle, ev.pos))
             {
-                fprintf(stderr, "Click on circle widget\n");
                 getParentWindow().hideCursor();
                 repaint();
             }
@@ -89,17 +65,21 @@ class VertexWidget : public NanoWidget
             getParentWindow().showCursor();
         }
 
-        return true;
+        return false;
     }
 
     bool middleClick(const MouseEvent &ev)
     {
-        return true;
+        return false;
     }
 
     bool rightClick(const MouseEvent &ev)
     {
-        return true;
+        return false;
+    }
+
+    bool onMotion(const MotionEvent &) override
+    {
     }
 
     bool onMouse(const MouseEvent &ev) override
@@ -114,7 +94,7 @@ class VertexWidget : public NanoWidget
             return rightClick(ev);
         }
 
-        return false;
+        return true;
     }
 
   private:

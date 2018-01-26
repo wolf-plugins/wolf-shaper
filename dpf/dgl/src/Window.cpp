@@ -98,8 +98,7 @@ struct Window::PrivateData
 		xWindow(0)
 #endif
 		{
-			DBG("Creating window without parent...");
-			DBGF;
+			DBG("Creating window without parent..."); DBGF;
 			init();
 		}
 
@@ -127,8 +126,7 @@ struct Window::PrivateData
 		xWindow(0)
 #endif
 		{
-			DBG("Creating window with parent...");
-			DBGF;
+			DBG("Creating window with parent..."); DBGF;
 			init();
 
 			const PuglInternals *const parentImpl(parent.pData->fView->impl);
@@ -171,18 +169,16 @@ struct Window::PrivateData
 		{
 			if (fUsingEmbed)
 			{
-				DBG("Creating embedded window...");
-				DBGF;
+				DBG("Creating embedded window..."); DBGF;
 				puglInitWindowParent(fView, parentId);
 			}
 			else
 			{
-				DBG("Creating window without parent...");
-				DBGF;
+				DBG("Creating window without parent..."); DBGF;
 			}
 
 			init();
-
+			
 			if (fUsingEmbed)
 			{
 				DBG("NOTE: Embed window is always visible and non-resizable\n");
@@ -269,8 +265,7 @@ struct Window::PrivateData
 
 	~PrivateData()
 	{
-		DBG("Destroying window...");
-		DBGF;
+		DBG("Destroying window..."); DBGF;
 
 		if (fModal.enabled)
 		{
@@ -360,8 +355,7 @@ struct Window::PrivateData
 
 	void exec_init()
 	{
-		DBG("Window modal loop starting...");
-		DBGF;
+		DBG("Window modal loop starting..."); DBGF;
 		DISTRHO_SAFE_ASSERT_RETURN(fModal.parent != nullptr, setVisible(true));
 
 		fModal.enabled = true;
@@ -391,8 +385,7 @@ struct Window::PrivateData
 
 	void exec_fini()
 	{
-		DBG("Window modal loop stopping...");
-		DBGF;
+		DBG("Window modal loop stopping..."); DBGF;
 		fModal.enabled = false;
 
 		if (fModal.parent != nullptr)
