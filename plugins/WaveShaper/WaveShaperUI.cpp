@@ -49,14 +49,10 @@ class WaveShaperUI : public UI
 
     void uiIdle() override 
     {
-        graphWidget.updateAnimations();
     }
 
   private:
     bool parameters[paramCount];
-
-    bool mouseDown;
-    Point<int> mouseDownLocation;
 
     GraphWidget graphWidget;
 

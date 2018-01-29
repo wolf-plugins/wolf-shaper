@@ -1,46 +1,29 @@
-#ifndef SPOONIE_VERTEX_WIDGET_HPP_INCLUDED
-#define SPOONIE_VERTEX_WIDGET_HPP_INCLUDED
+#ifndef SPOONIE_TEST_WIDGET_HPP_INCLUDED
+#define SPOONIE_TEST_WIDGET_HPP_INCLUDED
 
 #include "Widget.hpp"
 #include "Window.hpp"
 #include "Geometry.hpp"
 
 #include "Graph.hpp"
+#include "VertexWidget.hpp"
 
 START_NAMESPACE_DISTRHO
 
-class VertexWidget : public NanoWidget
+class TestWidget : public Widget
 {
   public:
-    VertexWidget(Window &parent) : NanoWidget(parent)
+    TestWidget(Window &parent)
+        : Widget(parent),
+          vertexWidget(this, 0)
     {
         setSize(300, 300);
     }
-
-    VertexWidget(Widget *parent, uint32_t vertexId)
-        : NanoWidget(parent),
-          vertexId(vertexId)
-    {
-        setSize(300, 300);
-    }
-
-    uint32_t vertexId;
 
   protected:
-    void onNanoDisplay() override
+    void onDisplay() override
     {
-        fprintf(stderr, "Render\n");
-
-        beginPath();
-
-        strokeWidth(2.0f);
-        strokeColor(Color(255, 255, 255, 255));
-
-        circle(18.0f, 18.0f, 10.0f);
-
-        stroke();
-
-        closePath();
+        fprintf(stderr, "On display, test widget\n");
     }
 
     bool leftClick(const MouseEvent &ev)
@@ -76,6 +59,9 @@ class VertexWidget : public NanoWidget
 
         return true;
     }
+
+  private:
+    VertexWidget vertexWidget;
 };
 
 END_NAMESPACE_DISTRHO

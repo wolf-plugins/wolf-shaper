@@ -7,6 +7,7 @@
 #include "Graph.hpp"
 
 #include "Mathf.hpp"
+#include "GraphNodes.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -15,6 +16,7 @@ class GraphWidget : public NanoWidget
   public:
     GraphWidget(UI *ui, Window &parent)
         : NanoWidget(parent),
+          //uiVertex(this, 0),
           ui(ui)
     {
         setSize(ui->getWidth(), ui->getHeight());
@@ -22,9 +24,17 @@ class GraphWidget : public NanoWidget
         vertexWidgets[0] = DGL::Circle<int>(0, 0, absoluteVertexSize);
         vertexWidgets[1] = DGL::Circle<int>(getWidth(), getHeight(), absoluteVertexSize);
 
+        tensionWidgets[0] = DGL::Circle<int>(getWidth() / 2.0f, getHeight() / 2.0f, absoluteVertexSize);
+
+        bootleg[0] = new GraphVertex(this, GraphVertexType::Left);
+        bootleg[1] = new GraphVertex(this, GraphVertexType::Right);
+
         for (int i = 2; i < spoonie::maxVertices; ++i)
         {
             vertexWidgets[i] = DGL::Circle<int>(0, 0, absoluteVertexSize);
+            tensionWidgets[i - 1] = DGL::Circle<int>(0, 0, absoluteVertexSize);
+            
+            bootleg[i] = new GraphVertex(this, GraphVertexType::Middle);
         }
     }
 
@@ -226,27 +236,22 @@ class GraphWidget : public NanoWidget
 
     void drawTensionHandle(int index)
     {
-        const float width = 8;
+        const float lineWidth = 2.0f;
+
+        const float width = absoluteVertexSize - lineWidth;
         const float height = width;
 
         beginPath();
 
-        fillColor(Color(255, 255, 255, 255));
+        strokeWidth(lineWidth);
+        strokeColor(Color(255, 255, 255, 255));
 
-        strokeWidth(2.0f);
-        strokeColor(Color(0, 0, 0, 255));
+        const int x = tensionWidgets[index].getX();
+        const int y = tensionWidgets[index].getY();
+        const float size = tensionWidgets[index].getSize();
 
-        const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(index);
-        const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(index + 1);
+        circle(x, y, size);
 
-        const float normalizedCenterX = (vertexLeft->x + vertexRight->x) / 2.0f;
-        const float centerX = normalizedCenterX * getWidth();
-
-        const float posY = lineEditor.getValueAt(normalizedCenterX) * getHeight();
-
-        circle(centerX, posY, width);
-
-        fill();
         stroke();
 
         closePath();
@@ -263,21 +268,55 @@ class GraphWidget : public NanoWidget
         drawVertex(lineEditor.getVertexCount() - 1);
     }
 
+    void drawAlignmentLines()
+    {
+        const int x = grabbedWidget->getX();
+        const int y = grabbedWidget->getY();
+        const int width = getWidth();
+        const int height = getHeight();
+
+        beginPath();
+
+        strokeWidth(1.0f);
+        strokeColor(Color(255, 255, 255, 180));
+
+        moveTo(x, 0);
+        lineTo(x, height);
+
+        moveTo(0, y);
+        lineTo(width, y);
+
+        stroke();
+
+        closePath();
+    }
+
     void onNanoDisplay() override
     {
         flipY();
 
         drawBackground();
         drawGrid();
-        drawGraphLine(3.0f, Color(169, 29, 239, 255)); //outer
-        //drawGraphLine(1.0f, Color(245, 112, 188, 255)); //inner
+
+        drawGraphLine(3.2f, Color(169, 29, 239, 255));  //outer
+        drawGraphLine(1.2f, Color(245, 112, 188, 255)); //inner
+
+        if (grabbedWidget != nullptr)
+            drawAlignmentLines();
+
         drawGraphVertices();
+
+        bootleg[0]->render();
     }
 
     bool onScroll(const ScrollEvent &ev) override
     {
         float oldTension = lineEditor.getVertexAtIndex(0)->tension;
         lineEditor.setTensionAtIndex(0, spoonie::clamp(oldTension + 0.50f * -ev.delta.getY(), -100.0f, 100.0f));
+
+        //position tension handles
+        const float centerX = (lineEditor.getVertexAtIndex(0)->x + lineEditor.getVertexAtIndex(1)->x) / 2.0f;
+        tensionWidgets[0].setY(lineEditor.getValueAt(centerX) * getHeight());
 
         ui->setState("graph", lineEditor.serialize());
 
@@ -294,6 +333,9 @@ class GraphWidget : public NanoWidget
 
     void insertVertex(DGL::Point<int> pos)
     {
+        const float width = getWidth();
+        const float height = getHeight();
+
         int i = lineEditor.getVertexCount();
 
         while ((i > 0) && (pos.getX() < vertexWidgets[i - 1].getX()))
@@ -305,13 +347,22 @@ class GraphWidget : public NanoWidget
         vertexWidgets[i] = DGL::Circle<int>(pos.getX(), pos.getY(), absoluteVertexSize);
         hoverCircle(&vertexWidgets[i], i);
 
-        const float width = getWidth();
-        const float height = getHeight();
+        //uiVertices[lineEditor.getVertexCount()] = new VertexWidget(getParentWindow());
 
-        const float x = spoonie::normalize(pos.getX(), width);
-        const float y = spoonie::normalize(pos.getY(), height);
+        const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(i);
+        const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(i + 1);
 
-        lineEditor.insertVertex(x, y);
+        const float normalizedCenterX = (vertexLeft->x + vertexRight->x) / 2.0f;
+        const float centerX = normalizedCenterX * width;
+
+        const float posY = lineEditor.getValueAt(normalizedCenterX) * height;
+
+        tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);
+
+        const float normalizedX = spoonie::normalize(pos.getX(), width);
+        const float normalizedY = spoonie::normalize(pos.getY(), height);
+
+        lineEditor.insertVertex(normalizedX, normalizedY);
 
         ui->setState("graph", lineEditor.serialize());
 
@@ -327,6 +378,8 @@ class GraphWidget : public NanoWidget
 
             if (hoveredWidget)
             {
+                getParentWindow().hideCursor();
+
                 grabbedWidget = hoveredWidget;
                 hoveredWidget = nullptr;
 
@@ -339,6 +392,8 @@ class GraphWidget : public NanoWidget
 
             if (grabbedWidget)
             {
+                getParentWindow().showCursor();
+
                 hoveredWidget = grabbedWidget;
                 grabbedWidget = nullptr;
 
@@ -384,36 +439,9 @@ class GraphWidget : public NanoWidget
         return false;
     }
 
-    template <typename T, typename U>
-    bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
-    {
-        const float radius = circle.getSize();
-
-        const T x = point.getX();
-        const T xo = circle.getX();
-
-        const T dx = std::abs(x - xo);
-
-        if (dx > radius)
-            return false;
-
-        const T y = point.getY();
-        const T yo = circle.getY();
-
-        const T dy = std::abs(y - yo);
-
-        if (dy > radius)
-            return false;
-
-        if (dx + dy <= radius)
-            return true;
-
-        return dx * dx + dy * dy <= radius * radius;
-    }
-
     void expandCircle(DGL::Circle<int> *circle)
     {
-        circle->setSize(absoluteVertexSize + 1.0f);
+        circle->setSize(absoluteVertexSize + 1.5f);
 
         repaint();
     }
@@ -444,13 +472,21 @@ class GraphWidget : public NanoWidget
             const Circle<int> left = vertexWidgets[focusedWidgetIndex - 1];
             const Circle<int> right = vertexWidgets[focusedWidgetIndex + 1];
 
-            const int clampedX = spoonie::clamp(point.getX(), left.getX(), right.getX());
+            const int width = getWidth();
+            const int height = getHeight();
+
+            //clamped between neighbouring vertices
+            int clampedX = spoonie::clamp(point.getX(), left.getX(), right.getX());
+
+            //clamped inside the graph
+            clampedX = spoonie::clamp(clampedX, 0, width);
+            int clampedY = spoonie::clamp(point.getY(), 0, height);
 
             grabbedWidget->setX(clampedX);
-            grabbedWidget->setY(point.getY());
+            grabbedWidget->setY(clampedY);
 
-            const float normalizedX = clampedX / (float)getWidth();
-            const float normalizedY = point.getY() / (float)getHeight();
+            const float normalizedX = spoonie::normalize(clampedX, width);
+            const float normalizedY = spoonie::normalize(clampedY, height);
 
             lineEditor.getVertexAtIndex(focusedWidgetIndex)->setPosition(normalizedX, normalizedY);
 
@@ -486,6 +522,12 @@ class GraphWidget : public NanoWidget
     Point<int> mouseDownLocation;
 
     spoonie::Graph lineEditor;
+
+    //VertexWidget *uiVertices[spoonie::maxVertices];
+    //VertexWidget uiVertex;
+
+    GraphVertex *bootleg[spoonie::maxVertices];
+
     DGL::Circle<int> vertexWidgets[spoonie::maxVertices];
     DGL::Circle<int> tensionWidgets[spoonie::maxVertices - 1];
 
@@ -493,8 +535,10 @@ class GraphWidget : public NanoWidget
     DGL::Circle<int> *grabbedWidget = nullptr;
     int focusedWidgetIndex = -1;
 
-    const float absoluteVertexSize = 8.0f;
+    const float absoluteVertexSize = 7.0f;
     UI *ui;
+
+    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
 
 END_NAMESPACE_DISTRHO
