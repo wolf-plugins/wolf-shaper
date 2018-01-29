@@ -6,7 +6,6 @@
 
 #include "Graph.hpp"
 
-#include "GeometricalWidgets.hpp"
 #include "Mathf.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -20,8 +19,13 @@ class GraphWidget : public NanoWidget
     {
         setSize(ui->getWidth(), ui->getHeight());
 
-        vertexWidgets[0] = spoonie::Circle(0.0f, 0.0f, absoluteVertexSize);
-        vertexWidgets[1] = spoonie::Circle(1.0f, 1.0f, absoluteVertexSize);
+        vertexWidgets[0] = DGL::Circle<int>(0, 0, absoluteVertexSize);
+        vertexWidgets[1] = DGL::Circle<int>(getWidth(), getHeight(), absoluteVertexSize);
+
+        for (int i = 2; i < spoonie::maxVertices; ++i)
+        {
+            vertexWidgets[i] = DGL::Circle<int>(0, 0, absoluteVertexSize);
+        }
     }
 
     void rebuildFromString(const char *serializedGraph)
@@ -37,11 +41,15 @@ class GraphWidget : public NanoWidget
     void flipY() //(0,0) at the bottom-left corner makes more sense for this plugin
     {
         transform(1.0f, 0.0f, 0.0f, -1.0f, 0.0f, getHeight());
-        normalizeCoordinates();
     }
 
-    void normalizeCoordinates() {
-        glTranslatef(0.0f, 0.0f, -10.0f);
+    template <typename T>
+    DGL::Point<T> flipY(const DGL::Point<T> point)
+    {
+        const T x = point.getX();
+        const T y = getHeight() - point.getY();
+
+        return DGL::Point<T>(x, y);
     }
 
     void drawSubGrid()
@@ -174,7 +182,7 @@ class GraphWidget : public NanoWidget
         strokeColor(color);
         strokeWidth(lineWidth);
 
-        moveTo(0.0f, height);
+        moveTo(0.0f, 0.0f);
 
         const float iteration = 1.0f / width * 2.0f;
 
@@ -192,19 +200,23 @@ class GraphWidget : public NanoWidget
 
     void drawVertex(int index)
     {
-        const spoonie::Circle vertex = vertexWidgets[index];
+        const DGL::Circle<int> vertex = vertexWidgets[index];
 
-        const float posX = vertex.x * getWidth();
-        const float posY = vertex.y * getHeight();
+        const int posX = vertex.getX();
+        const int posY = vertex.getY();
+        const float size = vertex.getSize();
 
         beginPath();
 
-        fillColor(vertex.color);
+        if (grabbedWidget != nullptr && vertex == *grabbedWidget)
+            fillColor(Color(255, 100, 100, 255));
+        else
+            fillColor(Color(255, 255, 255, 255));
 
         strokeWidth(2.0f);
         strokeColor(Color(0, 0, 0, 255));
 
-        circle(posX, posY, vertex.absoluteDiameter);
+        circle(posX, posY, size);
 
         fill();
         stroke();
@@ -274,9 +286,31 @@ class GraphWidget : public NanoWidget
         return true;
     }
 
-    void insertVertex(float x, float y)
+    void hoverCircle(DGL::Circle<int> *circle, int index)
     {
-        vertexWidgets[lineEditor.getVertexCount()] = spoonie::Circle(x, y, absoluteVertexSize);
+        hoveredWidget = circle;
+        focusedWidgetIndex = index;
+    }
+
+    void insertVertex(DGL::Point<int> pos)
+    {
+        int i = lineEditor.getVertexCount();
+
+        while ((i > 0) && (pos.getX() < vertexWidgets[i - 1].getX()))
+        {
+            vertexWidgets[i] = vertexWidgets[i - 1];
+            --i;
+        }
+
+        vertexWidgets[i] = DGL::Circle<int>(pos.getX(), pos.getY(), absoluteVertexSize);
+        hoverCircle(&vertexWidgets[i], i);
+
+        const float width = getWidth();
+        const float height = getHeight();
+
+        const float x = spoonie::normalize(pos.getX(), width);
+        const float y = spoonie::normalize(pos.getY(), height);
+
         lineEditor.insertVertex(x, y);
 
         ui->setState("graph", lineEditor.serialize());
@@ -290,10 +324,26 @@ class GraphWidget : public NanoWidget
         {
             mouseDown = true;
             mouseDownLocation = ev.pos;
+
+            if (hoveredWidget)
+            {
+                grabbedWidget = hoveredWidget;
+                hoveredWidget = nullptr;
+
+                expandCircle(grabbedWidget);
+            }
         }
         else
         {
             mouseDown = false;
+
+            if (grabbedWidget)
+            {
+                hoveredWidget = grabbedWidget;
+                grabbedWidget = nullptr;
+
+                shrinkCircle(hoveredWidget);
+            }
         }
 
         return true;
@@ -306,15 +356,11 @@ class GraphWidget : public NanoWidget
 
     bool rightClick(const MouseEvent &ev)
     {
+        const Point<int> point = flipY(ev.pos);
+
         if (ev.press)
         {
-            const float width = getWidth();
-            const float height = getHeight();
-
-            const float x = spoonie::normalize(ev.pos.getX(), width);
-            const float y = spoonie::normalize(ev.pos.getY(), height);
-
-            insertVertex(x, y);
+            insertVertex(point);
         }
         else
         {
@@ -338,22 +384,23 @@ class GraphWidget : public NanoWidget
         return false;
     }
 
-    bool pointInCircle(spoonie::Circle circle, Point<float> point)
+    template <typename T, typename U>
+    bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
     {
-        const float radius = circle.absoluteDiameter;
+        const float radius = circle.getSize();
 
-        const float x = point.getX() * getWidth();
-        const float xo = circle.x * getWidth();
+        const T x = point.getX();
+        const T xo = circle.getX();
 
-        const float dx = std::abs(x - xo);
+        const T dx = std::abs(x - xo);
 
         if (dx > radius)
             return false;
 
-        const float y = point.getY() * getHeight();
-        const float yo = circle.y * getHeight();
+        const T y = point.getY();
+        const T yo = circle.getY();
 
-        const float dy = std::abs(y - yo);
+        const T dy = std::abs(y - yo);
 
         if (dy > radius)
             return false;
@@ -364,20 +411,70 @@ class GraphWidget : public NanoWidget
         return dx * dx + dy * dy <= radius * radius;
     }
 
+    void expandCircle(DGL::Circle<int> *circle)
+    {
+        circle->setSize(absoluteVertexSize + 1.0f);
+
+        repaint();
+    }
+
+    void shrinkCircle(DGL::Circle<int> *circle)
+    {
+        circle->setSize(absoluteVertexSize);
+
+        repaint();
+    }
+
     bool onMotion(const MotionEvent &ev) override
     {
-        const float x = (float)ev.pos.getX() / (float)getWidth();
-        const float y = 1.0f - (float)ev.pos.getY() / (float)getHeight();
-        const Point<float> point = Point<float>(x, y);
+        const Point<int> point = flipY(ev.pos);
 
-        for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+        if (hoveredWidget)
         {
-            if (pointInCircle(vertexWidgets[i], point))
+            if (!pointInCircle(*hoveredWidget, point))
             {
-                vertexWidgets[i].color = Color(200, 150, 150, 255);
-                repaint();
+                shrinkCircle(hoveredWidget);
+                hoveredWidget = nullptr;
 
-                return true;
+                focusedWidgetIndex = -1;
+            }
+        }
+        else if (grabbedWidget)
+        {
+            const Circle<int> left = vertexWidgets[focusedWidgetIndex - 1];
+            const Circle<int> right = vertexWidgets[focusedWidgetIndex + 1];
+
+            const int clampedX = spoonie::clamp(point.getX(), left.getX(), right.getX());
+
+            grabbedWidget->setX(clampedX);
+            grabbedWidget->setY(point.getY());
+
+            const float normalizedX = clampedX / (float)getWidth();
+            const float normalizedY = point.getY() / (float)getHeight();
+
+            lineEditor.getVertexAtIndex(focusedWidgetIndex)->setPosition(normalizedX, normalizedY);
+
+            repaint();
+        }
+        else //check for hovered widget
+        {
+            for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+            {
+                if (i < lineEditor.getVertexCount() - 1)
+                {
+                    if (pointInCircle(tensionWidgets[i], point))
+                    {
+                        hoverCircle(&tensionWidgets[i], i);
+
+                        return true;
+                    }
+                }
+                if (pointInCircle(vertexWidgets[i], point))
+                {
+                    hoverCircle(&vertexWidgets[i], i);
+
+                    return true;
+                }
             }
         }
 
@@ -389,8 +486,12 @@ class GraphWidget : public NanoWidget
     Point<int> mouseDownLocation;
 
     spoonie::Graph lineEditor;
-    spoonie::Circle vertexWidgets[spoonie::maxVertices];
-    spoonie::Circle tensionHandles[spoonie::maxVertices - 1];
+    DGL::Circle<int> vertexWidgets[spoonie::maxVertices];
+    DGL::Circle<int> tensionWidgets[spoonie::maxVertices - 1];
+
+    DGL::Circle<int> *hoveredWidget = nullptr;
+    DGL::Circle<int> *grabbedWidget = nullptr;
+    int focusedWidgetIndex = -1;
 
     const float absoluteVertexSize = 8.0f;
     UI *ui;

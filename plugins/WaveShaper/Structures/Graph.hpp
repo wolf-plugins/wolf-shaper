@@ -29,8 +29,11 @@ public:
   Graph();
 
   void insertVertex(float x, float y, float tension = 0.0f, CurveType type = CurveType::Exponential);
+  void removeVertex(int index);
   Vertex* getVertexAtIndex(int index);
+
   void setTensionAtIndex(int index, float tension);
+
   int getVertexCount();
 
   float getValueAt(float x);

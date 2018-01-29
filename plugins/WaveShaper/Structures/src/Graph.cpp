@@ -39,7 +39,7 @@ static float getOutValueUnipolar(float input, float tension, float p1x, float p1
 
     const float x = p2x - p1x;
     const float y = p2y - p1y;
-    
+
     input = std::abs(input);
 
     float result;
@@ -60,9 +60,9 @@ float Graph::getValueAt(float x)
 {
     const float absX = std::abs(x);
 
-    if(absX > 1.0f)
+    if (absX > 1.0f)
         return x;
-    
+
     //binary search
     int left = 0;
     int right = vertexCount - 1;
@@ -107,6 +107,16 @@ void Graph::insertVertex(float x, float y, float tension, CurveType type)
     ++vertexCount;
 }
 
+void Graph::removeVertex(int index)
+{
+    --vertexCount;
+
+    for (int i = index; i < vertexCount; ++i)
+    {
+        vertices[i] = vertices[i + 1];
+    }
+}
+
 void Graph::setTensionAtIndex(int index, float tension)
 {
     vertices[index].tension = tension;
@@ -148,7 +158,7 @@ void Graph::rebuildFromString(const char *serializedGraph)
 {
     this->clear();
 
-    char *rest = (char*)serializedGraph;
+    char *rest = (char *)serializedGraph;
 
     do
     {
@@ -158,7 +168,7 @@ void Graph::rebuildFromString(const char *serializedGraph)
         const CurveType type = static_cast<CurveType>(strtol(++rest, &rest, 10));
 
         insertVertex(x, y, tension, type);
-        
+
     } while (strcmp(++rest, "\0") != 0);
 }
 }
