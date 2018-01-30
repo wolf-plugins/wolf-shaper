@@ -2,6 +2,10 @@
 #include "Graph.hpp"
 #include "NanoVG.hpp"
 #include "Widget.hpp"
+#include "GraphNodes.hpp"
+#include "GraphWidget.hpp"
+#include "Mathf.hpp"
+
 
 START_NAMESPACE_DISTRHO
 
@@ -10,11 +14,11 @@ GraphVertex::GraphVertex()
 }
 
 GraphVertex::GraphVertex(NanoWidget *parent, GraphVertexType type) : NanoVG(parent),
+                                                                     parent(static_cast<GraphWidget*>(parent)),
                                                                      lockX(type != GraphVertexType::Middle),
                                                                      type(type),
                                                                      surface(Circle<int>(0, 0, 1.0f))
 {
-    parent = dynamic_cast<GraphWidget *>(parent);
 }
 
 void GraphVertex::fadeIn()
@@ -39,10 +43,10 @@ void GraphVertex::render()
 
 bool GraphVertex::contains(Point<int> point)
 {
-    return pointInCircle(surface, point);
+    return spoonie::pointInCircle(surface, point);
 }
 
-void GraphVertex::idleCallback() override
+void GraphVertex::idleCallback()
 {
     fprintf(stderr, "Render\n");
 }
@@ -54,14 +58,14 @@ void GraphVertex::stopFadeIn()
 
 bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
 {
-    fprintf(parent->lineEditor.getVertexAtIndex(0).x);
+    fprintf(stderr, "%f\n", parent->lineEditor.getVertexAtIndex(0)->x);
 }
 
 GraphTensionHandle::GraphTensionHandle()
 {
 }
 
-GraphTensionHandle::GraphTensionHandle(NanoWidget *parent) : parent(parent)
+GraphTensionHandle::GraphTensionHandle(GraphWidget *parent) : parent(parent)
 {
 }
 

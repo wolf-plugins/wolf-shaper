@@ -5,6 +5,8 @@
 #include "Graph.hpp"
 #include "NanoVG.hpp"
 #include "Widget.hpp"
+#include "GraphWidget.hpp"
+#include "Mathf.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -18,35 +20,10 @@ enum GraphVertexType
     Right
 };
 
-template <typename T, typename U>
-bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
-{
-    const float radius = circle.getSize();
-
-    const T x = point.getX();
-    const T xo = circle.getX();
-
-    const T dx = std::abs(x - xo);
-
-    if (dx > radius)
-        return false;
-
-    const T y = point.getY();
-    const T yo = circle.getY();
-
-    const T dy = std::abs(y - yo);
-
-    if (dy > radius)
-        return false;
-
-    if (dx + dy <= radius)
-        return true;
-
-    return dx * dx + dy * dy <= radius * radius;
-}
-
 class GraphVertex : public IdleCallback, public NanoVG
 {
+    friend class GraphWidget;
+
   public:
     GraphVertex();
     GraphVertex(NanoWidget *parent, GraphVertexType type);
@@ -73,31 +50,13 @@ class GraphVertex : public IdleCallback, public NanoVG
 class GraphTensionHandle
 {
   public:
-    GraphTensionHandle()
-    {
-    }
+    GraphTensionHandle();
+    GraphTensionHandle(GraphWidget *parent);
 
-    GraphTensionHandle(NanoWidget *parent) : parent(parent)
-    {
-    }
-
-    void render()
-    {
-        parent->beginPath();
-
-        parent->strokeWidth(2.0f);
-        parent->strokeColor(Color(0, 0, 0, 255));
-
-        parent->circle(12.0f, 12.0f, 10.f);
-
-        parent->fill();
-        parent->stroke();
-
-        parent->closePath();
-    }
+    void render();
 
   private:
-    NanoWidget *parent;
+    GraphWidget *parent;
 };
 
 END_NAMESPACE_DISTRHO

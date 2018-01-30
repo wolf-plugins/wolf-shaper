@@ -3,7 +3,7 @@
 
 namespace spoonie
 {
-int slog(const char *format, ...)
+static int slog(const char *format, ...)
 {
     va_list arg;
     int done;
