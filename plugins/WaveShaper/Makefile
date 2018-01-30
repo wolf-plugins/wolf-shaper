@@ -18,7 +18,9 @@ OBJS_DSP = \
 
 OBJS_UI  = \
 	Structures/src/Graph.cpp.o \
-	WaveShaperUI.cpp.o
+	Widgets/src/GraphNodes.cpp.o \
+	Widgets/src/GraphWidget.cpp.o \
+	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------
 # Do some magic

@@ -1,11 +1,15 @@
-#ifndef SPOONIE_BOOTLEG_TEST_WIDGET_HPP_INCLUDED
-#define SPOONIE_BOOTLEG_TEST_WIDGET_HPP_INCLUDED
+#ifndef SPOONIE_GRAPH_NODES_HPP_INCLUDED
+#define SPOONIE_GRAPH_NODES_HPP_INCLUDED
 
 #include "Geometry.hpp"
 #include "Graph.hpp"
 #include "NanoVG.hpp"
+#include "Widget.hpp"
+
 
 START_NAMESPACE_DISTRHO
+
+class GraphWidget;
 
 enum GraphVertexType
 {
@@ -43,59 +47,22 @@ bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
 
 class GraphVertex : public IdleCallback, public NanoVG
 {
-    friend class GraphWidget;
-    
   public:
-    GraphVertex()
-    {
-    }
+    GraphVertex();
+    GraphVertex(NanoWidget *parent, GraphVertexType type);
 
-    GraphVertex(NanoWidget *parent, GraphVertexType type) : NanoVG(parent),
-                                                            parent(parent),
-                                                            lockX(type != GraphVertexType::Middle),
-                                                            type(type),
-                                                            surface(Circle<int>(0, 0, 1.0f))
-    {
-    }
+    void fadeIn();
+    void render();
 
-    void fadeIn()
-    {
-        parent->getParentWindow().addIdleCallback(this);
-    }
-
-    void render()
-    {
-        beginPath();
-
-        strokeWidth(2.0f);
-        strokeColor(Color(0, 0, 0, 255));
-
-        circle(12.0f, 12.0f, 10.f);
-
-        fill();
-        stroke();
-
-        closePath();
-    }
-
-    bool contains(Point<int> point)
-    {
-        return pointInCircle(surface, point);
-    }
+    bool contains(Point<int> point);
 
   protected:
-    void idleCallback() override
-    {
-        fprintf(stderr, "Render\n");
-    }
-
-    void stopFadeIn()
-    {
-        parent->getParentWindow().removeIdleCallback(this);
-    }
+    void idleCallback() override;
+    void stopFadeIn();
+    bool onMotion(const Widget::MotionEvent &ev);
 
   private:
-    NanoWidget *parent;
+    GraphWidget *parent;
 
     bool lockX;
     GraphVertexType type;
