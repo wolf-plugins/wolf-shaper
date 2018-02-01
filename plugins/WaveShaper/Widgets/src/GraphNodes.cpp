@@ -6,6 +6,7 @@
 #include "GraphWidget.hpp"
 #include "Mathf.hpp"
 #include "WaveShaperUI.hpp"
+#include "Utils.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -17,7 +18,8 @@ GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type) : NanoVG(par
                                                                       parent(parent),
                                                                       type(type),
                                                                       color(Color(255, 255, 255, 255)),
-                                                                      grabbed(false)
+                                                                      grabbed(false),
+                                                                      lastClickButton(0)
 {
     switch (type)
     {
@@ -182,11 +184,45 @@ bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
 
     parent->repaint();
 
+    //Cancel out double clicks
+    lastClickButton = 0;
+
+    return true;
+}
+
+/**
+ * Make the node remove itself from the graph.
+ */
+void GraphVertex::removeFromGraph()
+{
+    parent->removeVertex(index);
+}
+
+bool GraphVertex::leftDoubleClick(const Widget::MouseEvent &ev)
+{
+    removeFromGraph();
+    getParentWindow()->setCursorStyle(Window::CursorStyle::Default);
+
     return true;
 }
 
 bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
 {
+    using namespace std::chrono;
+
+    steady_clock::time_point now = steady_clock::now();
+
+    bool doubleClick = ev.press && lastClickButton == ev.button && duration_cast<duration<double>>(now - lastClickTimePoint).count() < 0.250;
+
+    if (ev.press)
+    {
+        lastClickTimePoint = now;
+        lastClickButton = ev.button;
+    }
+
+    if (doubleClick)
+        return leftDoubleClick(ev);
+
     grabbed = ev.press;
     Window *window = getParentWindow();
 

@@ -10,6 +10,7 @@
 #include "Mathf.hpp"
 #include "GraphNodes.hpp"
 #include "DistrhoUI.hpp"
+#include <chrono>
 
 START_NAMESPACE_DISTRHO
 
@@ -46,8 +47,12 @@ protected:
    * Insert a new vertex into the graph and return a pointer to it. 
    */
   GraphVertex *insertVertex(const DGL::Point<int> pos);
+  void removeVertex(const int index);
+
   bool leftClick(const MouseEvent &ev);
+
   bool middleClick(const MouseEvent &ev);
+
   bool rightClick(const MouseEvent &ev);
 
 private:

@@ -8,6 +8,9 @@
 #include "GraphNodes.hpp"
 #include "ObjectPool.hpp"
 #include "WaveShaperUI.hpp"
+#include "Utils.hpp"
+
+#include <chrono>
 
 START_NAMESPACE_DISTRHO
 
@@ -312,6 +315,34 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
     return true;
 }
 
+void GraphWidget::removeVertex(int index)
+{
+    //Make sure the vertex to remove is in the middle of the graph
+    if (index <= 0)
+        return;
+    else if (index >= lineEditor.getVertexCount() - 1)
+        return;
+
+    //Get rid of the ui widget
+    graphVerticesPool.freeObject(graphVertices[index]);
+
+    const int vertexCount = lineEditor.getVertexCount();
+
+    for (int i = index; i < vertexCount - 1; ++i)
+    {
+        graphVertices[i] = graphVertices[i + 1];
+        graphVertices[i]->index -= 1;
+    }
+
+    //Get rid of the logical vertex and update dsp
+    lineEditor.removeVertex(index);
+    ui->setState("graph", lineEditor.serialize());
+
+    focusedElement = nullptr;
+    
+    repaint();
+}
+
 GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
 {
     int i = lineEditor.getVertexCount();
@@ -360,10 +391,13 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 {
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
-    if (focusedElement)
+    if (!ev.press)
     {
-        focusedElement->onMouse(ev);
-        focusedElement = nullptr;
+        if (focusedElement != nullptr)
+        {
+            focusedElement->onMouse(ev);
+            focusedElement = nullptr;
+        }
 
         return true;
     }

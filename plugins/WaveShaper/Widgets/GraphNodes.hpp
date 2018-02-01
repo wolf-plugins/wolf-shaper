@@ -7,6 +7,7 @@
 #include "Widget.hpp"
 #include "GraphWidget.hpp"
 #include "Mathf.hpp"
+#include <chrono>
 
 START_NAMESPACE_DISTRHO
 
@@ -34,7 +35,7 @@ public:
 
   void fadeIn();
   void stopFadeIn();
-  
+
   void reset();
 
   /**
@@ -57,12 +58,14 @@ protected:
   void idleCallback() override;
   bool onMotion(const Widget::MotionEvent &ev);
   bool onMouse(const Widget::MouseEvent &ev);
-  
+  bool leftDoubleClick(const Widget::MouseEvent &ev);
+
+  void removeFromGraph();
   GraphVertex *getVertexAtLeft() const;
   GraphVertex *getVertexAtRight() const;
   spoonie::Graph *getLineEditor();
   UI *getUI();
-  Window* getParentWindow();
+  Window *getParentWindow();
 
   void updateGraph();
 
@@ -77,6 +80,9 @@ private:
 
   Circle<int> surface;
   Color color;
+
+  std::chrono::steady_clock::time_point lastClickTimePoint;
+  int lastClickButton;
 
   bool grabbed;
 

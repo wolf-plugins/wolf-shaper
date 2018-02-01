@@ -1375,19 +1375,23 @@ void Window::hideCursor()
 #endif
 }
 
+/**
+ * Set the cursor position relative to the window.
+ */
 void Window::setCursorPos(int x, int y)
 {
 #if defined(DISTRHO_OS_WINDOWS)
-	RECT curRect;
-	GetWindowRect(pData->hwnd, &curRect);
+	RECT winRect;
+	GetWindowRect(pData->hwnd, &winRect);
 
-	SetCursorPos(curRect.left + x, curRect.top + y);
+	SetCursorPos(winRect.left + x, winRect.top + y);
 
 #elif defined(DISTRHO_OS_MAC)
 	CGWarpMouseCursorPosition(CGPointMake(x, y));
 
 #else
-	XWarpPointer(pData->xDisplay, pData->xWindow, pData->xWindow, 0, 0, 0, 0, x, y);
+	XWarpPointer(pData->xDisplay, None, pData->xWindow, 0, 0, 0, 0, x, y);
+
 #endif
 }
 
