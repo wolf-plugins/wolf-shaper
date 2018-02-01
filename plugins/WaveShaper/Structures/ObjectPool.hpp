@@ -40,6 +40,8 @@ T *ObjectPool<T>::getObject()
 template <class T>
 void ObjectPool<T>::freeObject(T *object)
 {
+    object->reset();
+
     this->objects.push(object);
 }
 

@@ -7,7 +7,6 @@
 #include "Mathf.hpp"
 #include "WaveShaperUI.hpp"
 
-
 START_NAMESPACE_DISTRHO
 
 GraphVertex::GraphVertex()
@@ -30,6 +29,14 @@ GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type) : NanoVG(par
         surface = Circle<int>(parent->getWidth(), parent->getHeight(), 8.0f);
         break;
     }
+}
+
+void GraphVertex::reset()
+{
+    surface = Circle<int>(0, 0, 8.0f);
+    color = Color(255, 255, 255, 255);
+    type = GraphVertexType::Middle;
+    grabbed = false;
 }
 
 void GraphVertex::fadeIn()

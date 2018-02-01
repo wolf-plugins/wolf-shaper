@@ -23,6 +23,7 @@ class GraphWidget : public NanoWidget
 public:
   GraphWidget(WaveShaperUI *ui, Window &parent);
   void rebuildFromString(const char *serializedGraph);
+  void reset();
 
 protected:
   void onNanoDisplay() override;
@@ -40,6 +41,10 @@ protected:
   void drawTensionHandle(int index);
   void drawGraphVertices();
   void drawAlignmentLines();
+
+  /**
+   * Insert a new vertex into the graph and return a pointer to it. 
+   */
   GraphVertex *insertVertex(const DGL::Point<int> pos);
   bool leftClick(const MouseEvent &ev);
   bool middleClick(const MouseEvent &ev);
@@ -47,7 +52,8 @@ protected:
 
 private:
   void initializeDefaultVertices();
-
+  void resetVerticesPool();
+  
   bool mouseDown;
   Point<int> mouseDownLocation;
 

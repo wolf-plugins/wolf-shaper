@@ -34,6 +34,8 @@ public:
 
   void fadeIn();
   void stopFadeIn();
+  
+  void reset();
 
   /**
    * Draw the vertex.
@@ -55,7 +57,7 @@ protected:
   void idleCallback() override;
   bool onMotion(const Widget::MotionEvent &ev);
   bool onMouse(const Widget::MouseEvent &ev);
-
+  
   GraphVertex *getVertexAtLeft() const;
   GraphVertex *getVertexAtRight() const;
   spoonie::Graph *getLineEditor();

@@ -41,9 +41,47 @@ void GraphWidget::initializeDefaultVertices()
     graphVertices[1] = vertex;
 }
 
+void GraphWidget::reset()
+{
+    resetVerticesPool();
+
+    initializeDefaultVertices();
+}
+
+void GraphWidget::resetVerticesPool()
+{
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    {
+        graphVerticesPool.freeObject(graphVertices[i]);
+    }
+}
+
 void GraphWidget::rebuildFromString(const char *serializedGraph)
 {
+    resetVerticesPool();
+
     lineEditor.rebuildFromString(serializedGraph);
+
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    {
+        GraphVertex *vertex = graphVerticesPool.getObject();
+        const spoonie::Vertex *lineEditorVertex = lineEditor.getVertexAtIndex(i);
+
+        const int x = lineEditorVertex->x * getWidth();
+        const int y = lineEditorVertex->y * getHeight();
+
+        vertex->setPos(x, y);
+        vertex->index = i;
+
+        if (i == 0)
+            vertex->type = GraphVertexType::Left;
+        else if (i == lineEditor.getVertexCount() - 1)
+            vertex->type = GraphVertexType::Right;
+        else
+            vertex->type = GraphVertexType::Middle;
+
+        graphVertices[i] = vertex;
+    }
 }
 
 void GraphWidget::updateAnimations()
@@ -274,7 +312,6 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
     return true;
 }
 
-/* Insert a new vertex into the graph and return a pointer to it. */
 GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
 {
     int i = lineEditor.getVertexCount();
@@ -299,7 +336,7 @@ GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
     const float width = getWidth();
     const float height = getHeight();
 
-    const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(i);
+    /*const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(i);
     const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(i + 1);
 
     const float normalizedCenterX = (vertexLeft->x + vertexRight->x) / 2.0f;
@@ -307,7 +344,7 @@ GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
 
     const float posY = lineEditor.getValueAt(normalizedCenterX) * height;
 
-    //tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);
+    tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);*/
 
     const float normalizedX = spoonie::normalize(pos.getX(), width);
     const float normalizedY = spoonie::normalize(pos.getY(), height);
