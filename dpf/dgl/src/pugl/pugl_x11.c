@@ -97,7 +97,7 @@ getVisual(PuglView* view)
 		*/
 		int attrListDbl[] = {
 			GLX_RGBA,
-			GLX_DOUBLEBUFFER,
+			//GLX_DOUBLEBUFFER,
 			GLX_RED_SIZE,        4,
 			GLX_GREEN_SIZE,      4,
 			GLX_BLUE_SIZE,       4,
@@ -112,7 +112,7 @@ getVisual(PuglView* view)
 		*/
 		int attrListDblMS[] = {
 			GLX_RGBA,
-			GLX_DOUBLEBUFFER,
+			//GLX_DOUBLEBUFFER,
 			GLX_RED_SIZE,       4,
 			GLX_GREEN_SIZE,     4,
 			GLX_BLUE_SIZE,      4,
@@ -123,7 +123,7 @@ getVisual(PuglView* view)
 			None
 		};
 
-		impl->doubleBuffered = True;
+		impl->doubleBuffered = False;
 
 		vi = glXChooseVisual(impl->display, impl->screen, attrListDblMS);
 
