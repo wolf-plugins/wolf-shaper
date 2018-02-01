@@ -115,9 +115,20 @@ public:
     void removeIdleCallback(IdleCallback *const callback);
 
     //fork-----------------
+    enum CursorStyle
+    {
+	    Default,
+	    Pointer,
+	    Grab,
+	    Grabbing,
+	    Text,
+	    NWSEResize
+    };
+    
     void showCursor();
     void hideCursor();
     void setCursorPos(int x, int y);
+    void setCursorStyle(CursorStyle style);
     //---------------------
 
   protected:

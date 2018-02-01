@@ -5,59 +5,42 @@
 #include "Mathf.hpp"
 //#include "VertexWidget.hpp"
 #include "GraphWidget.hpp"
+#include "WaveShaperUI.hpp"
+
 
 START_NAMESPACE_DISTRHO
 
-class WaveShaperUI : public UI
+WaveShaperUI::WaveShaperUI() : UI(512, 512),
+                               graphWidget(this, getParentWindow())
 {
-    enum Parameters
-    {
-        paramPreGain = 0,
-        paramWet,
-        paramPostGain,
-        paramRemoveDC,
-        paramOversample,
-        paramBipolarMode,
-        paramCount
-    };
+}
 
-  public:
-    WaveShaperUI() : UI(512, 512),
-                     graphWidget(this, getParentWindow())
-    {
-    }
+WaveShaperUI::~WaveShaperUI()
+{
+}
 
-  protected:
-    void parameterChanged(uint32_t index, float value) override
-    {
-        parameters[index] = value;
+void WaveShaperUI::parameterChanged(uint32_t index, float value)
+{
+    parameters[index] = value;
 
-        repaint();
-    }
+    repaint();
+}
 
-    void stateChanged(const char *key, const char *value) override
-    {
-        if (std::strcmp(key, "graph") == 0)
-            graphWidget.rebuildFromString(value);
+void WaveShaperUI::stateChanged(const char *key, const char *value)
+{
+    if (std::strcmp(key, "graph") == 0)
+        graphWidget.rebuildFromString(value);
 
-        repaint();
-    }
+    repaint();
+}
 
-    void onNanoDisplay() override
-    {
-    }
+void WaveShaperUI::onNanoDisplay()
+{
+}
 
-    void uiIdle() override 
-    {
-    }
-
-  private:
-    bool parameters[paramCount];
-
-    GraphWidget graphWidget;
-
-    DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
-};
+void WaveShaperUI::uiIdle()
+{
+}
 
 UI *createUI()
 {

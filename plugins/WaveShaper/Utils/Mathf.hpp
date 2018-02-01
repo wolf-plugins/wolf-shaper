@@ -5,7 +5,7 @@ namespace spoonie
 {
 template <typename T,
           typename = typename std::enable_if<std::is_arithmetic<T>::value, T>::type>
-static T clamp(const T &value, const T &min, const T &max)
+static T clamp(const T &value, const T min, const T &max)
 {
     return std::max(min, std::min(value, max));
 }
@@ -64,6 +64,16 @@ static bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
         return true;
 
     return dx * dx + dy * dy <= radius * radius;
+}
+
+template <typename T, typename U,
+          typename = typename std::enable_if<std::is_arithmetic<U>::value, U>::type>
+static DGL::Point<T> flipY(const DGL::Point<T> point, const U height)
+{
+    const T x = point.getX();
+    const T y = height - point.getY();
+
+    return DGL::Point<T>(x, y);
 }
 }
 

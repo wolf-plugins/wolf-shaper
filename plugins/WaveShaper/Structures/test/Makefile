@@ -1,5 +1,5 @@
 CC=g++
-binaries=Main.o TestGraph.o Graph.o
+binaries=Main.o TestGraph.o TestStack.o Graph.o
 
 all: Graph.o tests
 

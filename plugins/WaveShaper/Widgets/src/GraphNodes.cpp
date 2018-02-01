@@ -5,6 +5,7 @@
 #include "GraphNodes.hpp"
 #include "GraphWidget.hpp"
 #include "Mathf.hpp"
+#include "WaveShaperUI.hpp"
 
 
 START_NAMESPACE_DISTRHO
@@ -13,17 +14,35 @@ GraphVertex::GraphVertex()
 {
 }
 
-GraphVertex::GraphVertex(NanoWidget *parent, GraphVertexType type) : NanoVG(parent),
-                                                                     parent(static_cast<GraphWidget*>(parent)),
-                                                                     lockX(type != GraphVertexType::Middle),
-                                                                     type(type),
-                                                                     surface(Circle<int>(0, 0, 1.0f))
+GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type) : NanoVG(parent),
+                                                                      parent(parent),
+                                                                      type(type),
+                                                                      color(Color(255, 255, 255, 255)),
+                                                                      grabbed(false)
 {
+    switch (type)
+    {
+    case GraphVertexType::Left:
+    case GraphVertexType::Middle:
+        surface = Circle<int>(0, 0, 8.0f);
+        break;
+    case GraphVertexType::Right:
+        surface = Circle<int>(parent->getWidth(), parent->getHeight(), 8.0f);
+        break;
+    }
 }
 
 void GraphVertex::fadeIn()
 {
-    parent->getParentWindow().addIdleCallback(this);
+}
+
+void GraphVertex::stopFadeIn()
+{
+}
+
+bool GraphVertex::isLockedX() const
+{
+    return type != GraphVertexType::Middle;
 }
 
 void GraphVertex::render()
@@ -31,9 +50,11 @@ void GraphVertex::render()
     beginPath();
 
     strokeWidth(2.0f);
-    strokeColor(Color(0, 0, 0, 255));
 
-    circle(12.0f, 12.0f, 10.f);
+    strokeColor(Color(0, 0, 0, 255));
+    fillColor(color);
+
+    circle(surface.getX(), surface.getY(), surface.getSize());
 
     fill();
     stroke();
@@ -41,24 +62,142 @@ void GraphVertex::render()
     closePath();
 }
 
-bool GraphVertex::contains(Point<int> point)
+bool GraphVertex::contains(Point<int> pos)
 {
-    return spoonie::pointInCircle(surface, point);
+    return spoonie::pointInCircle(surface, pos);
 }
 
 void GraphVertex::idleCallback()
 {
-    fprintf(stderr, "Render\n");
+    parent->repaint();
 }
 
-void GraphVertex::stopFadeIn()
+void GraphVertex::setPos(int x, int y)
 {
-    parent->getParentWindow().removeIdleCallback(this);
+    surface.setPos(x, y);
+}
+
+void GraphVertex::setPos(Point<int> pos)
+{
+    surface.setPos(pos);
+}
+
+int GraphVertex::getX() const
+{
+    return surface.getX();
+}
+
+int GraphVertex::getY() const
+{
+    return surface.getY();
+}
+
+GraphVertex *GraphVertex::getVertexAtLeft() const
+{
+    if (index == 0)
+        return nullptr;
+
+    return parent->graphVertices[index - 1];
+}
+
+GraphVertex *GraphVertex::getVertexAtRight() const
+{
+    if (index == parent->lineEditor.getVertexCount() - 1)
+        return nullptr;
+
+    return parent->graphVertices[index + 1];
+}
+
+Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
+{
+    const GraphVertex *leftVertex = getVertexAtLeft();
+    const GraphVertex *rightVertex = getVertexAtRight();
+
+    int x = this->getX();
+    int y = point.getY();
+
+    if (!isLockedX())
+    {
+        //clamp to neighbouring vertices
+        x = spoonie::clamp<int>(point.getX(), leftVertex->getX(), rightVertex->getX());
+    }
+
+    //clamp to graph
+    y = spoonie::clamp<int>(y, 0, parent->getHeight());
+
+    return Point<int>(x, y);
+}
+
+spoonie::Graph *GraphVertex::getLineEditor()
+{
+    return &parent->lineEditor;
+}
+
+UI *GraphVertex::getUI()
+{
+    return parent->ui;
+}
+
+Window *GraphVertex::getParentWindow()
+{
+    return &parent->getParentWindow();
+}
+
+void GraphVertex::updateGraph()
+{
+    const float width = parent->getWidth();
+    const float height = parent->getHeight();
+
+    const float normalizedX = spoonie::normalize(surface.getX(), width);
+    const float normalizedY = spoonie::normalize(surface.getY(), height);
+
+    spoonie::Graph *lineEditor = getLineEditor();
+
+    lineEditor->getVertexAtIndex(index)->setPosition(normalizedX, normalizedY);
+
+    getUI()->setState("graph", lineEditor->serialize());
 }
 
 bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
 {
-    fprintf(stderr, "%f\n", parent->lineEditor.getVertexAtIndex(0)->x);
+    if (!grabbed)
+    {
+        getParentWindow()->setCursorStyle(Window::CursorStyle::Grab);
+        return true;
+    }
+
+    Point<int> pos = spoonie::flipY(ev.pos, parent->getHeight());
+
+    Point<int> clampedPosition = clampVertexPosition(pos);
+    surface.setPos(clampedPosition);
+
+    updateGraph();
+
+    parent->repaint();
+
+    return true;
+}
+
+bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
+{
+    grabbed = ev.press;
+    Window *window = getParentWindow();
+
+    if (grabbed)
+    {
+        window->hideCursor();
+    }
+    else
+    {
+        window->setCursorPos(getX(), parent->getHeight() - getY());
+        window->setCursorStyle(Window::CursorStyle::Grab);
+
+        window->showCursor();
+    }
+
+    parent->repaint();
+
+    return true;
 }
 
 GraphTensionHandle::GraphTensionHandle()

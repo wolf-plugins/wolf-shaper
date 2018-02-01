@@ -6,30 +6,39 @@
 #include "GraphWidget.hpp"
 #include "Mathf.hpp"
 #include "GraphNodes.hpp"
+#include "ObjectPool.hpp"
+#include "WaveShaperUI.hpp"
 
 START_NAMESPACE_DISTRHO
 
-GraphWidget::GraphWidget(UI *ui, Window &parent)
+GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     : NanoWidget(parent),
-      ui(ui)
+      ui(ui),
+      graphVerticesPool(spoonie::maxVertices, this, GraphVertexType::Middle),
+      focusedElement(nullptr)
 {
     setSize(ui->getWidth(), ui->getHeight());
 
-    vertexWidgets[0] = DGL::Circle<int>(0, 0, absoluteVertexSize);
-    vertexWidgets[1] = DGL::Circle<int>(getWidth(), getHeight(), absoluteVertexSize);
+    initializeDefaultVertices();
+}
 
-    tensionWidgets[0] = DGL::Circle<int>(getWidth() / 2.0f, getHeight() / 2.0f, absoluteVertexSize);
+void GraphWidget::initializeDefaultVertices()
+{
+    GraphVertex *vertex = graphVerticesPool.getObject();
 
-    graphVertices[0] = new GraphVertex(this, GraphVertexType::Left);
-    graphVertices[1] = new GraphVertex(this, GraphVertexType::Right);
+    vertex->setPos(0, 0);
+    vertex->index = 0;
+    vertex->type = GraphVertexType::Left;
 
-    for (int i = 2; i < spoonie::maxVertices; ++i)
-    {
-        vertexWidgets[i] = DGL::Circle<int>(0, 0, absoluteVertexSize);
-        tensionWidgets[i - 1] = DGL::Circle<int>(0, 0, absoluteVertexSize);
+    graphVertices[0] = vertex;
 
-        graphVertices[i] = new GraphVertex(this, GraphVertexType::Middle);
-    }
+    vertex = graphVerticesPool.getObject();
+
+    vertex->setPos(getWidth(), getHeight());
+    vertex->index = 1;
+    vertex->type = GraphVertexType::Right;
+
+    graphVertices[1] = vertex;
 }
 
 void GraphWidget::rebuildFromString(const char *serializedGraph)
@@ -41,7 +50,7 @@ void GraphWidget::updateAnimations()
 {
 }
 
-void GraphWidget::flipY() //(0,0) at the bottom-left corner makes more sense for this plugin
+void GraphWidget::flipYAxis() //(0,0) at the bottom-left corner makes more sense for this plugin
 {
     transform(1.0f, 0.0f, 0.0f, -1.0f, 0.0f, getHeight());
 }
@@ -194,68 +203,26 @@ void GraphWidget::drawGraphLine(float lineWidth, Color color)
 
 void GraphWidget::drawVertex(int index)
 {
-    const DGL::Circle<int> vertex = vertexWidgets[index];
-
-    const int posX = vertex.getX();
-    const int posY = vertex.getY();
-    const float size = vertex.getSize();
-
-    beginPath();
-
-    if (grabbedWidget != nullptr && vertex == *grabbedWidget)
-        fillColor(Color(255, 100, 100, 255));
-    else
-        fillColor(Color(255, 255, 255, 255));
-
-    strokeWidth(2.0f);
-    strokeColor(Color(0, 0, 0, 255));
-
-    circle(posX, posY, size);
-
-    fill();
-    stroke();
-
-    closePath();
 }
 
 void GraphWidget::drawTensionHandle(int index)
 {
-    const float lineWidth = 2.0f;
-
-    const float width = absoluteVertexSize - lineWidth;
-    const float height = width;
-
-    beginPath();
-
-    strokeWidth(lineWidth);
-    strokeColor(Color(255, 255, 255, 255));
-
-    const int x = tensionWidgets[index].getX();
-    const int y = tensionWidgets[index].getY();
-    const float size = tensionWidgets[index].getSize();
-
-    circle(x, y, size);
-
-    stroke();
-
-    closePath();
 }
 
 void GraphWidget::drawGraphVertices()
 {
     for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
     {
-        drawVertex(i);
-        drawTensionHandle(i);
+        graphVertices[i]->render();
     }
 
-    drawVertex(lineEditor.getVertexCount() - 1);
+    graphVertices[lineEditor.getVertexCount() - 1]->render();
 }
 
 void GraphWidget::drawAlignmentLines()
 {
-    const int x = grabbedWidget->getX();
-    const int y = grabbedWidget->getY();
+    const int x = focusedElement->getX();
+    const int y = focusedElement->getY();
     const int width = getWidth();
     const int height = getHeight();
 
@@ -277,7 +244,7 @@ void GraphWidget::drawAlignmentLines()
 
 void GraphWidget::onNanoDisplay()
 {
-    flipY();
+    flipYAxis();
 
     drawBackground();
     drawGrid();
@@ -285,12 +252,10 @@ void GraphWidget::onNanoDisplay()
     drawGraphLine(3.2f, Color(169, 29, 239, 255));  //outer
     drawGraphLine(1.2f, Color(245, 112, 188, 255)); //inner
 
-    if (grabbedWidget != nullptr)
+    if (focusedElement != nullptr)
         drawAlignmentLines();
 
     drawGraphVertices();
-
-    graphVertices[0]->render();
 }
 
 bool GraphWidget::onScroll(const ScrollEvent &ev)
@@ -300,7 +265,7 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
 
     //position tension handles
     const float centerX = (lineEditor.getVertexAtIndex(0)->x + lineEditor.getVertexAtIndex(1)->x) / 2.0f;
-    tensionWidgets[0].setY(lineEditor.getValueAt(centerX) * getHeight());
+    //tensionWidgets[0].setY(lineEditor.getValueAt(centerX) * getHeight());
 
     ui->setState("graph", lineEditor.serialize());
 
@@ -309,23 +274,30 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
     return true;
 }
 
-void GraphWidget::insertVertex(DGL::Point<int> pos)
+/* Insert a new vertex into the graph and return a pointer to it. */
+GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
 {
-    const float width = getWidth();
-    const float height = getHeight();
-
     int i = lineEditor.getVertexCount();
 
-    while ((i > 0) && (pos.getX() < vertexWidgets[i - 1].getX()))
+    if (i == spoonie::maxVertices)
+        return nullptr;
+
+    while ((i > 0) && (pos.getX() < graphVertices[i - 1]->getX()))
     {
-        vertexWidgets[i] = vertexWidgets[i - 1];
+        graphVertices[i] = graphVertices[i - 1];
+        graphVertices[i]->index++;
+
         --i;
     }
 
-    vertexWidgets[i] = DGL::Circle<int>(pos.getX(), pos.getY(), absoluteVertexSize);
-    hoverCircle(&vertexWidgets[i], i);
+    GraphVertex *vertex = graphVerticesPool.getObject();
+    vertex->setPos(pos);
+    vertex->index = i;
 
-    //uiVertices[lineEditor.getVertexCount()] = new VertexWidget(getParentWindow());
+    graphVertices[i] = vertex;
+
+    const float width = getWidth();
+    const float height = getHeight();
 
     const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(i);
     const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(i + 1);
@@ -335,7 +307,7 @@ void GraphWidget::insertVertex(DGL::Point<int> pos)
 
     const float posY = lineEditor.getValueAt(normalizedCenterX) * height;
 
-    tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);
+    //tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);
 
     const float normalizedX = spoonie::normalize(pos.getX(), width);
     const float normalizedY = spoonie::normalize(pos.getY(), height);
@@ -344,62 +316,59 @@ void GraphWidget::insertVertex(DGL::Point<int> pos)
 
     ui->setState("graph", lineEditor.serialize());
 
-    repaint();
+    return vertex;
 }
 
 bool GraphWidget::leftClick(const MouseEvent &ev)
 {
-    if (ev.press)
+    const Point<int> point = spoonie::flipY(ev.pos, getHeight());
+
+    if (focusedElement)
     {
-        mouseDown = true;
-        mouseDownLocation = ev.pos;
+        focusedElement->onMouse(ev);
+        focusedElement = nullptr;
 
-        if (hoveredWidget)
-        {
-            getParentWindow().hideCursor();
-
-            grabbedWidget = hoveredWidget;
-            hoveredWidget = nullptr;
-
-            expandCircle(grabbedWidget);
-        }
+        return true;
     }
-    else
+
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
-        mouseDown = false;
-
-        if (grabbedWidget)
+        if (graphVertices[i]->contains(point))
         {
-            getParentWindow().showCursor();
+            focusedElement = graphVertices[i];
 
-            hoveredWidget = grabbedWidget;
-            grabbedWidget = nullptr;
-
-            shrinkCircle(hoveredWidget);
+            return focusedElement->onMouse(ev);
         }
     }
 
-    return true;
+    return false;
 }
 
 bool GraphWidget::middleClick(const MouseEvent &ev)
 {
-    return true;
+    return false;
 }
 
 bool GraphWidget::rightClick(const MouseEvent &ev)
 {
-    const Point<int> point = flipY(ev.pos);
+    const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
     if (ev.press)
     {
-        insertVertex(point);
+        focusedElement = insertVertex(point);
+
+        if (focusedElement != nullptr)
+            return focusedElement->onMouse(ev);
     }
     else
     {
+        focusedElement->onMouse(ev);
+        focusedElement = nullptr;
+
+        return true;
     }
 
-    return true;
+    return false;
 }
 
 bool GraphWidget::onMouse(const MouseEvent &ev)
@@ -419,11 +388,23 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
 
 bool GraphWidget::onMotion(const MotionEvent &ev)
 {
+    const Point<int> point = spoonie::flipY(ev.pos, getHeight());
+
+    if (focusedElement)
+    {
+        return focusedElement->onMotion(ev);
+    }
+
     for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
-        if (graphVertices[i]->onMotion(ev))
-            break;
+        if (graphVertices[i]->contains(point))
+        {
+            return graphVertices[i]->onMotion(ev);
+        }
     }
+
+    //The cursor is not over any graph element
+    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
     return false;
 }

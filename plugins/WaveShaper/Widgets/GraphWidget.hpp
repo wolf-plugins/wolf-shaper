@@ -6,6 +6,7 @@
 
 #include "Graph.hpp"
 
+#include "ObjectPool.hpp"
 #include "Mathf.hpp"
 #include "GraphNodes.hpp"
 #include "DistrhoUI.hpp"
@@ -13,13 +14,14 @@
 START_NAMESPACE_DISTRHO
 
 class GraphVertex;
+class WaveShaperUI;
 
 class GraphWidget : public NanoWidget
 {
   friend class GraphVertex;
 
 public:
-  GraphWidget(UI *ui, Window &parent);
+  GraphWidget(WaveShaperUI *ui, Window &parent);
   void rebuildFromString(const char *serializedGraph);
 
 protected:
@@ -29,7 +31,7 @@ protected:
   bool onMotion(const MotionEvent &ev) override;
 
   void updateAnimations();
-  void flipY();
+  void flipYAxis();
   void drawSubGrid();
   void drawGrid();
   void drawBackground();
@@ -38,60 +40,26 @@ protected:
   void drawTensionHandle(int index);
   void drawGraphVertices();
   void drawAlignmentLines();
-  void insertVertex(DGL::Point<int> pos);
+  GraphVertex *insertVertex(const DGL::Point<int> pos);
   bool leftClick(const MouseEvent &ev);
   bool middleClick(const MouseEvent &ev);
   bool rightClick(const MouseEvent &ev);
 
-  void hoverCircle(DGL::Circle<int> *circle, int index)
-  {
-    hoveredWidget = circle;
-    focusedWidgetIndex = index;
-  }
-
-  void expandCircle(DGL::Circle<int> *circle)
-  {
-    circle->setSize(absoluteVertexSize + 1.5f);
-
-    repaint();
-  }
-
-  void shrinkCircle(DGL::Circle<int> *circle)
-  {
-    circle->setSize(absoluteVertexSize);
-
-    repaint();
-  }
-  
-  template <typename T>
-  DGL::Point<T> flipY(const DGL::Point<T> point)
-  {
-    const T x = point.getX();
-    const T y = getHeight() - point.getY();
-
-    return DGL::Point<T>(x, y);
-  }
-
 private:
+  void initializeDefaultVertices();
+
   bool mouseDown;
   Point<int> mouseDownLocation;
 
   spoonie::Graph lineEditor;
 
-  //VertexWidget *uiVertices[spoonie::maxVertices];
-  //VertexWidget uiVertex;
-
+  spoonie::ObjectPool<GraphVertex> graphVerticesPool;
   GraphVertex *graphVertices[spoonie::maxVertices];
 
-  DGL::Circle<int> vertexWidgets[spoonie::maxVertices];
-  DGL::Circle<int> tensionWidgets[spoonie::maxVertices - 1];
-
-  DGL::Circle<int> *hoveredWidget = nullptr;
-  DGL::Circle<int> *grabbedWidget = nullptr;
-  int focusedWidgetIndex = -1;
+  GraphVertex *focusedElement;
 
   const float absoluteVertexSize = 7.0f;
-  UI *ui;
+  WaveShaperUI *ui;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };

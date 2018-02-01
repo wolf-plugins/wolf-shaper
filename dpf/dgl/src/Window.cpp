@@ -37,6 +37,8 @@
 #else
 #include <sys/types.h>
 #include <unistd.h>
+#include <X11/Xcursor/Xcursor.h>
+
 extern "C" {
 #include "pugl/pugl_x11.c"
 }
@@ -90,7 +92,7 @@ struct Window::PrivateData
 #if defined(DISTRHO_OS_WINDOWS)
 		hwnd(0)
 #elif defined(DISTRHO_OS_MAC)
-			fNeedsIdle(true),
+		fNeedsIdle(true),
 		mView(nullptr),
 		mWindow(nullptr)
 #else
@@ -118,11 +120,11 @@ struct Window::PrivateData
 #if defined(DISTRHO_OS_WINDOWS)
 		hwnd(0)
 #elif defined(DISTRHO_OS_MAC)
-			fNeedsIdle(false),
+		fNeedsIdle(false),
 		mView(nullptr),
 		mWindow(nullptr)
 #else
-			xDisplay(nullptr),
+		xDisplay(nullptr),
 		xWindow(0)
 #endif
 		{
@@ -1328,6 +1330,25 @@ void Window::onClose()
 {
 }
 
+//fork----------
+
+void Window::setCursorStyle(CursorStyle style) 
+{
+#if defined(DISTRHO_OS_WINDOWS)
+    HCURSOR cursor = LoadCursor(NULL, IDC_HAND);
+
+	SetCursor(cursor);
+	SetClassLong(pData->hwnd, GCLP_HCURSOR, (DWORD)cursor);
+
+#elif defined(DISTRHO_OS_MAC)
+   [[NSCursor openHandCursor] set];
+
+#else
+	Cursor cursor = XcursorLibraryLoadCursor(pData->xDisplay, style == CursorStyle::Grab ? "grab" : "default");
+	XDefineCursor(pData->xDisplay, pData->xWindow, cursor);
+#endif
+}
+
 void Window::showCursor() 
 {
 #if defined(DISTRHO_OS_WINDOWS)
@@ -1339,7 +1360,6 @@ void Window::showCursor()
 #else
 	XUndefineCursor(pData->xDisplay, pData->xWindow);
 #endif
-
 }
 
 void Window::hideCursor()
@@ -1372,7 +1392,6 @@ void Window::setCursorPos(int x, int y)
 }
 
 //end fork------
-
 
 #ifndef DGL_FILE_BROWSER_DISABLED
 void Window::fileBrowserSelected(const char *)

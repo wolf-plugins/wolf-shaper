@@ -107,8 +107,8 @@ endif
 ifeq ($(HAVE_DGL),true)
 
 ifeq ($(LINUX),true)
-DGL_FLAGS = $(shell pkg-config --cflags gl x11)
-DGL_LIBS  = $(shell pkg-config --libs gl x11)
+DGL_FLAGS = $(shell pkg-config --cflags gl x11 xcursor)
+DGL_LIBS  = $(shell pkg-config --libs gl x11 xcursor)
 endif
 
 ifeq ($(MACOS),true)

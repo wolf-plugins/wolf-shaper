@@ -150,6 +150,7 @@ void UI::onResize(const ResizeEvent& ev)
 {
     pData->setSizeCallback(ev.size.getWidth(), ev.size.getHeight());
 }
+
 #endif
 
 // -----------------------------------------------------------------------------------------------------------
