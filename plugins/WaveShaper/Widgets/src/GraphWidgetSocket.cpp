@@ -117,9 +117,5 @@ void GraphWidgetSocket::onNanoDisplay()
 
     closePath();
 }
-  
-bool GraphWidgetSocket::onScroll(const ScrollEvent &ev) {}
-bool GraphWidgetSocket::onMouse(const MouseEvent &ev) {}
-bool GraphWidgetSocket::onMotion(const MotionEvent &ev) {}
 
 END_NAMESPACE_DISTRHO

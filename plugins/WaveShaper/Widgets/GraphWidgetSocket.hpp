@@ -17,9 +17,6 @@ public:
 
 protected:
   void onNanoDisplay() override;
-  bool onScroll(const ScrollEvent &ev) override;
-  bool onMouse(const MouseEvent &ev) override;
-  bool onMotion(const MotionEvent &ev) override;
 
 private:
   WaveShaperUI *ui;

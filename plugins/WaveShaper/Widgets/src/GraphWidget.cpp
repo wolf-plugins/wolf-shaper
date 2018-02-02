@@ -235,7 +235,7 @@ void GraphWidget::drawGraphLine(float lineWidth, Color color)
     strokeColor(color);
     strokeWidth(lineWidth);
 
-    moveTo(0.0f, 0.0f);
+    moveTo(0.0f, lineEditor.getVertexAtIndex(0)->y * height);
 
     const float iteration = 1.0f / width * 2.0f;
 
