@@ -294,8 +294,8 @@ void GraphWidget::onNanoDisplay()
     drawBackground();
     drawGrid();
 
-    drawGraphLine(3.2f, Color(169, 29, 239, 255));  //outer
-    drawGraphLine(1.2f, Color(245, 112, 188, 255)); //inner
+    drawGraphLine(5.0f, Color(169, 29, 239, 100));  //outer
+    drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
 
     if (focusedElement != nullptr)
         drawAlignmentLines();
