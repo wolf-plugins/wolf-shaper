@@ -14,13 +14,13 @@ enum GraphVertexType
   Right
 };
 
-class GraphVertex : public IdleCallback, public NanoVG
+class GraphVertex : public IdleCallback
 {
   friend class GraphWidget;
 
 public:
   GraphVertex();
-  GraphVertex(GraphWidget *parent, GraphVertexType type);
+  GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type);
 
   /**
    * Return true if the vertex cannot be moved on the X axis.
@@ -72,7 +72,7 @@ private:
   int index;
 
   GraphVertexType type;
-
+  GraphNodesLayer* layer;
   Circle<int> surface;
   Color color;
 

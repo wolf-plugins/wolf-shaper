@@ -7,6 +7,7 @@
 #include "WaveShaperUI.hpp"
 #include "GraphNodes.hpp"
 #include "Mathf.hpp"
+#include "GraphNodesLayer.hpp"
 
 #include <chrono>
 
@@ -15,15 +16,17 @@ START_NAMESPACE_DISTRHO
 GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     : NanoWidget(parent),
       ui(ui),
-      graphVerticesPool(spoonie::maxVertices, this, GraphVertexType::Middle),
+      graphNodesLayer(this, parent),
+      graphVerticesPool(spoonie::maxVertices, this, &graphNodesLayer, GraphVertexType::Middle),
       focusedElement(nullptr)
 {
-    const int marginTop = 48;
-    const int marginLeft = 36;
-    const int marginRight = 36;
-    const int marginBottom = 48;
+    const int width = ui->getWidth() - marginLeft - marginRight;
+    const int height = ui->getHeight() - marginTop - marginBottom;
 
-    setSize(ui->getWidth() - marginLeft - marginRight, ui->getHeight() - marginTop - marginBottom);
+    setSize(width, height);
+
+    graphNodesLayer.setSize(ui->getWidth(), ui->getHeight());
+
     setAbsolutePos(marginLeft, marginTop);
 
     initializeDefaultVertices();
@@ -137,7 +140,7 @@ void GraphWidget::drawGrid()
 
         stroke();
         closePath();
-        
+
         //background
         beginPath();
         strokeWidth(lineWidth);
@@ -216,7 +219,7 @@ void GraphWidget::drawBackground()
     rect(0.f, 0.f, width, height);
     //Paint gradient = radialGradient(centerX, centerY, 1.0f, centerX, Color(42, 42, 42, 255), Color(33, 32, 39, 255));
     //fillPaint(gradient);
-    fillColor(Color(40, 40, 47,255));
+    fillColor(Color(40, 40, 47, 255));
     fill();
 
     closePath();
@@ -258,10 +261,7 @@ void GraphWidget::drawTensionHandle(int index)
 
 void GraphWidget::drawGraphVertices()
 {
-    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
-    {
-        graphVertices[i]->render();
-    }
+
 }
 
 void GraphWidget::drawAlignmentLines()
@@ -299,8 +299,6 @@ void GraphWidget::onNanoDisplay()
 
     if (focusedElement != nullptr)
         drawAlignmentLines();
-
-    drawGraphVertices();
 }
 
 bool GraphWidget::onScroll(const ScrollEvent &ev)

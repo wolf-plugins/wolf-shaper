@@ -13,12 +13,12 @@ GraphVertex::GraphVertex()
 {
 }
 
-GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type) : NanoVG(parent),
-                                                                      parent(parent),
-                                                                      type(type),
-                                                                      color(Color(255, 255, 255, 255)),
-                                                                      grabbed(false),
-                                                                      lastClickButton(0)
+GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type) : parent(parent),
+                                                                                              layer(layer),
+                                                                                              type(type),
+                                                                                              color(Color(255, 255, 255, 255)),
+                                                                                              grabbed(false),
+                                                                                              lastClickButton(0)
 {
     switch (type)
     {
@@ -55,19 +55,19 @@ bool GraphVertex::isLockedX() const
 
 void GraphVertex::render()
 {
-    beginPath();
+    layer->beginPath();
 
-    strokeWidth(2.0f);
+    layer->strokeWidth(2.0f);
 
-    strokeColor(Color(0, 0, 0, 255));
-    fillColor(color);
+    layer->strokeColor(Color(0, 0, 0, 255));
+    layer->fillColor(color);
 
-    circle(surface.getX(), surface.getY(), surface.getSize());
+    layer->circle(parent->marginLeft + surface.getX(), parent->getHeight() - surface.getY() + parent->marginTop, surface.getSize());
 
-    fill();
-    stroke();
+    layer->fill();
+    layer->stroke();
 
-    closePath();
+    layer->closePath();
 }
 
 bool GraphVertex::contains(Point<int> pos)
@@ -100,12 +100,12 @@ int GraphVertex::getY() const
     return surface.getY();
 }
 
-int GraphVertex::getAbsoluteX() const 
+int GraphVertex::getAbsoluteX() const
 {
     return getX() + parent->getAbsoluteX();
 }
 
-int GraphVertex::getAbsoluteY() const 
+int GraphVertex::getAbsoluteY() const
 {
     return parent->getHeight() - getY() + parent->getAbsoluteY();
 }

@@ -4,6 +4,7 @@
 #include "ObjectPool.hpp"
 #include "DistrhoUI.hpp"
 #include "Graph.hpp"
+#include "GraphNodesLayer.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -13,6 +14,7 @@ class WaveShaperUI;
 class GraphWidget : public NanoWidget
 {
   friend class GraphVertex;
+  friend class GraphNodesLayer;
 
 public:
   GraphWidget(WaveShaperUI *ui, Window &parent);
@@ -49,7 +51,7 @@ protected:
 private:
   void initializeDefaultVertices();
   void resetVerticesPool();
-  
+
   bool mouseDown;
   Point<int> mouseDownLocation;
 
@@ -59,8 +61,15 @@ private:
   GraphVertex *graphVertices[spoonie::maxVertices];
 
   GraphVertex *focusedElement;
+  GraphNodesLayer graphNodesLayer;
 
   const float absoluteVertexSize = 7.0f;
+  
+  const int marginTop = 48;
+  const int marginLeft = 36;
+  const int marginRight = 36;
+  const int marginBottom = 48;
+
   WaveShaperUI *ui;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
