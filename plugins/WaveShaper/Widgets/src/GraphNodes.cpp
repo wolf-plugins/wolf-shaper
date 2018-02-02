@@ -100,6 +100,16 @@ int GraphVertex::getY() const
     return surface.getY();
 }
 
+int GraphVertex::getAbsoluteX() const 
+{
+    return getX() + parent->getAbsoluteX();
+}
+
+int GraphVertex::getAbsoluteY() const 
+{
+    return parent->getHeight() - getY() + parent->getAbsoluteY();
+}
+
 GraphVertex *GraphVertex::getVertexAtLeft() const
 {
     if (index == 0)
@@ -226,7 +236,7 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
     }
     else
     {
-        window->setCursorPos(getX(), parent->getHeight() - getY());
+        window->setCursorPos(getAbsoluteX(), getAbsoluteY());
         window->setCursorStyle(Window::CursorStyle::Grab);
 
         window->showCursor();

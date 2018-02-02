@@ -19,9 +19,9 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       focusedElement(nullptr)
 {
     const int marginTop = 48;
-    const int marginLeft = 24;
-    const int marginRight = 24;
-    const int marginBottom = 24;
+    const int marginLeft = 36;
+    const int marginRight = 36;
+    const int marginBottom = 48;
 
     setSize(ui->getWidth() - marginLeft - marginRight, ui->getHeight() - marginTop - marginBottom);
     setAbsolutePos(marginLeft, marginTop);
@@ -111,22 +111,33 @@ void GraphWidget::drawGrid()
     const float width = getWidth();
     const float height = getHeight();
 
-    const float lineWidth = 2.0f;
+    const float lineWidth = 1.0f;
 
-    const float squaresPerRow = 10.0f;
+    const int squaresPerRow = 8.0f;
 
     const float verticalStep = width / squaresPerRow;
     const float horizontalStep = height / squaresPerRow;
 
-    const Color gridForegroundColor = Color(51, 51, 51, 255);
+    const Color gridForegroundColor = Color(103, 98, 102, 255);
     const Color gridBackgroundColor = Color(25, 24, 26, 255);
-    const Color subGridColor = Color(25, 24, 26, 255);
+    const Color subGridColor = Color(27, 27, 27, 255);
 
     //vertical
-    for (int i = 0; i < squaresPerRow; ++i)
+    for (int i = 0; i < squaresPerRow + 1; ++i)
     {
-        const float posX = i * verticalStep;
+        const float posX = std::round(i * verticalStep);
 
+        //subgrid
+        beginPath();
+        strokeWidth(lineWidth);
+        strokeColor(subGridColor);
+
+        moveTo(std::round(posX + verticalStep / 2.0f), 0.0f);
+        lineTo(std::round(posX + verticalStep / 2.0f), height);
+
+        stroke();
+        closePath();
+        
         //background
         beginPath();
         strokeWidth(lineWidth);
@@ -148,23 +159,23 @@ void GraphWidget::drawGrid()
 
         stroke();
         closePath();
+    }
+
+    //horizontal
+    for (int i = 0; i < squaresPerRow + 1; ++i)
+    {
+        const float posY = std::round(i * horizontalStep);
 
         //subgrid
         beginPath();
         strokeWidth(lineWidth);
         strokeColor(subGridColor);
 
-        moveTo(posX + verticalStep / 2.0f, 0.0f);
-        lineTo(posX + verticalStep / 2.0f, height);
+        moveTo(0.0f, std::round(posY + horizontalStep / 2.0f));
+        lineTo(width, std::round(posY + horizontalStep / 2.0f));
 
         stroke();
         closePath();
-    }
-
-    //horizontal
-    for (int i = 0; i < squaresPerRow; ++i)
-    {
-        const float posY = i * horizontalStep;
 
         //background
         beginPath();
@@ -189,17 +200,6 @@ void GraphWidget::drawGrid()
 
         stroke();
         closePath();
-
-        //subgrid
-        beginPath();
-        strokeWidth(lineWidth);
-        strokeColor(subGridColor);
-
-        moveTo(0.0f, posY + horizontalStep / 2.0f);
-        lineTo(width, posY + horizontalStep / 2.0f);
-
-        stroke();
-        closePath();
     }
 }
 
@@ -214,9 +214,9 @@ void GraphWidget::drawBackground()
     beginPath();
 
     rect(0.f, 0.f, width, height);
-    Paint gradient = radialGradient(centerX, centerY, 1.0f, centerX, Color(42, 42, 42, 255), Color(33, 32, 39, 255));
-    fillPaint(gradient);
-
+    //Paint gradient = radialGradient(centerX, centerY, 1.0f, centerX, Color(42, 42, 42, 255), Color(33, 32, 39, 255));
+    //fillPaint(gradient);
+    fillColor(Color(40, 40, 47,255));
     fill();
 
     closePath();
@@ -258,12 +258,10 @@ void GraphWidget::drawTensionHandle(int index)
 
 void GraphWidget::drawGraphVertices()
 {
-    for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
         graphVertices[i]->render();
     }
-
-    graphVertices[lineEditor.getVertexCount() - 1]->render();
 }
 
 void GraphWidget::drawAlignmentLines()

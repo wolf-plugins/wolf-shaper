@@ -47,6 +47,8 @@ public:
 
   int getX() const;
   int getY() const;
+  int getAbsoluteX() const;
+  int getAbsoluteY() const;
 
 protected:
   void idleCallback() override;

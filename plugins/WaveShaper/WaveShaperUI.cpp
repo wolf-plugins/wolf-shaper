@@ -4,7 +4,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(512, 512),
+WaveShaperUI::WaveShaperUI() : UI(600, 600),
                                graphWidgetSocket(this, getParentWindow())
 {
 }
