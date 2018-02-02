@@ -1,12 +1,6 @@
 #ifndef SPOONIE_GRAPH_NODES_HPP_INCLUDED
 #define SPOONIE_GRAPH_NODES_HPP_INCLUDED
 
-#include "Geometry.hpp"
-#include "Graph.hpp"
-#include "NanoVG.hpp"
-#include "Widget.hpp"
-#include "GraphWidget.hpp"
-#include "Mathf.hpp"
 #include <chrono>
 
 START_NAMESPACE_DISTRHO
@@ -64,7 +58,6 @@ protected:
   GraphVertex *getVertexAtLeft() const;
   GraphVertex *getVertexAtRight() const;
   spoonie::Graph *getLineEditor();
-  UI *getUI();
   Window *getParentWindow();
 
   void updateGraph();

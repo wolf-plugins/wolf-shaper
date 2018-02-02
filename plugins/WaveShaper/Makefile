@@ -20,6 +20,7 @@ OBJS_UI  = \
 	Structures/src/Graph.cpp.o \
 	Widgets/src/GraphNodes.cpp.o \
 	Widgets/src/GraphWidget.cpp.o \
+	Widgets/src/GraphWidgetSocket.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------

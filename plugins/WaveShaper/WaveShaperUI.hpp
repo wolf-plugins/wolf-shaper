@@ -2,7 +2,7 @@
 #define WAVESHAPER_UI_HPP_INCLUDED
 
 #include "DistrhoUI.hpp"
-#include "GraphWidget.hpp"
+#include "GraphWidgetSocket.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -32,7 +32,7 @@ protected:
 private:
   bool parameters[paramCount];
 
-  GraphWidget graphWidget;
+  GraphWidgetSocket graphWidgetSocket;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
 };

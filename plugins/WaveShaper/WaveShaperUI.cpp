@@ -1,17 +1,11 @@
 #include "DistrhoUI.hpp"
 
-#include "Graph.hpp"
-#include "Window.hpp"
-#include "Mathf.hpp"
-//#include "VertexWidget.hpp"
-#include "GraphWidget.hpp"
 #include "WaveShaperUI.hpp"
-
 
 START_NAMESPACE_DISTRHO
 
 WaveShaperUI::WaveShaperUI() : UI(512, 512),
-                               graphWidget(this, getParentWindow())
+                               graphWidgetSocket(this, getParentWindow())
 {
 }
 
@@ -29,7 +23,7 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
 void WaveShaperUI::stateChanged(const char *key, const char *value)
 {
     if (std::strcmp(key, "graph") == 0)
-        graphWidget.rebuildFromString(value);
+        graphWidgetSocket.graphWidget.rebuildFromString(value);
 
     repaint();
 }

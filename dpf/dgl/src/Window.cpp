@@ -1349,7 +1349,7 @@ void Window::setCursorStyle(CursorStyle style)
 #endif
 }
 
-void Window::showCursor() 
+void Window::showCursor()
 {
 #if defined(DISTRHO_OS_WINDOWS)
 	while(ShowCursor(true) < 0);

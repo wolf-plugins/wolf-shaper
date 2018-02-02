@@ -1,16 +1,9 @@
 #ifndef SPOONIE_GRAPH_WIDGET_HPP_INCLUDED
 #define SPOONIE_GRAPH_WIDGET_HPP_INCLUDED
 
-#include "Widget.hpp"
-#include "Window.hpp"
-
-#include "Graph.hpp"
-
 #include "ObjectPool.hpp"
-#include "Mathf.hpp"
-#include "GraphNodes.hpp"
 #include "DistrhoUI.hpp"
-#include <chrono>
+#include "Graph.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -50,9 +43,7 @@ protected:
   void removeVertex(const int index);
 
   bool leftClick(const MouseEvent &ev);
-
   bool middleClick(const MouseEvent &ev);
-
   bool rightClick(const MouseEvent &ev);
 
 private:

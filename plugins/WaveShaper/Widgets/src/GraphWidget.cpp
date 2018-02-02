@@ -2,13 +2,11 @@
 #include "Window.hpp"
 
 #include "Graph.hpp"
-
-#include "GraphWidget.hpp"
-#include "Mathf.hpp"
-#include "GraphNodes.hpp"
 #include "ObjectPool.hpp"
+#include "GraphWidget.hpp"
 #include "WaveShaperUI.hpp"
-#include "Utils.hpp"
+#include "GraphNodes.hpp"
+#include "Mathf.hpp"
 
 #include <chrono>
 
@@ -20,13 +18,20 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       graphVerticesPool(spoonie::maxVertices, this, GraphVertexType::Middle),
       focusedElement(nullptr)
 {
-    setSize(ui->getWidth(), ui->getHeight());
+    const int marginTop = 48;
+    const int marginLeft = 24;
+    const int marginRight = 24;
+    const int marginBottom = 24;
+
+    setSize(ui->getWidth() - marginLeft - marginRight, ui->getHeight() - marginTop - marginBottom);
+    setAbsolutePos(marginLeft, marginTop);
 
     initializeDefaultVertices();
 }
 
 void GraphWidget::initializeDefaultVertices()
 {
+    //Left vertex
     GraphVertex *vertex = graphVerticesPool.getObject();
 
     vertex->setPos(0, 0);
@@ -35,6 +40,7 @@ void GraphWidget::initializeDefaultVertices()
 
     graphVertices[0] = vertex;
 
+    //Right vertex
     vertex = graphVerticesPool.getObject();
 
     vertex->setPos(getWidth(), getHeight());
@@ -326,12 +332,12 @@ void GraphWidget::removeVertex(int index)
     //Get rid of the ui widget
     graphVerticesPool.freeObject(graphVertices[index]);
 
-    const int vertexCount = lineEditor.getVertexCount();
+    const int vertexCount = lineEditor.getVertexCount() - 1;
 
-    for (int i = index; i < vertexCount - 1; ++i)
+    for (int i = index; i < vertexCount; ++i)
     {
         graphVertices[i] = graphVertices[i + 1];
-        graphVertices[i]->index -= 1;
+        graphVertices[i]->index--;
     }
 
     //Get rid of the logical vertex and update dsp
@@ -339,7 +345,7 @@ void GraphWidget::removeVertex(int index)
     ui->setState("graph", lineEditor.serialize());
 
     focusedElement = nullptr;
-    
+
     repaint();
 }
 

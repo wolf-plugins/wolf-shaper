@@ -1,12 +1,11 @@
 #include "Geometry.hpp"
 #include "Graph.hpp"
 #include "NanoVG.hpp"
-#include "Widget.hpp"
-#include "GraphNodes.hpp"
-#include "GraphWidget.hpp"
-#include "Mathf.hpp"
+#include "Window.hpp"
 #include "WaveShaperUI.hpp"
-#include "Utils.hpp"
+#include "GraphWidget.hpp"
+#include "GraphNodes.hpp"
+#include "Mathf.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -142,11 +141,6 @@ spoonie::Graph *GraphVertex::getLineEditor()
     return &parent->lineEditor;
 }
 
-UI *GraphVertex::getUI()
-{
-    return parent->ui;
-}
-
 Window *GraphVertex::getParentWindow()
 {
     return &parent->getParentWindow();
@@ -164,7 +158,7 @@ void GraphVertex::updateGraph()
 
     lineEditor->getVertexAtIndex(index)->setPosition(normalizedX, normalizedY);
 
-    getUI()->setState("graph", lineEditor->serialize());
+    parent->ui->setState("graph", lineEditor->serialize());
 }
 
 bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
