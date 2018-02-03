@@ -11,7 +11,6 @@ START_NAMESPACE_DISTRHO
 
 GraphNode::GraphNode(GraphWidget *parent, GraphNodesLayer *layer) : parent(parent),
                                                                     layer(layer),
-                                                                    surface(Circle<int>(0, 0, 8.0f)),
                                                                     color(Color(255, 255, 255, 255)),
                                                                     grabbed(false)
 {
@@ -24,7 +23,8 @@ bool GraphNode::onMouse(const Widget::MouseEvent &ev) {}
 void GraphNode::render() {}
 
 GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type) : GraphNode(parent, layer),
-                                                                                              tensionHandle(parent, layer),
+                                                                                              surface(Circle<int>(0, 0, 8.0f)),
+                                                                                              tensionHandle(parent, layer, this),
                                                                                               type(type),
                                                                                               lastClickButton(0)
 {
@@ -62,7 +62,7 @@ void GraphVertex::render()
     layer->strokeColor(Color(0, 0, 0, 255));
     layer->fillColor(color);
 
-    layer->circle(parent->marginLeft + surface.getX(), parent->getHeight() - surface.getY() + parent->marginTop, surface.getSize());
+    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, getSize());
 
     layer->fill();
     layer->stroke();
@@ -70,34 +70,48 @@ void GraphVertex::render()
     layer->closePath();
 }
 
-bool GraphNode::contains(Point<int> pos)
+GraphVertexType GraphVertex::getType()
+{
+    return type;
+}
+
+bool GraphVertex::contains(Point<int> pos)
 {
     return spoonie::pointInCircle(surface, pos);
 }
 
-void GraphNode::idleCallback()
+bool GraphTensionHandle::contains(Point<int> pos)
 {
-    parent->repaint();
+    return false;
 }
 
-void GraphNode::setPos(int x, int y)
+void GraphNode::idleCallback()
+{
+}
+
+void GraphVertex::setPos(int x, int y)
 {
     surface.setPos(x, y);
 }
 
-void GraphNode::setPos(Point<int> pos)
+void GraphVertex::setPos(Point<int> pos)
 {
     surface.setPos(pos);
 }
 
-int GraphNode::getX() const
+int GraphVertex::getX() const
 {
     return surface.getX();
 }
 
-int GraphNode::getY() const
+int GraphVertex::getY() const
 {
     return surface.getY();
+}
+
+float GraphVertex::getSize() const
+{
+    return surface.getSize();
 }
 
 int GraphNode::getAbsoluteX() const
@@ -108,6 +122,29 @@ int GraphNode::getAbsoluteX() const
 int GraphNode::getAbsoluteY() const
 {
     return parent->getHeight() - getY() + parent->getAbsoluteY();
+}
+
+int GraphTensionHandle::getX() const
+{
+    GraphVertex *leftVertex = vertex;
+    GraphVertex *rightVertex = leftVertex->getVertexAtRight();
+
+    return (leftVertex->getX() + rightVertex->getX()) / 2.0f;
+}
+
+spoonie::Graph *GraphNode::getLineEditor() const
+{
+    return &parent->lineEditor;
+}
+
+int GraphTensionHandle::getY() const
+{
+    GraphVertex *leftVertex = vertex;
+    GraphVertex *rightVertex = leftVertex->getVertexAtRight();
+
+    float normalizedX = (float)getX() / parent->getWidth();
+
+    return getLineEditor()->getValueAt(normalizedX) * parent->getHeight();
 }
 
 GraphVertex *GraphVertex::getVertexAtLeft() const
@@ -124,6 +161,11 @@ GraphVertex *GraphVertex::getVertexAtRight() const
         return nullptr;
 
     return parent->graphVertices[index + 1];
+}
+
+GraphTensionHandle *GraphVertex::getTensionHandle()
+{
+    return &tensionHandle;
 }
 
 Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
@@ -146,11 +188,6 @@ Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
     return Point<int>(x, y);
 }
 
-spoonie::Graph *GraphVertex::getLineEditor()
-{
-    return &parent->lineEditor;
-}
-
 Window *GraphVertex::getParentWindow()
 {
     return &parent->getParentWindow();
@@ -164,7 +201,7 @@ void GraphVertex::updateGraph()
     const float normalizedX = spoonie::normalize(surface.getX(), width);
     const float normalizedY = spoonie::normalize(surface.getY(), height);
 
-    spoonie::Graph *lineEditor = getLineEditor();
+    spoonie::Graph *lineEditor = &parent->lineEditor;
 
     lineEditor->getVertexAtIndex(index)->setPosition(normalizedX, normalizedY);
 
@@ -247,12 +284,30 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
     return true;
 }
 
-GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer) : GraphNode(parent, layer)
+GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer, GraphVertex *vertex) : GraphNode(parent, layer),
+                                                                                                           vertex(vertex)
 {
 }
 
 void GraphTensionHandle::render()
 {
+    if (vertex->getType() == GraphVertexType::Right) //last vertex doesn't have a tension handle
+        return;
+
+    layer->beginPath();
+
+    layer->strokeWidth(2.0f);
+
+    layer->strokeColor(Color(0, 0, 0, 255));
+    layer->fillColor(color);
+
+    fprintf(stderr, "%d\n",  parent->getHeight() - getY() + parent->marginTop);
+    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 8.0f);
+
+    layer->fill();
+    layer->stroke();
+
+    layer->closePath();
 }
 
 END_NAMESPACE_DISTRHO

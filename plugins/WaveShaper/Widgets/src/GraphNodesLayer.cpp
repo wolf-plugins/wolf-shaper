@@ -19,7 +19,10 @@ void GraphNodesLayer::onNanoDisplay()
     
     for (int i = 0; i < vertexCount; ++i)
     {
-        graph->graphVertices[i]->render();
+        GraphVertex *vertex = graph->graphVertices[i];
+
+        vertex->render();
+        vertex->getTensionHandle()->render();
     }
 }
 

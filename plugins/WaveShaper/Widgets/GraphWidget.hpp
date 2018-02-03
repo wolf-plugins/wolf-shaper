@@ -15,7 +15,9 @@ class WaveShaperUI;
 
 class GraphWidget : public NanoWidget
 {
+  friend class GraphNode;
   friend class GraphVertex;
+  friend class GraphTensionHandle;
   friend class GraphNodesLayer;
   
 public:

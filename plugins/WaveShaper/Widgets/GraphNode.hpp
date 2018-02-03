@@ -30,13 +30,11 @@ public:
   /**
    * Check if this node contains the point @a pos.
    */
-  bool contains(Point<int> pos);
+  virtual bool contains(Point<int> pos) = 0;
 
-  void setPos(int x, int y);
-  void setPos(Point<int> pos);
+  virtual int getX() const = 0;
+  virtual int getY() const = 0;
 
-  int getX() const;
-  int getY() const;
   int getAbsoluteX() const;
   int getAbsoluteY() const;
 
@@ -46,9 +44,10 @@ protected:
   virtual bool onMotion(const Widget::MotionEvent &ev);
   virtual bool onMouse(const Widget::MouseEvent &ev);
 
+  spoonie::Graph *getLineEditor() const;
+
   GraphWidget *parent;
   GraphNodesLayer *layer;
-  Circle<int> surface;
   Color color;
 
   bool grabbed;
@@ -57,9 +56,18 @@ protected:
 class GraphTensionHandle : public GraphNode
 {
 public:
-  GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer);
+  GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer, GraphVertex *vertex);
 
   void render() override;
+  bool contains(Point<int> pos) override;
+
+  int getX() const override;
+  int getY() const override;
+
+private:
+  GraphVertex *vertex;
+
+  DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphTensionHandle)
 };
 
 class GraphVertex : public GraphNode
@@ -76,15 +84,25 @@ public:
    * Return true if the vertex cannot be moved on the X axis.
    */
   bool isLockedX() const;
-
   void removeFromGraph();
+
+  bool contains(Point<int> pos) override;
+  void setPos(int x, int y);
+  void setPos(Point<int> pos);
+
+  int getX() const override;
+  int getY() const override;
+  float getSize() const;
+
+  GraphVertex *getVertexAtLeft() const;
+  GraphVertex *getVertexAtRight() const;
+  GraphTensionHandle *getTensionHandle();
+
+  GraphVertexType getType();
 
 protected:
   bool leftDoubleClick(const Widget::MouseEvent &ev);
 
-  GraphVertex *getVertexAtLeft() const;
-  GraphVertex *getVertexAtRight() const;
-  spoonie::Graph *getLineEditor();
   Window *getParentWindow();
 
   GraphTensionHandle tensionHandle;
@@ -98,6 +116,7 @@ protected:
 
 private:
   int index;
+  Circle<int> surface;
 
   GraphVertexType type;
 
