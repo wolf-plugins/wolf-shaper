@@ -99,12 +99,12 @@ void GraphVertex::setPos(Point<int> pos)
     surface.setPos(pos);
 }
 
-int GraphVertex::getX() const
+float GraphVertex::getX() const
 {
     return surface.getX();
 }
 
-int GraphVertex::getY() const
+float GraphVertex::getY() const
 {
     return surface.getY();
 }
@@ -124,7 +124,7 @@ int GraphNode::getAbsoluteY() const
     return parent->getHeight() - getY() + parent->getAbsoluteY();
 }
 
-int GraphTensionHandle::getX() const
+float GraphTensionHandle::getX() const
 {
     GraphVertex *leftVertex = vertex;
     GraphVertex *rightVertex = leftVertex->getVertexAtRight();
@@ -137,7 +137,7 @@ spoonie::Graph *GraphNode::getLineEditor() const
     return &parent->lineEditor;
 }
 
-int GraphTensionHandle::getY() const
+float GraphTensionHandle::getY() const
 {
     GraphVertex *leftVertex = vertex;
     GraphVertex *rightVertex = leftVertex->getVertexAtRight();
@@ -301,7 +301,6 @@ void GraphTensionHandle::render()
     layer->strokeColor(Color(0, 0, 0, 255));
     layer->fillColor(color);
 
-    fprintf(stderr, "%d\n",  parent->getHeight() - getY() + parent->marginTop);
     layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 8.0f);
 
     layer->fill();

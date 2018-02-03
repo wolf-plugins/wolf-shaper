@@ -32,8 +32,8 @@ public:
    */
   virtual bool contains(Point<int> pos) = 0;
 
-  virtual int getX() const = 0;
-  virtual int getY() const = 0;
+  virtual float getX() const = 0;
+  virtual float getY() const = 0;
 
   int getAbsoluteX() const;
   int getAbsoluteY() const;
@@ -61,8 +61,8 @@ public:
   void render() override;
   bool contains(Point<int> pos) override;
 
-  int getX() const override;
-  int getY() const override;
+  float getX() const override;
+  float getY() const override;
 
 private:
   GraphVertex *vertex;
@@ -90,8 +90,8 @@ public:
   void setPos(int x, int y);
   void setPos(Point<int> pos);
 
-  int getX() const override;
-  int getY() const override;
+  float getX() const override;
+  float getY() const override;
   float getSize() const;
 
   GraphVertex *getVertexAtLeft() const;
