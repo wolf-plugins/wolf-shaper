@@ -4,20 +4,28 @@
 #include "Window.hpp"
 #include "WaveShaperUI.hpp"
 #include "GraphWidget.hpp"
-#include "GraphNodes.hpp"
+#include "GraphNode.hpp"
 #include "Mathf.hpp"
 
 START_NAMESPACE_DISTRHO
 
-GraphVertex::GraphVertex()
+GraphNode::GraphNode(GraphWidget *parent, GraphNodesLayer *layer) : parent(parent),
+                                                                    layer(layer),
+                                                                    surface(Circle<int>(0, 0, 8.0f)),
+                                                                    color(Color(255, 255, 255, 255)),
+                                                                    grabbed(false)
 {
 }
 
-GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type) : parent(parent),
-                                                                                              layer(layer),
+GraphNode::~GraphNode() {}
+
+bool GraphNode::onMotion(const Widget::MotionEvent &ev) {}
+bool GraphNode::onMouse(const Widget::MouseEvent &ev) {}
+void GraphNode::render() {}
+
+GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type) : GraphNode(parent, layer),
+                                                                                              tensionHandle(parent, layer),
                                                                                               type(type),
-                                                                                              color(Color(255, 255, 255, 255)),
-                                                                                              grabbed(false),
                                                                                               lastClickButton(0)
 {
     switch (type)
@@ -38,14 +46,6 @@ void GraphVertex::reset()
     color = Color(255, 255, 255, 255);
     type = GraphVertexType::Middle;
     grabbed = false;
-}
-
-void GraphVertex::fadeIn()
-{
-}
-
-void GraphVertex::stopFadeIn()
-{
 }
 
 bool GraphVertex::isLockedX() const
@@ -70,42 +70,42 @@ void GraphVertex::render()
     layer->closePath();
 }
 
-bool GraphVertex::contains(Point<int> pos)
+bool GraphNode::contains(Point<int> pos)
 {
     return spoonie::pointInCircle(surface, pos);
 }
 
-void GraphVertex::idleCallback()
+void GraphNode::idleCallback()
 {
     parent->repaint();
 }
 
-void GraphVertex::setPos(int x, int y)
+void GraphNode::setPos(int x, int y)
 {
     surface.setPos(x, y);
 }
 
-void GraphVertex::setPos(Point<int> pos)
+void GraphNode::setPos(Point<int> pos)
 {
     surface.setPos(pos);
 }
 
-int GraphVertex::getX() const
+int GraphNode::getX() const
 {
     return surface.getX();
 }
 
-int GraphVertex::getY() const
+int GraphNode::getY() const
 {
     return surface.getY();
 }
 
-int GraphVertex::getAbsoluteX() const
+int GraphNode::getAbsoluteX() const
 {
     return getX() + parent->getAbsoluteX();
 }
 
-int GraphVertex::getAbsoluteY() const
+int GraphNode::getAbsoluteY() const
 {
     return parent->getHeight() - getY() + parent->getAbsoluteY();
 }
@@ -195,7 +195,7 @@ bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
 }
 
 /**
- * Make the node remove itself from the graph.
+ * Make the vertex remove itself from the graph.
  */
 void GraphVertex::removeFromGraph()
 {
@@ -247,27 +247,12 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
     return true;
 }
 
-GraphTensionHandle::GraphTensionHandle()
-{
-}
-
-GraphTensionHandle::GraphTensionHandle(GraphWidget *parent) : parent(parent)
+GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer) : GraphNode(parent, layer)
 {
 }
 
 void GraphTensionHandle::render()
 {
-    parent->beginPath();
-
-    parent->strokeWidth(2.0f);
-    parent->strokeColor(Color(0, 0, 0, 255));
-
-    parent->circle(12.0f, 12.0f, 10.f);
-
-    parent->fill();
-    parent->stroke();
-
-    parent->closePath();
 }
 
 END_NAMESPACE_DISTRHO

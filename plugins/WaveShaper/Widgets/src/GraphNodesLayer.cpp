@@ -1,6 +1,6 @@
 #include "GraphNodesLayer.hpp"
 #include "GraphWidget.hpp"
-#include "GraphNodes.hpp"
+#include "GraphNode.hpp"
 
 START_NAMESPACE_DISTRHO
 

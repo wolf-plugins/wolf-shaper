@@ -5,7 +5,7 @@
 #include "ObjectPool.hpp"
 #include "GraphWidget.hpp"
 #include "WaveShaperUI.hpp"
-#include "GraphNodes.hpp"
+#include "GraphNode.hpp"
 #include "Mathf.hpp"
 #include "GraphNodesLayer.hpp"
 
@@ -74,6 +74,7 @@ void GraphWidget::rebuildFromString(const char *serializedGraph)
 
     lineEditor.rebuildFromString(serializedGraph);
 
+    //position ui vertices to match the new graph
     for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
         GraphVertex *vertex = graphVerticesPool.getObject();
@@ -251,19 +252,6 @@ void GraphWidget::drawGraphLine(float lineWidth, Color color)
     closePath();
 }
 
-void GraphWidget::drawVertex(int index)
-{
-}
-
-void GraphWidget::drawTensionHandle(int index)
-{
-}
-
-void GraphWidget::drawGraphVertices()
-{
-
-}
-
 void GraphWidget::drawAlignmentLines()
 {
     const int x = focusedElement->getX();
@@ -294,7 +282,7 @@ void GraphWidget::onNanoDisplay()
     drawBackground();
     drawGrid();
 
-    drawGraphLine(5.0f, Color(169, 29, 239, 100));  //outer
+    drawGraphLine(5.0f, Color(169, 29, 239, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
 
     if (focusedElement != nullptr)
@@ -404,11 +392,19 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
         return true;
     }
 
+    //Testing for mouse hover on graph node
     for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
         if (graphVertices[i]->contains(point))
         {
             focusedElement = graphVertices[i];
+
+            return focusedElement->onMouse(ev);
+        }
+
+        else if (graphVertices[i]->tensionHandle.contains(point))
+        {
+            focusedElement = &graphVertices[i]->tensionHandle;
 
             return focusedElement->onMouse(ev);
         }
@@ -468,15 +464,20 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
         return focusedElement->onMotion(ev);
     }
 
+    //Testing for mouse hover on graph nodes
     for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
         if (graphVertices[i]->contains(point))
         {
             return graphVertices[i]->onMotion(ev);
         }
+        else if (graphVertices[i]->tensionHandle.contains(point))
+        {
+            return graphVertices[i]->tensionHandle.onMotion(ev);
+        }
     }
 
-    //The cursor is not over any graph element
+    //The cursor is not over any graph node
     getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
     return false;

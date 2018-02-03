@@ -9,13 +9,15 @@
 START_NAMESPACE_DISTRHO
 
 class GraphVertex;
+class GraphTensionHandle;
+class GraphNode;
 class WaveShaperUI;
 
 class GraphWidget : public NanoWidget
 {
   friend class GraphVertex;
   friend class GraphNodesLayer;
-
+  
 public:
   GraphWidget(WaveShaperUI *ui, Window &parent);
   void rebuildFromString(const char *serializedGraph);
@@ -33,10 +35,8 @@ protected:
   void drawGrid();
   void drawBackground();
   void drawGraphLine(float lineWidth, Color color);
-  void drawVertex(int index);
-  void drawTensionHandle(int index);
-  void drawGraphVertices();
   void drawAlignmentLines();
+  void positionTensionHandles();
 
   /**
    * Insert a new vertex into the graph and return a pointer to it. 
@@ -58,9 +58,10 @@ private:
   spoonie::Graph lineEditor;
 
   spoonie::ObjectPool<GraphVertex> graphVerticesPool;
+
   GraphVertex *graphVertices[spoonie::maxVertices];
 
-  GraphVertex *focusedElement;
+  GraphNode *focusedElement;
   GraphNodesLayer graphNodesLayer;
 
   const float absoluteVertexSize = 7.0f;
