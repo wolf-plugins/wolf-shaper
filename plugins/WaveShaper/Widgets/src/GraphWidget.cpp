@@ -295,7 +295,7 @@ void GraphWidget::onNanoDisplay()
     drawGraphLine(5.0f, Color(169, 29, 239, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
 
-    if (focusedElement != nullptr && dynamic_cast<GraphVertex*>(focusedElement))
+    if (focusedElement != nullptr && dynamic_cast<GraphVertex *>(focusedElement))
         drawAlignmentLines();
 }
 
@@ -407,8 +407,8 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
         return true;
     }
 
-    //Testing for mouse hover on graph node
-    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    //Testing for mouse hover on graph vertices
+    for (int i =  lineEditor.getVertexCount() - 1; i >= 0; --i)
     {
         if (graphVertices[i]->contains(point))
         {
@@ -416,8 +416,12 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 
             return focusedElement->onMouse(ev);
         }
+    }
 
-        else if (graphVertices[i]->tensionHandle.contains(point))
+    //Testing for mouse hover on tension handles
+    for (int i =  lineEditor.getVertexCount() - 1; i >= 0; --i)
+    {
+        if (graphVertices[i]->tensionHandle.contains(point))
         {
             focusedElement = &graphVertices[i]->tensionHandle;
 
@@ -425,6 +429,7 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
         }
     }
 
+    //The cursor is not over any graph node
     return false;
 }
 
