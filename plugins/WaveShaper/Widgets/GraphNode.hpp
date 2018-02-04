@@ -37,6 +37,8 @@ public:
 
   int getAbsoluteX() const;
   int getAbsoluteY() const;
+  
+  Window *getParentWindow();
 
 protected:
   void idleCallback() override;
@@ -68,10 +70,12 @@ public:
 
 protected:
   bool onMotion(const Widget::MotionEvent &ev) override;
+  bool onMouse(const Widget::MouseEvent &ev) override;
 
 private:
   GraphVertex *vertex;
-
+  Point<int> mouseDownPosition;
+  
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphTensionHandle)
 };
 
@@ -98,8 +102,10 @@ public:
   float getX() const override;
   float getY() const override;
   float getSize() const;
+
   float getTension();
-  
+  int getIndex();
+
   GraphVertex *getVertexAtLeft() const;
   GraphVertex *getVertexAtRight() const;
   GraphTensionHandle *getTensionHandle();
@@ -108,8 +114,6 @@ public:
 
 protected:
   bool leftDoubleClick(const Widget::MouseEvent &ev);
-
-  Window *getParentWindow();
 
   GraphTensionHandle tensionHandle;
 

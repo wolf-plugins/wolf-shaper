@@ -199,7 +199,7 @@ Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
     return Point<int>(x, y);
 }
 
-Window *GraphVertex::getParentWindow()
+Window *GraphNode::getParentWindow()
 {
     return &parent->getParentWindow();
 }
@@ -242,6 +242,11 @@ bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
     return true;
 }
 
+int GraphVertex::getIndex()
+{
+    return index;
+}
+
 bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
 {
     if (!grabbed)
@@ -250,17 +255,27 @@ bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
         return true;
     }
 
-    /*Point<int> pos = spoonie::flipY(ev.pos, parent->getHeight());
+    Point<int> pos = spoonie::flipY(ev.pos, parent->getHeight());
 
-    Point<int> clampedPosition = clampVertexPosition(pos);
-    surface.setPos(clampedPosition);
+    const GraphVertex *leftVertex = vertex;
+    const GraphVertex *rightVertex = vertex->getVertexAtRight();
 
-    updateGraph();
+    float tension = vertex->getTension();
+    float difference = (mouseDownPosition.getY() - pos.getY()) / 2.0f;
+
+    if (leftVertex->getY() > rightVertex->getY())
+        difference = -difference;
+
+    mouseDownPosition = pos;
+
+    tension = spoonie::clamp(tension + difference, -100.0f, 100.0f);
+
+    spoonie::Graph *lineEditor = getLineEditor();
+    lineEditor->getVertexAtIndex(vertex->getIndex())->tension = tension;
+
+    parent->ui->setState("graph", lineEditor->serialize());
 
     parent->repaint();
-
-    //Cancel out double clicks
-    lastClickButton = 0;*/
 
     return true;
 }
@@ -323,6 +338,30 @@ GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *lay
 {
 }
 
+bool GraphTensionHandle::onMouse(const Widget::MouseEvent &ev)
+{
+    grabbed = ev.press;
+    Window *window = getParentWindow();
+
+    if (grabbed)
+    {
+        mouseDownPosition = spoonie::flipY(ev.pos, parent->getHeight());
+
+        window->hideCursor();
+    }
+    else
+    {
+        window->setCursorPos(getAbsoluteX(), getAbsoluteY());
+        window->setCursorStyle(Window::CursorStyle::Grab);
+
+        window->showCursor();
+    }
+
+    parent->repaint();
+
+    return true;
+}
+
 void GraphTensionHandle::render()
 {
     if (vertex->getType() == GraphVertexType::Right) //last vertex doesn't have a tension handle
@@ -331,7 +370,6 @@ void GraphTensionHandle::render()
     layer->beginPath();
 
     layer->strokeWidth(2.0f);
-
     layer->strokeColor(Color(228, 104, 181, 255));
 
     layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 6.0f);
