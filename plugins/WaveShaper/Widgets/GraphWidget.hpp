@@ -19,11 +19,11 @@ class GraphWidget : public NanoWidget
   friend class GraphVertex;
   friend class GraphTensionHandle;
   friend class GraphNodesLayer;
-  
+
 public:
   GraphWidget(WaveShaperUI *ui, Window &parent);
   ~GraphWidget();
-  
+
   void rebuildFromString(const char *serializedGraph);
   void reset();
 
@@ -56,26 +56,25 @@ private:
   void initializeDefaultVertices();
   void resetVerticesPool();
 
+  spoonie::Graph lineEditor;
+
+  WaveShaperUI *ui;
+
+  GraphNodesLayer graphNodesLayer;
+  GraphVertex *graphVertices[spoonie::maxVertices];
+  spoonie::ObjectPool<GraphVertex> graphVerticesPool;
+
+  GraphNode *focusedElement;
+
   bool mouseLeftDown;
   bool mouseRightDown;
 
-  spoonie::Graph lineEditor;
-
-  spoonie::ObjectPool<GraphVertex> graphVerticesPool;
-
-  GraphVertex *graphVertices[spoonie::maxVertices];
-
-  GraphNode *focusedElement;
-  GraphNodesLayer graphNodesLayer;
-
   const float absoluteVertexSize = 7.0f;
-  
+
   const int marginTop = 48;
   const int marginLeft = 36;
   const int marginRight = 36;
   const int marginBottom = 48;
-
-  WaveShaperUI *ui;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };

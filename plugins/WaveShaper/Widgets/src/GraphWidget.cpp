@@ -21,6 +21,7 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       focusedElement(nullptr),
       mouseLeftDown(false),
       mouseRightDown(false)
+
 {
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
@@ -222,8 +223,8 @@ void GraphWidget::drawBackground()
     const float width = getWidth();
     const float height = getHeight();
 
-    const float centerX = width / 2.0f;
-    const float centerY = height / 2.0f;
+    //const float centerX = width / 2.0f;
+    //const float centerY = height / 2.0f;
 
     beginPath();
 
@@ -299,9 +300,9 @@ void GraphWidget::onNanoDisplay()
         drawAlignmentLines();
 }
 
-bool GraphWidget::onScroll(const ScrollEvent &ev)
+bool GraphWidget::onScroll(const ScrollEvent &)
 {
-    float oldTension = lineEditor.getVertexAtIndex(0)->tension;
+    /*float oldTension = lineEditor.getVertexAtIndex(0)->tension;
     lineEditor.setTensionAtIndex(0, spoonie::clamp(oldTension + 0.50f * -ev.delta.getY(), -100.0f, 100.0f));
 
     //position tension handles
@@ -311,7 +312,7 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
     ui->setState("graph", lineEditor.serialize());
 
     repaint();
-
+    */
     return true;
 }
 
@@ -408,7 +409,7 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
     }
 
     //Testing for mouse hover on graph vertices
-    for (int i =  lineEditor.getVertexCount() - 1; i >= 0; --i)
+    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
     {
         if (graphVertices[i]->contains(point))
         {
@@ -419,7 +420,7 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
     }
 
     //Testing for mouse hover on tension handles
-    for (int i =  lineEditor.getVertexCount() - 1; i >= 0; --i)
+    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
     {
         if (graphVertices[i]->tensionHandle.contains(point))
         {
@@ -433,7 +434,7 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
     return false;
 }
 
-bool GraphWidget::middleClick(const MouseEvent &ev)
+bool GraphWidget::middleClick(const MouseEvent &)
 {
     return false;
 }

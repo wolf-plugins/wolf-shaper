@@ -18,13 +18,13 @@ GraphNode::GraphNode(GraphWidget *parent, GraphNodesLayer *layer) : parent(paren
 
 GraphNode::~GraphNode() {}
 
-bool GraphNode::onMotion(const Widget::MotionEvent &ev) {}
-bool GraphNode::onMouse(const Widget::MouseEvent &ev) {}
+bool GraphNode::onMotion(const Widget::MotionEvent &) { return false; }
+bool GraphNode::onMouse(const Widget::MouseEvent &) { return false; }
 void GraphNode::render() {}
 
 GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVertexType type) : GraphNode(parent, layer),
-                                                                                              surface(Circle<int>(0, 0, 8.0f)),
                                                                                               tensionHandle(parent, layer, this),
+                                                                                              surface(Circle<int>(0, 0, 8.0f)),
                                                                                               type(type),
                                                                                               lastClickButton(0)
 {
@@ -288,7 +288,7 @@ void GraphVertex::removeFromGraph()
     parent->removeVertex(index);
 }
 
-bool GraphVertex::leftDoubleClick(const Widget::MouseEvent &ev)
+bool GraphVertex::leftDoubleClick(const Widget::MouseEvent &)
 {
     removeFromGraph();
     getParentWindow()->setCursorStyle(Window::CursorStyle::Default);

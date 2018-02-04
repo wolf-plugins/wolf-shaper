@@ -26,10 +26,10 @@ void GraphWidgetSocket::onNanoDisplay()
     const float height = getHeight();
 
     const float centerX = width / 2.0f;
-    const float centerY = height / 2.0f;
+    //const float centerY = height / 2.0f;
 
     const int graphLeft = graphWidget.getAbsoluteX();
-    const int graphRight = graphLeft + graphWidget.getWidth();
+    //const int graphRight = graphLeft + graphWidget.getWidth();
 
     const int graphTop = graphWidget.getAbsoluteY();
     const int graphBottom = graphWidget.getAbsoluteY() + graphWidget.getHeight();
