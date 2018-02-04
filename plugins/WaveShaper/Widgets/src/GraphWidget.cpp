@@ -295,7 +295,7 @@ void GraphWidget::onNanoDisplay()
     drawGraphLine(5.0f, Color(169, 29, 239, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
 
-    if (focusedElement != nullptr)
+    if (focusedElement != nullptr && dynamic_cast<GraphVertex*>(focusedElement))
         drawAlignmentLines();
 }
 
