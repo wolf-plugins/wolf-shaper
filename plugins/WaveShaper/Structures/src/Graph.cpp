@@ -30,11 +30,12 @@ Graph::Graph() : vertexCount(0)
 
 float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y)
 {
-    const float sign = input >= 0 ? 1 : -1;
+    const float inputSign = input >= 0 ? 1 : -1;
+    const bool tensionIsPositive = tension >= 0.0f;
 
     if (p1x == p2x)
     {
-        return sign * p2y;
+        return inputSign * p2y;
     }
 
     const float x = p2x - p1x;
@@ -42,18 +43,22 @@ float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1
 
     input = std::abs(input);
 
+    tension /= 100; //FIXME: should be stored as normalized value
+    
     float result;
 
-    if (tension >= 0.0f)
+    if (tensionIsPositive)
     {
-        result = y * std::pow((input - p1x) / x, 1 + (tension / 100 * 14)) + p1y;
+        tension = std::pow(tension, 1.6f);
+        result = y * std::pow((input - p1x) / x, 1 + (tension * 14)) + p1y;
     }
     else
     {
-        result = 1 - (y * std::pow(1 - (input - p1x) / x, 1 + (-tension / 100 * 14)) + p1y) + p2y - (1 - p1y);
+        tension = -std::pow(-tension, 1.6f);
+        result = 1 - (y * std::pow(1 - (input - p1x) / x, 1 + (-tension * 14)) + p1y) + p2y - (1 - p1y);
     }
 
-    return sign * result;
+    return inputSign * result;
 }
 
 float Graph::getValueAt(float x)
