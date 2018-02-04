@@ -18,7 +18,9 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       ui(ui),
       graphNodesLayer(this, parent),
       graphVerticesPool(spoonie::maxVertices, this, &graphNodesLayer, GraphVertexType::Middle),
-      focusedElement(nullptr)
+      focusedElement(nullptr),
+      mouseLeftDown(false),
+      mouseRightDown(false)
 {
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
@@ -381,6 +383,11 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 {
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
+    if (mouseRightDown)
+        return true;
+
+    mouseLeftDown = ev.press;
+
     if (!ev.press)
     {
         if (focusedElement != nullptr)
@@ -422,12 +429,20 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 {
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
-    if (ev.press)
-    {
-        focusedElement = insertVertex(point);
+    if (mouseLeftDown)
+        return true;
+        
+    mouseRightDown = ev.press;
 
-        if (focusedElement != nullptr)
-            return focusedElement->onMouse(ev);
+    if (focusedElement == nullptr)
+    {
+        if (ev.press)
+        {
+            focusedElement = insertVertex(point);
+
+            if (focusedElement != nullptr)
+                return focusedElement->onMouse(ev);
+        }
     }
     else
     {

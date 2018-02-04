@@ -54,8 +54,8 @@ private:
   void initializeDefaultVertices();
   void resetVerticesPool();
 
-  bool mouseDown;
-  Point<int> mouseDownLocation;
+  bool mouseLeftDown;
+  bool mouseRightDown;
 
   spoonie::Graph lineEditor;
 
