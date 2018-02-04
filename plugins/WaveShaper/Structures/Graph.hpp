@@ -36,6 +36,7 @@ public:
 
   int getVertexCount();
 
+  static float getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y);
   float getValueAt(float x);
 
   void clear();

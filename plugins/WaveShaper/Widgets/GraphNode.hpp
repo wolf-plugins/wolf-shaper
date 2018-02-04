@@ -56,6 +56,8 @@ protected:
 class GraphTensionHandle : public GraphNode
 {
 public:
+  friend class GraphWidget;
+
   GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *layer, GraphVertex *vertex);
 
   void render() override;
@@ -63,6 +65,9 @@ public:
 
   float getX() const override;
   float getY() const override;
+
+protected:
+  bool onMotion(const Widget::MotionEvent &ev) override;
 
 private:
   GraphVertex *vertex;
@@ -93,7 +98,8 @@ public:
   float getX() const override;
   float getY() const override;
   float getSize() const;
-
+  float getTension();
+  
   GraphVertex *getVertexAtLeft() const;
   GraphVertex *getVertexAtRight() const;
   GraphTensionHandle *getTensionHandle();
@@ -122,8 +128,6 @@ private:
 
   std::chrono::steady_clock::time_point lastClickTimePoint;
   int lastClickButton;
-
-  float tension;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphVertex)
 };

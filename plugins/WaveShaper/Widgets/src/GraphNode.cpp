@@ -82,7 +82,12 @@ bool GraphVertex::contains(Point<int> pos)
 
 bool GraphTensionHandle::contains(Point<int> pos)
 {
-    return false;
+    if (vertex->getType() == GraphVertexType::Right) //last vertex doesn't have a tension handle
+        return false;
+
+    Circle<int> surface(getX(), getY(), 6.0f);
+
+    return spoonie::pointInCircle(surface, pos);
 }
 
 void GraphNode::idleCallback()
@@ -137,14 +142,20 @@ spoonie::Graph *GraphNode::getLineEditor() const
     return &parent->lineEditor;
 }
 
+float GraphVertex::getTension()
+{
+    return getLineEditor()->getVertexAtIndex(index)->tension;
+}
+
 float GraphTensionHandle::getY() const
 {
     GraphVertex *leftVertex = vertex;
     GraphVertex *rightVertex = leftVertex->getVertexAtRight();
 
-    float normalizedX = (float)getX() / parent->getWidth();
+    float tension = vertex->getTension();
 
-    return getLineEditor()->getValueAt(normalizedX) * parent->getHeight();
+    //calculate value for generic curve
+    return spoonie::Graph::getOutValueUnipolar(0.5f, tension, 0.0f, leftVertex->getY() / parent->getHeight(), 1.0f, rightVertex->getY() / parent->getHeight()) * parent->getHeight();
 }
 
 GraphVertex *GraphVertex::getVertexAtLeft() const
@@ -231,6 +242,29 @@ bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
     return true;
 }
 
+bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
+{
+    if (!grabbed)
+    {
+        parent->getParentWindow().setCursorStyle(Window::CursorStyle::Grab);
+        return true;
+    }
+
+    /*Point<int> pos = spoonie::flipY(ev.pos, parent->getHeight());
+
+    Point<int> clampedPosition = clampVertexPosition(pos);
+    surface.setPos(clampedPosition);
+
+    updateGraph();
+
+    parent->repaint();
+
+    //Cancel out double clicks
+    lastClickButton = 0;*/
+
+    return true;
+}
+
 /**
  * Make the vertex remove itself from the graph.
  */
@@ -298,12 +332,10 @@ void GraphTensionHandle::render()
 
     layer->strokeWidth(2.0f);
 
-    layer->strokeColor(Color(0, 0, 0, 255));
-    layer->fillColor(color);
+    layer->strokeColor(Color(228, 104, 181, 255));
 
-    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 8.0f);
+    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 6.0f);
 
-    layer->fill();
     layer->stroke();
 
     layer->closePath();

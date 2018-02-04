@@ -28,7 +28,7 @@ Graph::Graph() : vertexCount(0)
     insertVertex(1.0f, 1.0f);
 }
 
-static float getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y)
+float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y)
 {
     const float sign = input >= 0 ? 1 : -1;
 
