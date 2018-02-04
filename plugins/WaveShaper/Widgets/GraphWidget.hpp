@@ -22,6 +22,8 @@ class GraphWidget : public NanoWidget
   
 public:
   GraphWidget(WaveShaperUI *ui, Window &parent);
+  ~GraphWidget();
+  
   void rebuildFromString(const char *serializedGraph);
   void reset();
 

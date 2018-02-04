@@ -11,6 +11,7 @@ class ObjectPool
   public:
     template <typename... Args>
     ObjectPool(int numberOfObjects, Args &&... args);
+    ~ObjectPool();
 
     T *getObject();
     void freeObject(T *object);
@@ -28,6 +29,15 @@ ObjectPool<T>::ObjectPool(int numberOfObjects, Args &&... args) : objects(number
     for (int i = 0; i < objects.getSize(); ++i)
     {
         this->objects.push(new T(args...));
+    }
+}
+
+template <class T>
+ObjectPool<T>::~ObjectPool()
+{    
+    while (objects.getCount() > 0)
+    {
+        delete this->objects.pop();
     }
 }
 

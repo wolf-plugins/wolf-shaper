@@ -34,6 +34,14 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     initializeDefaultVertices();
 }
 
+GraphWidget::~GraphWidget()
+{
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    {
+        delete graphVertices[i];
+    }
+}
+
 void GraphWidget::initializeDefaultVertices()
 {
     //Left vertex
@@ -431,7 +439,7 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
     if (mouseLeftDown)
         return true;
-        
+
     mouseRightDown = ev.press;
 
     if (focusedElement == nullptr)
