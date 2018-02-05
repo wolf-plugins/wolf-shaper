@@ -163,7 +163,7 @@ class WaveShaper : public Plugin
 			break;
 		}
 
-		//fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, spoonie::CurveType::Exponential, 1.0f, 1.0f, 0.0f, spoonie::CurveType::Exponential);
+		//generated with fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, spoonie::CurveType::Exponential, 1.0f, 1.0f, 0.0f, spoonie::CurveType::Exponential);
 		defaultStateValue = String("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
 	}
 
@@ -176,12 +176,18 @@ class WaveShaper : public Plugin
 
 	float removeDCOffset(float input)
 	{
+		//Steep IIR filter at the DC frequency
+		//Should probably be a FIR filter
+
+		//Previous calculated value
 		static float prev = 0.0f;
 
-		const float w_n = input + 0.9999f * prev;
-		const float result = w_n - prev;
+		const float scaleFactor = 0.9999f; //Closer to 1 means steeper stop band
 
-		prev = w_n;
+		const float value = input + scaleFactor * prev;
+		const float result = value - prev;
+
+		prev = value;
 
 		return result;
 	}
