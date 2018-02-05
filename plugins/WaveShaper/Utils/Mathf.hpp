@@ -42,6 +42,7 @@ static T normalizeBipolar(const T &value, const T &min, const T &max)
 template <typename T, typename U>
 static bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
 {
+    //source: https://stackoverflow.com/questions/481144/equation-for-testing-if-a-point-is-inside-a-circle
     const float radius = circle.getSize();
 
     const T x = point.getX();
