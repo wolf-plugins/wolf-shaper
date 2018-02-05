@@ -44,7 +44,7 @@ float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1
     input = std::abs(input);
 
     tension /= 100; //FIXME: should be stored as normalized value
-    
+
     float result;
 
     //FIXME: smoothing should be done in the ui, not here
@@ -162,9 +162,9 @@ void Graph::clear()
 
 void Graph::rebuildFromString(const char *serializedGraph)
 {
-    this->clear();
-
     char *rest = (char *)serializedGraph;
+
+    int i = 0;
 
     do
     {
@@ -173,8 +173,9 @@ void Graph::rebuildFromString(const char *serializedGraph)
         const float tension = strtof(++rest, &rest);
         const CurveType type = static_cast<CurveType>(strtol(++rest, &rest, 10));
 
-        insertVertex(x, y, tension, type);
-
+        vertices[i++] = Vertex(x, y, tension, type);
     } while (strcmp(++rest, "\0") != 0);
+
+    vertexCount = i;
 }
 }
