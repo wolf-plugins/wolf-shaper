@@ -148,10 +148,10 @@ private:
   /**
    * Define the space around the grid of the graph.
    */
-  const int marginTop = 48;
-  const int marginLeft = 36;
-  const int marginRight = 36;
-  const int marginBottom = 48;
+  const int marginTop = 36;
+  const int marginLeft = 48;
+  const int marginRight = 48;
+  const int marginBottom = 84;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
