@@ -280,9 +280,6 @@ bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
     return true;
 }
 
-/**
- * Make the vertex remove itself from the graph.
- */
 void GraphVertex::removeFromGraph()
 {
     parent->removeVertex(index);

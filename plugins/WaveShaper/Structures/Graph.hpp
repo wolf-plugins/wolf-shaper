@@ -3,9 +3,12 @@
 
 namespace spoonie
 {
+  /**
+   * The max number of vertices that can be in the graph at the same time.
+   */
 const int maxVertices = 99;
 
-enum CurveType
+enum CurveType //TODO: implement more curve types
 {
   Exponential
 };
@@ -34,14 +37,34 @@ public:
 
   void setTensionAtIndex(int index, float tension);
 
+  /**
+   * Return the number of vertices contained in the graph.
+   */
   int getVertexCount();
 
-  static float getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y);
+  /**
+   * Waveshaping function that acts the same on both negative and positive input.
+   */
+  static float getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y); //TODO: bipolar mode
+
+  /**
+   * Get the y value at x in the graph. 
+   */
   float getValueAt(float x);
 
+  /**
+   * Empty the graph.
+   */
   void clear();
 
+  /**
+   * Save the graph into a string.
+   */
   const char* serialize();
+
+  /**
+   * Rebuild the graph from a string.
+   */
   void rebuildFromString(const char* serializedGraph);
   
 private:
