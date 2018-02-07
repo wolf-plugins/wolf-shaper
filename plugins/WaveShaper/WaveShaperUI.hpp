@@ -16,6 +16,7 @@ enum Parameters
   paramRemoveDC,
   paramOversample,
   paramBipolarMode,
+  paramOut,
   paramCount
 };
 
@@ -27,9 +28,12 @@ class WaveShaperUI : public UI,
 public:
   WaveShaperUI();
   ~WaveShaperUI();
+  
+  float getParameterValue(uint32_t index) const;
 
 protected:
   void parameterChanged(uint32_t, float value) override;
+
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;
   void uiIdle() override;
@@ -40,8 +44,8 @@ protected:
   void imageKnobValueChanged(ImageKnob *knob, float value) override;
 
 private:
-  bool parameters[paramCount];
-
+  float parameters[paramCount];
+  
   //ScopedPointer<ImageButton> fButtonRemoveDC;
   ScopedPointer<ImageKnob> fKnobPre, fKnobDryWet, fKnobPost;
 

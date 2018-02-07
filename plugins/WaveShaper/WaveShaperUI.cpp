@@ -46,7 +46,6 @@ WaveShaperUI::~WaveShaperUI()
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
 {
-
     switch (index)
     {
     case paramPreGain:
@@ -59,6 +58,8 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         fKnobPost->setValue(value);
         break;
     }
+
+    parameters[index] = value;
 }
 
 void WaveShaperUI::stateChanged(const char *key, const char *value)
@@ -75,6 +76,7 @@ void WaveShaperUI::onNanoDisplay()
 
 void WaveShaperUI::uiIdle()
 {
+
 }
 
 void WaveShaperUI::imageButtonClicked(ImageButton *button, int)
@@ -98,6 +100,11 @@ void WaveShaperUI::imageKnobDragFinished(ImageKnob *knob)
 void WaveShaperUI::imageKnobValueChanged(ImageKnob *knob, float value)
 {
     setParameterValue(knob->getId(), value);
+}
+
+float WaveShaperUI::getParameterValue(uint32_t index) const
+{
+    return parameters[index];
 }
 
 UI *createUI()

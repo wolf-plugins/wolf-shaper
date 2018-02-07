@@ -36,6 +36,7 @@ class WaveShaper : public Plugin
 		paramRemoveDC,
 		paramOversample,
 		paramBipolarMode,
+		paramOut,
 		paramCount
 	};
 
@@ -48,8 +49,7 @@ class WaveShaper : public Plugin
 		parameters[paramRemoveDC] = 0.0f;
 		parameters[paramOversample] = 0.0f;
 		parameters[paramBipolarMode] = 0.0f;
-
-		lineEditor = new spoonie::Graph();
+		parameters[paramOut] = 0.0f;
 	}
 
   protected:
@@ -141,6 +141,11 @@ class WaveShaper : public Plugin
 			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
 			break;
+		case paramOut:
+			parameter.name = "Out";
+			parameter.symbol = "out";
+			parameter.hints = kParameterIsAutomable | kParameterIsOutput;
+			break;
 		}
 	}
 
@@ -169,8 +174,9 @@ class WaveShaper : public Plugin
 
 	void setState(const char *key, const char *value) override
 	{
-		if (std::strcmp(key, "graph") == 0) {
-			lineEditor->rebuildFromString(value);
+		if (std::strcmp(key, "graph") == 0)
+		{
+			lineEditor.rebuildFromString(value);
 		}
 	}
 
@@ -194,10 +200,15 @@ class WaveShaper : public Plugin
 
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
+		float max = 0.0f;
+
 		for (uint32_t i = 0; i < frames; i++)
 		{
-			outputs[0][i] = lineEditor->getValueAt(parameters[paramPreGain] * inputs[0][i]);
-			outputs[1][i] = lineEditor->getValueAt(parameters[paramPreGain] * inputs[1][i]);
+			outputs[0][i] = lineEditor.getValueAt(parameters[paramPreGain] * inputs[0][i]);
+			outputs[1][i] = lineEditor.getValueAt(parameters[paramPreGain] * inputs[1][i]);
+
+			max = std::max(max, std::abs(outputs[0][i]));
+			max = std::max(max, std::abs(outputs[1][i]));
 
 			const float wet = parameters[paramWet];
 			const float dry = 1.0f - wet;
@@ -213,11 +224,13 @@ class WaveShaper : public Plugin
 				outputs[1][i] = removeDCOffset(outputs[1][i]);
 			}
 		}
+
+		setParameterValue(paramOut, max);
 	}
 
   private:
 	float parameters[paramCount];
-	spoonie::Graph* lineEditor;
+	spoonie::Graph lineEditor;
 
 	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaper)
 };
