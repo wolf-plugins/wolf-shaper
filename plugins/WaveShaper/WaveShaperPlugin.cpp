@@ -144,7 +144,7 @@ class WaveShaper : public Plugin
 		case paramOut:
 			parameter.name = "Out";
 			parameter.symbol = "out";
-			parameter.hints = kParameterIsAutomable | kParameterIsOutput;
+			parameter.hints = kParameterIsOutput;
 			break;
 		}
 	}
@@ -204,11 +204,14 @@ class WaveShaper : public Plugin
 
 		for (uint32_t i = 0; i < frames; i++)
 		{
-			outputs[0][i] = lineEditor.getValueAt(parameters[paramPreGain] * inputs[0][i]);
-			outputs[1][i] = lineEditor.getValueAt(parameters[paramPreGain] * inputs[1][i]);
+			float inputL = parameters[paramPreGain] * inputs[0][i];
+			float inputR = parameters[paramPreGain] * inputs[1][i];
 
-			max = std::max(max, std::abs(outputs[0][i]));
-			max = std::max(max, std::abs(outputs[1][i]));
+			max = std::max(max, std::abs(inputL));
+			max = std::max(max, std::abs(inputR));
+
+			outputs[0][i] = lineEditor.getValueAt(inputL);
+			outputs[1][i] = lineEditor.getValueAt(inputR);
 
 			const float wet = parameters[paramWet];
 			const float dry = 1.0f - wet;

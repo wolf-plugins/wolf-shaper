@@ -286,6 +286,30 @@ void GraphWidget::drawAlignmentLines()
     closePath();
 }
 
+void GraphWidget::drawInputIndicator()
+{
+    const float width = getWidth();
+    const float height = getHeight();
+
+    const float normalizedInput = ui->getParameterValue(paramOut); //the plugin's out parameter is its input * the pre gain. It's considered as the input in the graph.
+
+    if(normalizedInput <= 0.0f)
+        return;
+
+    const float input = normalizedInput * width;
+    
+    beginPath();
+
+    strokeWidth(2.0f);
+    
+    moveTo(input, 0);
+    lineTo(input, height);
+    
+    stroke();
+
+    closePath();
+}
+
 void GraphWidget::onNanoDisplay()
 {
     flipYAxis();
@@ -295,6 +319,8 @@ void GraphWidget::onNanoDisplay()
 
     drawGraphLine(5.0f, Color(169, 29, 239, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
+
+    drawInputIndicator();
 
     if (focusedElement != nullptr && dynamic_cast<GraphVertex *>(focusedElement))
         drawAlignmentLines();

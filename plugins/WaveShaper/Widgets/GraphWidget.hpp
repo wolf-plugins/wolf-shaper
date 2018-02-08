@@ -78,6 +78,8 @@ protected:
    */
   void drawAlignmentLines();
 
+  void drawInputIndicator();
+  
   /**
    * Insert a new vertex into the graph at a specified location and return a pointer to it. 
    * The position is in absolute coordinates.
