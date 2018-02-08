@@ -161,7 +161,8 @@ private:
   const int marginBottom = 84;
 
   float maxInput;
-
+  float maxInputAcceleration = 0.0f;
+  
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
 

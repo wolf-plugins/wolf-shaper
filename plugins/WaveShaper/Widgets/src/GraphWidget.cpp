@@ -297,10 +297,11 @@ void GraphWidget::drawInputIndicator()
     if (maxInput <= 0.0f)
         return;
 
-    const float inputIndicatorX = maxInput * width;
+    const float inputIndicatorX = std::round(maxInput * width);
 
     beginPath();
 
+    strokeColor(Color(255,255,255,122));
     strokeWidth(2.0f);
 
     moveTo(inputIndicatorX, 0);
@@ -319,11 +320,15 @@ void GraphWidget::idleCallback()
     if (input > deadZone && input > maxInput)
     {
         maxInput = input;
+        maxInputAcceleration = 0.0f;
+
         repaint();
     }
     else if (maxInput > -deadZone)
     {
-        maxInput -= 0.01f;
+        maxInput -= maxInputAcceleration;
+        maxInputAcceleration += std::pow(maxInputAcceleration + 0.01f, 2); //not sure if visually pleasant
+
         repaint();
     }
 }
