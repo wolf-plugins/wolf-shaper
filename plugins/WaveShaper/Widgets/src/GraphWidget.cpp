@@ -252,11 +252,19 @@ void GraphWidget::drawGraphLine(float lineWidth, Color color)
 
     moveTo(0.0f, lineEditor.getVertexAtIndex(0)->y * height);
 
-    const float iteration = 1.0f / width * 2.0f;
-
-    for (float i = 0; i < 1.0f; i += iteration)
+    for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
     {
-        lineTo(i * width, lineEditor.getValueAt(i) * height);
+        spoonie::Vertex *leftVertex = lineEditor.getVertexAtIndex(i);
+        spoonie::Vertex *rightVertex = lineEditor.getVertexAtIndex(i + 1);
+
+        const float edgeLength = (rightVertex->x - leftVertex->x) * width;
+
+        for (int j = 0; j <= edgeLength; ++j)
+        {
+            const float normalizedX = leftVertex->x + j / width;
+
+            lineTo(normalizedX * width, lineEditor.getValueAt(normalizedX) * height);
+        }
     }
 
     lineTo(width, lineEditor.getValueAt(1.0f) * height);
@@ -301,7 +309,7 @@ void GraphWidget::drawInputIndicator()
 
     beginPath();
 
-    strokeColor(Color(255,255,255,122));
+    strokeColor(Color(255, 255, 255, 122));
     strokeWidth(2.0f);
 
     moveTo(inputIndicatorX, 0);
