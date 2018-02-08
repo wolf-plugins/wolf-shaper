@@ -20,7 +20,8 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       graphVerticesPool(spoonie::maxVertices, this, &graphNodesLayer, GraphVertexType::Middle),
       focusedElement(nullptr),
       mouseLeftDown(false),
-      mouseRightDown(false)
+      mouseRightDown(false),
+      maxInput(0.0f)
 
 {
     const int width = ui->getWidth() - marginLeft - marginRight;
@@ -33,6 +34,8 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     setAbsolutePos(marginLeft, marginTop);
 
     initializeDefaultVertices();
+
+    parent.addIdleCallback(this);
 }
 
 GraphWidget::~GraphWidget()
@@ -291,23 +294,38 @@ void GraphWidget::drawInputIndicator()
     const float width = getWidth();
     const float height = getHeight();
 
-    const float normalizedInput = ui->getParameterValue(paramOut); //the plugin's out parameter is its input * the pre gain. It's considered as the input in the graph.
-
-    if(normalizedInput <= 0.0f)
+    if (maxInput <= 0.0f)
         return;
 
-    const float input = normalizedInput * width;
-    
+    const float inputIndicatorX = maxInput * width;
+
     beginPath();
 
     strokeWidth(2.0f);
-    
-    moveTo(input, 0);
-    lineTo(input, height);
-    
+
+    moveTo(inputIndicatorX, 0);
+    lineTo(inputIndicatorX, height);
+
     stroke();
 
     closePath();
+}
+
+void GraphWidget::idleCallback()
+{
+    const float input = ui->getParameterValue(paramOut);
+    const float deadZone = 0.001f;
+
+    if (input > deadZone && input > maxInput)
+    {
+        maxInput = input;
+        repaint();
+    }
+    else if (maxInput > -deadZone)
+    {
+        maxInput -= 0.01f;
+        repaint();
+    }
 }
 
 void GraphWidget::onNanoDisplay()

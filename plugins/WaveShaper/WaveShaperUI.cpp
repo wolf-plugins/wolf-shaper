@@ -59,8 +59,6 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         break;
     }
 
-    repaint();
-    
     parameters[index] = value;
 }
 

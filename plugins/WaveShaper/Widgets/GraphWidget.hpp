@@ -13,7 +13,8 @@ class GraphTensionHandle;
 class GraphNode;
 class WaveShaperUI;
 
-class GraphWidget : public NanoWidget
+class GraphWidget : public NanoWidget,
+                    public IdleCallback
 {
   friend class GraphNode;
   friend class GraphVertex;
@@ -42,6 +43,7 @@ protected:
   bool onScroll(const ScrollEvent &ev) override;
   bool onMouse(const MouseEvent &ev) override;
   bool onMotion(const MotionEvent &ev) override;
+  void idleCallback() override;
 
   /**
    * Unused.
@@ -78,8 +80,11 @@ protected:
    */
   void drawAlignmentLines();
 
+  /**
+   * Draw a vertical line to indicate the input volume on the graph.
+   */
   void drawInputIndicator();
-  
+
   /**
    * Insert a new vertex into the graph at a specified location and return a pointer to it. 
    * The position is in absolute coordinates.
@@ -154,6 +159,8 @@ private:
   const int marginLeft = 48;
   const int marginRight = 48;
   const int marginBottom = 84;
+
+  float maxInput;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
