@@ -66,14 +66,24 @@ protected:
   void drawSubGrid();
 
   /**
+   * Determine whether the edge at the right of the specified vertex needs to be emphasized.
+   */
+  bool edgeMustBeEmphasized(int vertexIndex);
+
+  /**
    * Draw the background of the graph.
    */
   void drawBackground();
 
   /**
+   * Draw the edge associated with the specified vertex in the graph.
+   */
+  void drawGraphEdge(int vertexIndex, float lineWidth, Color color);
+
+  /**
    * Draw the line on the graph according to the current state of the plugin.
    */
-  void drawGraphLine(float lineWidth, Color color);
+  void drawGraphLine(float lineWidth, Color normalColor, Color emphasizedColor);
 
   /**
    * Draw lines to help the user align the currently grabbed node.
@@ -162,7 +172,7 @@ private:
 
   float maxInput;
   float maxInputAcceleration = 0.0f;
-  
+
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
 

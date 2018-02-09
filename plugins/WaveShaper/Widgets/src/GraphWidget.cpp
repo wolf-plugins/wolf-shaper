@@ -240,38 +240,64 @@ void GraphWidget::drawBackground()
     closePath();
 }
 
-void GraphWidget::drawGraphLine(float lineWidth, Color color)
+bool GraphWidget::edgeMustBeEmphasized(int vertexIndex)
 {
+    if (focusedElement == nullptr)
+        return false;
+
+    GraphVertex *vertex = graphVertices[vertexIndex];
+    const GraphVertexType type = vertex->getType();
+
+    if (dynamic_cast<GraphTensionHandle *>(focusedElement))
+        return focusedElement == vertex->getTensionHandle();
+
+    if (type == GraphVertexType::Right)
+        return false;
+
+    return focusedElement == vertex || focusedElement == vertex->getVertexAtRight();
+}
+
+void GraphWidget::drawGraphEdge(int vertexIndex, float lineWidth, Color color)
+{
+    DISTRHO_SAFE_ASSERT(vertexIndex < lineEditor.getVertexCount() - 1);
+
     const float width = getWidth();
     const float height = getHeight();
+
+    const spoonie::Vertex *leftVertex = lineEditor.getVertexAtIndex(vertexIndex);
+    const spoonie::Vertex *rightVertex = lineEditor.getVertexAtIndex(vertexIndex + 1);
 
     beginPath();
 
     strokeColor(color);
     strokeWidth(lineWidth);
 
-    moveTo(0.0f, lineEditor.getVertexAtIndex(0)->y * height);
+    moveTo(leftVertex->x * width, leftVertex->y * height);
 
-    for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
+    const float edgeLength = (rightVertex->x - leftVertex->x) * width;
+
+    for (int i = 0; i <= edgeLength; ++i)
     {
-        spoonie::Vertex *leftVertex = lineEditor.getVertexAtIndex(i);
-        spoonie::Vertex *rightVertex = lineEditor.getVertexAtIndex(i + 1);
+        const float normalizedX = leftVertex->x + i / width;
 
-        const float edgeLength = (rightVertex->x - leftVertex->x) * width;
-
-        for (int j = 0; j <= edgeLength; ++j)
-        {
-            const float normalizedX = leftVertex->x + j / width;
-
-            lineTo(normalizedX * width, lineEditor.getValueAt(normalizedX) * height);
-        }
+        lineTo(normalizedX * width, lineEditor.getValueAt(normalizedX) * height);
     }
 
-    lineTo(width, lineEditor.getValueAt(1.0f) * height);
+    lineTo(rightVertex->x * width, rightVertex->y * height);
 
     stroke();
 
     closePath();
+}
+
+void GraphWidget::drawGraphLine(float lineWidth, Color normalColor, Color emphasizedColor)
+{
+    for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
+    {
+        const Color color = edgeMustBeEmphasized(i) ? emphasizedColor : normalColor;
+
+        drawGraphEdge(i, lineWidth, color);
+    }
 }
 
 void GraphWidget::drawAlignmentLines()
@@ -348,8 +374,8 @@ void GraphWidget::onNanoDisplay()
     drawBackground();
     drawGrid();
 
-    drawGraphLine(5.0f, Color(169, 29, 239, 100));     //outer
-    drawGraphLine(1.1416f, Color(245, 112, 188, 255)); //inner
+    drawGraphLine(5.0f, Color(169, 29, 239, 100), Color(255, 255, 0, 100));     //outer
+    drawGraphLine(1.1416f, Color(245, 112, 188, 255), Color(255, 255, 0, 255)); //inner
 
     drawInputIndicator();
 
