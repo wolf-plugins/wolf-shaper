@@ -40,7 +40,7 @@ static T normalizeBipolar(const T &value, const T &min, const T &max)
 }
 
 template <typename T, typename U>
-static bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
+static bool pointInCircle(DGL_NAMESPACE::Circle<T> circle, DGL_NAMESPACE::Point<U> point)
 {
     //source: https://stackoverflow.com/questions/481144/equation-for-testing-if-a-point-is-inside-a-circle
     const float radius = circle.getSize();
@@ -69,12 +69,12 @@ static bool pointInCircle(DGL::Circle<T> circle, DGL::Point<U> point)
 
 template <typename T, typename U,
           typename = typename std::enable_if<std::is_arithmetic<U>::value, U>::type>
-static DGL::Point<T> flipY(const DGL::Point<T> point, const U height)
+static DGL_NAMESPACE::Point<T> flipY(const DGL_NAMESPACE::Point<T> point, const U height)
 {
     const T x = point.getX();
     const T y = height - point.getY();
 
-    return DGL::Point<T>(x, y);
+    return DGL_NAMESPACE::Point<T>(x, y);
 }
 }
 

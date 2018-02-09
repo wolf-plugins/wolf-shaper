@@ -252,7 +252,7 @@ bool GraphWidget::edgeMustBeEmphasized(int vertexIndex)
         return focusedElement == vertex->getTensionHandle();
 
     if (type == GraphVertexType::Right)
-        return false;
+        return false; //there is no edge at the right of the last vertex
 
     return focusedElement == vertex || focusedElement == vertex->getVertexAtRight();
 }
@@ -427,7 +427,7 @@ void GraphWidget::removeVertex(int index)
     repaint();
 }
 
-GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
+GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
 {
     int i = lineEditor.getVertexCount();
 
@@ -459,7 +459,7 @@ GraphVertex *GraphWidget::insertVertex(const DGL::Point<int> pos)
 
     const float posY = lineEditor.getValueAt(normalizedCenterX) * height;
 
-    tensionWidgets[i - 1] = DGL::Circle<int>(centerX, posY, 8.0f);*/
+    tensionWidgets[i - 1] = Circle<int>(centerX, posY, 8.0f);*/
 
     const float normalizedX = spoonie::normalize(pos.getX(), width);
     const float normalizedY = spoonie::normalize(pos.getY(), height);

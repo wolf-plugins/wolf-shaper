@@ -24,7 +24,7 @@
 // Define namespace
 
 #ifndef DGL_NAMESPACE
-# define DGL_NAMESPACE DGL
+# define DGL_NAMESPACE SPOONIE_DGL
 #endif
 
 #define START_NAMESPACE_DGL namespace DGL_NAMESPACE {

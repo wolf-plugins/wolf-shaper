@@ -99,7 +99,7 @@ protected:
    * Insert a new vertex into the graph at a specified location and return a pointer to it. 
    * The position is in absolute coordinates.
    */
-  GraphVertex *insertVertex(const DGL::Point<int> pos);
+  GraphVertex *insertVertex(const Point<int> pos);
 
   /**
    * Remove a vertex at the specified index.
