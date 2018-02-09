@@ -1,4 +1,4 @@
-# spoonie Waveshaper
+# spoonie WaveShaper
 
 ## W.I.P
 
