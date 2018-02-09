@@ -60,17 +60,17 @@ class WaveShaper : public Plugin
 
 	const char *getDescription() const noexcept override
 	{
-		return "Graphical distortion plugin.";
+		return "Waveshaping distortion plugin with editable graph.";
 	}
 
 	const char *getMaker() const noexcept override
 	{
-		return "spoonie (Patrick Desaulniers)";
+		return "Patrick Desaulniers";
 	}
 
 	const char *getHomePage() const noexcept override
 	{
-		return "https://github.com/desaulniersp/spoonie-waveshaper";
+		return "https://github.com/pdesaulniers/spoonie-waveshaper";
 	}
 
 	const char *getLicense() const noexcept override
