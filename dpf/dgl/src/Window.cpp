@@ -1476,7 +1476,7 @@ void Window::clipCursor(Rectangle<int> rect) const noexcept
 	ClipCursor(&clipRect);
 
 #elif defined(DISTRHO_OS_MAC)
-	CGAssociateMouseAndMouseCursorPosition(false);
+	//CGAssociateMouseAndMouseCursorPosition(false);
 
 #else
 	XMoveResizeWindow(pData->xDisplay, pData->xClipCursorWindow, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
