@@ -26,8 +26,8 @@
 #include "pugl/pugl.h"
 
 #if defined(__GNUC__) && (__GNUC__ >= 7)
-# pragma GCC diagnostic push
-# pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wimplicit-fallthrough"
 #endif
 
 #if defined(DISTRHO_OS_WINDOWS)
@@ -45,7 +45,7 @@ extern "C" {
 #endif
 
 #if defined(__GNUC__) && (__GNUC__ >= 7)
-# pragma GCC diagnostic pop
+#pragma GCC diagnostic pop
 #endif
 
 #include "ApplicationPrivateData.hpp"
@@ -78,117 +78,126 @@ struct Window::PrivateData
 {
 	PrivateData(Application &app, Window *const self)
 		: fApp(app),
-		fSelf(self),
-		fView(puglInit()),
-		fFirstInit(true),
-		fVisible(false),
-		fResizable(true),
-		fUsingEmbed(false),
-		fWidth(1),
-		fHeight(1),
-		fTitle(nullptr),
-		fWidgets(),
-		fModal(),
+		  fSelf(self),
+		  fView(puglInit()),
+		  fFirstInit(true),
+		  fVisible(false),
+		  fResizable(true),
+		  fUsingEmbed(false),
+		  fWidth(1),
+		  fHeight(1),
+		  fTitle(nullptr),
+		  fWidgets(),
+		  fModal(),
 #if defined(DISTRHO_OS_WINDOWS)
-		hwnd(0)
+		  hwnd(0)
 #elif defined(DISTRHO_OS_MAC)
-		fNeedsIdle(true),
-		mView(nullptr),
-		mWindow(nullptr)
+		  fNeedsIdle(true),
+		  mView(nullptr),
+		  mWindow(nullptr)
 #else
-			xDisplay(nullptr),
-		xWindow(0)
+		  xDisplay(nullptr),
+		  xWindow(0),
+		  xClipCursorWindow(0)
 #endif
-		{
-			DBG("Creating window without parent..."); DBGF;
-			init();
-		}
+	{
+		DBG("Creating window without parent...");
+		DBGF;
+		init();
+	}
 
 	PrivateData(Application &app, Window *const self, Window &parent)
 		: fApp(app),
-		fSelf(self),
-		fView(puglInit()),
-		fFirstInit(true),
-		fVisible(false),
-		fResizable(true),
-		fUsingEmbed(false),
-		fWidth(1),
-		fHeight(1),
-		fTitle(nullptr),
-		fWidgets(),
-		fModal(parent.pData),
+		  fSelf(self),
+		  fView(puglInit()),
+		  fFirstInit(true),
+		  fVisible(false),
+		  fResizable(true),
+		  fUsingEmbed(false),
+		  fWidth(1),
+		  fHeight(1),
+		  fTitle(nullptr),
+		  fWidgets(),
+		  fModal(parent.pData),
 #if defined(DISTRHO_OS_WINDOWS)
-		hwnd(0)
+		  hwnd(0)
 #elif defined(DISTRHO_OS_MAC)
-		fNeedsIdle(false),
-		mView(nullptr),
-		mWindow(nullptr)
+		  fNeedsIdle(false),
+		  mView(nullptr),
+		  mWindow(nullptr)
 #else
-		xDisplay(nullptr),
-		xWindow(0)
+		  xDisplay(nullptr),
+		  xWindow(0),
+		  xClipCursorWindow(0)
 #endif
-		{
-			DBG("Creating window with parent..."); DBGF;
-			init();
+	{
+		DBG("Creating window with parent...");
+		DBGF;
+		init();
 
-			const PuglInternals *const parentImpl(parent.pData->fView->impl);
+		const PuglInternals *const parentImpl(parent.pData->fView->impl);
 #if defined(DISTRHO_OS_WINDOWS)
-			// TODO
+		// TODO
 #elif defined(DISTRHO_OS_MAC)
-			[parentImpl->window orderWindow:NSWindowBelow relativeTo:[[mView window] windowNumber]];
+		[parentImpl->window orderWindow:NSWindowBelow
+							 relativeTo:[[mView window] windowNumber]];
 #else
-			XSetTransientForHint(xDisplay, xWindow, parentImpl->win);
+		XSetTransientForHint(xDisplay, xWindow, parentImpl->win);
 #endif
-			return;
+		return;
 
-			// maybe unused
-			(void)parentImpl;
-		}
+		// maybe unused
+		(void)parentImpl;
+	}
 
 	PrivateData(Application &app, Window *const self, const intptr_t parentId)
 		: fApp(app),
-		fSelf(self),
-		fView(puglInit()),
-		fFirstInit(true),
-		fVisible(parentId != 0),
-		fResizable(parentId == 0),
-		fUsingEmbed(parentId != 0),
-		fWidth(1),
-		fHeight(1),
-		fTitle(nullptr),
-		fWidgets(),
-		fModal(),
+		  fSelf(self),
+		  fView(puglInit()),
+		  fFirstInit(true),
+		  fVisible(parentId != 0),
+		  fResizable(parentId == 0),
+		  fUsingEmbed(parentId != 0),
+		  fWidth(1),
+		  fHeight(1),
+		  fTitle(nullptr),
+		  fWidgets(),
+		  fModal(),
+		  fCursorIsClipped(false),
 #if defined(DISTRHO_OS_WINDOWS)
-		hwnd(0)
+		  hwnd(0)
 #elif defined(DISTRHO_OS_MAC)
-			fNeedsIdle(parentId == 0),
-		mView(nullptr),
-		mWindow(nullptr)
+		  fNeedsIdle(parentId == 0),
+		  mView(nullptr),
+		  mWindow(nullptr)
 #else
-			xDisplay(nullptr),
-		xWindow(0)
+		  xDisplay(nullptr),
+		  xWindow(0),
+		  xClipCursorWindow(0)
 #endif
+	{
+		if (fUsingEmbed)
 		{
-			if (fUsingEmbed)
-			{
-				DBG("Creating embedded window..."); DBGF;
-				puglInitWindowParent(fView, parentId);
-			}
-			else
-			{
-				DBG("Creating window without parent..."); DBGF;
-			}
-
-			init();
-			
-			if (fUsingEmbed)
-			{
-				DBG("NOTE: Embed window is always visible and non-resizable\n");
-				puglShowWindow(fView);
-				fApp.pData->oneShown();
-				fFirstInit = false;
-			}
+			DBG("Creating embedded window...");
+			DBGF;
+			puglInitWindowParent(fView, parentId);
 		}
+		else
+		{
+			DBG("Creating window without parent...");
+			DBGF;
+		}
+
+		init();
+
+		if (fUsingEmbed)
+		{
+			DBG("NOTE: Embed window is always visible and non-resizable\n");
+			puglShowWindow(fView);
+			fApp.pData->oneShown();
+			fFirstInit = false;
+		}
+	}
 
 	void init()
 	{
@@ -256,6 +265,10 @@ struct Window::PrivateData
 		invisibleCursor = XCreatePixmapCursor(xDisplay, bitmapNoData, bitmapNoData, &black, &black, 0, 0);
 
 		XFreePixmap(xDisplay, bitmapNoData);
+
+		xClipCursorWindow = XCreateWindow(xDisplay, xWindow, 0, 0, fWidth, fHeight, 0, 0, InputOnly, NULL, 0, NULL);                
+		
+		XMapWindow(xDisplay, xClipCursorWindow);
 		//-------------
 #endif
 		puglEnterContext(fView);
@@ -267,7 +280,8 @@ struct Window::PrivateData
 
 	~PrivateData()
 	{
-		DBG("Destroying window..."); DBGF;
+		DBG("Destroying window...");
+		DBGF;
 
 		if (fModal.enabled)
 		{
@@ -309,6 +323,7 @@ struct Window::PrivateData
 #else
 		xDisplay = nullptr;
 		xWindow = 0;
+		xClipCursorWindow = 0;
 #endif
 
 		DBG("Success!\n");
@@ -357,7 +372,8 @@ struct Window::PrivateData
 
 	void exec_init()
 	{
-		DBG("Window modal loop starting..."); DBGF;
+		DBG("Window modal loop starting...");
+		DBGF;
 		DISTRHO_SAFE_ASSERT_RETURN(fModal.parent != nullptr, setVisible(true));
 
 		fModal.enabled = true;
@@ -387,7 +403,8 @@ struct Window::PrivateData
 
 	void exec_fini()
 	{
-		DBG("Window modal loop stopping..."); DBGF;
+		DBG("Window modal loop stopping...");
+		DBGF;
 		fModal.enabled = false;
 
 		if (fModal.parent != nullptr)
@@ -521,7 +538,7 @@ struct Window::PrivateData
 
 #if defined(DISTRHO_OS_WINDOWS)
 		const int winFlags = fResizable ? GetWindowLong(hwnd, GWL_STYLE) | WS_SIZEBOX
-			: GetWindowLong(hwnd, GWL_STYLE) & ~WS_SIZEBOX;
+										: GetWindowLong(hwnd, GWL_STYLE) & ~WS_SIZEBOX;
 		SetWindowLong(hwnd, GWL_STYLE, winFlags);
 #elif defined(DISTRHO_OS_MAC)
 		const uint flags(yesNo ? (NSViewWidthSizable | NSViewHeightSizable) : 0x0);
@@ -558,7 +575,7 @@ struct Window::PrivateData
 		AdjustWindowRectEx(&wr, fUsingEmbed ? WS_CHILD : winFlags, FALSE, WS_EX_TOPMOST);
 
 		SetWindowPos(hwnd, 0, 0, 0, wr.right - wr.left, wr.bottom - wr.top,
-				SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
+					 SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOOWNERZORDER | SWP_NOZORDER);
 
 		if (!forced)
 			UpdateWindow(hwnd);
@@ -634,8 +651,8 @@ struct Window::PrivateData
 		{
 			NSString *titleString = [[NSString alloc]
 				initWithBytes:title
-				length:strlen(title)
-				encoding:NSUTF8StringEncoding];
+					   length:strlen(title)
+					 encoding:NSUTF8StringEncoding];
 
 			[mWindow setTitle:titleString];
 		}
@@ -646,16 +663,16 @@ struct Window::PrivateData
 
 	void setTransientWinId(const uintptr_t winId)
 	{
-		DISTRHO_SAFE_ASSERT_RETURN(winId != 0,);
+		DISTRHO_SAFE_ASSERT_RETURN(winId != 0, );
 
 #if defined(DISTRHO_OS_WINDOWS)
 		// TODO
 #elif defined(DISTRHO_OS_MAC)
-		NSWindow* const window = [NSApp windowWithWindowNumber:winId];
-		DISTRHO_SAFE_ASSERT_RETURN(window != nullptr,);
+		NSWindow *const window = [NSApp windowWithWindowNumber:winId];
+		DISTRHO_SAFE_ASSERT_RETURN(window != nullptr, );
 
 		[window addChildWindow:mWindow
-			ordered:NSWindowAbove];
+					   ordered:NSWindowAbove];
 		[mWindow makeKeyWindow];
 #else
 		XSetTransientForHint(xDisplay, xWindow, static_cast<::Window>(winId));
@@ -688,9 +705,9 @@ struct Window::PrivateData
 			{
 				event = [NSApp
 					nextEventMatchingMask:NSAnyEventMask
-					untilDate:[NSDate distantPast]
-					inMode:NSDefaultRunLoopMode
-					dequeue:YES];
+								untilDate:[NSDate distantPast]
+								   inMode:NSDefaultRunLoopMode
+								  dequeue:YES];
 
 				if (event == nil)
 					break;
@@ -930,17 +947,17 @@ struct Window::PrivateData
 
 		switch (key)
 		{
-			case kKeyShift:
-				mods |= kModifierShift;
-				break;
-			case kKeyControl:
-				mods |= kModifierControl;
-				break;
-			case kKeyAlt:
-				mods |= kModifierAlt;
-				break;
-			default:
-				break;
+		case kKeyShift:
+			mods |= kModifierShift;
+			break;
+		case kKeyControl:
+			mods |= kModifierControl;
+			break;
+		case kKeyAlt:
+			mods |= kModifierAlt;
+			break;
+		default:
+			break;
 		}
 
 		if (mods != 0x0)
@@ -983,6 +1000,10 @@ struct Window::PrivateData
 	char *fTitle;
 	std::list<Widget *> fWidgets;
 
+	//fork---------
+	bool fCursorIsClipped;
+	//-------------
+
 	struct Modal
 	{
 		bool enabled;
@@ -991,13 +1012,13 @@ struct Window::PrivateData
 
 		Modal()
 			: enabled(false),
-			parent(nullptr),
-			childFocus(nullptr) {}
+			  parent(nullptr),
+			  childFocus(nullptr) {}
 
 		Modal(PrivateData *const p)
 			: enabled(false),
-			parent(p),
-			childFocus(nullptr) {}
+			  parent(p),
+			  childFocus(nullptr) {}
 
 		~Modal()
 		{
@@ -1016,9 +1037,11 @@ struct Window::PrivateData
 	id mWindow;
 #else
 	Display *xDisplay;
-	::Window xWindow;
 
+	::Window xWindow;
+	
 	//fork---------
+	::Window xClipCursorWindow;
 	Cursor invisibleCursor;
 	//-------------
 #endif
@@ -1069,7 +1092,7 @@ struct Window::PrivateData
 	}
 
 #ifndef DGL_FILE_BROWSER_DISABLED
-	static void fileBrowserSelectedCallback(PuglView* view, const char* filename)
+	static void fileBrowserSelectedCallback(PuglView *view, const char *filename)
 	{
 		handlePtr->fSelf->fileBrowserSelected(filename);
 	}
@@ -1127,14 +1150,14 @@ void Window::repaint() noexcept
 	puglPostRedisplay(pData->fView);
 }
 
-// static int fib_filter_filename_filter(const char* const name)
-// {
-//     return 1;
-//     (void)name;
-// }
+	// static int fib_filter_filename_filter(const char* const name)
+	// {
+	//     return 1;
+	//     (void)name;
+	// }
 
 #ifndef DGL_FILE_BROWSER_DISABLED
-bool Window::openFileBrowser(const FileBrowserOptions& options)
+bool Window::openFileBrowser(const FileBrowserOptions &options)
 {
 #ifdef SOFD_HAVE_X11
 	using DISTRHO_NAMESPACE::String;
@@ -1292,14 +1315,14 @@ void Window::addIdleCallback(IdleCallback *const callback)
 {
 	DISTRHO_SAFE_ASSERT_RETURN(callback != nullptr, )
 
-		pData->fApp.pData->idleCallbacks.push_back(callback);
+	pData->fApp.pData->idleCallbacks.push_back(callback);
 }
 
 void Window::removeIdleCallback(IdleCallback *const callback)
 {
 	DISTRHO_SAFE_ASSERT_RETURN(callback != nullptr, )
 
-		pData->fApp.pData->idleCallbacks.remove(callback);
+	pData->fApp.pData->idleCallbacks.remove(callback);
 }
 
 // -----------------------------------------------------------------------
@@ -1332,16 +1355,16 @@ void Window::onClose()
 
 //fork----------
 
-void Window::setCursorStyle(CursorStyle style) 
+void Window::setCursorStyle(CursorStyle style) noexcept
 {
 #if defined(DISTRHO_OS_WINDOWS)
-    HCURSOR cursor = LoadCursor(NULL, IDC_HAND);
+	HCURSOR cursor = LoadCursor(NULL, IDC_HAND);
 
 	SetCursor(cursor);
 	SetClassLong(pData->hwnd, GCLP_HCURSOR, (DWORD)cursor);
 
 #elif defined(DISTRHO_OS_MAC)
-   [[NSCursor openHandCursor] set];
+	[[NSCursor openHandCursor] set];
 
 #else
 	Cursor cursor = XcursorLibraryLoadCursor(pData->xDisplay, style == CursorStyle::Grab ? "grab" : "default");
@@ -1349,10 +1372,10 @@ void Window::setCursorStyle(CursorStyle style)
 #endif
 }
 
-void Window::showCursor()
+void Window::showCursor() noexcept
 {
 #if defined(DISTRHO_OS_WINDOWS)
-	while(ShowCursor(true) < 0);
+	while (ShowCursor(true) < 0);
 
 #elif defined(DISTRHO_OS_MAC)
 	CGDisplayShowCursor(kCGNullDirectDisplay);
@@ -1362,10 +1385,10 @@ void Window::showCursor()
 #endif
 }
 
-void Window::hideCursor()
+void Window::hideCursor() noexcept
 {
 #if defined(DISTRHO_OS_WINDOWS)
-	while(ShowCursor(false) >= 0);
+	while (ShowCursor(false) >= 0);
 
 #elif defined(DISTRHO_OS_MAC)
 	CGDisplayHideCursor(kCGNullDirectDisplay);
@@ -1375,10 +1398,42 @@ void Window::hideCursor()
 #endif
 }
 
+const Point<int> Window::getCursorPos() const noexcept
+{
+#if defined(DISTRHO_OS_WINDOWS)
+	POINT pos;
+	GetCursorPos(&pos);
+
+	ScreenToClient(pData->hwnd, &pos);
+
+	return Point<int>(pos.x, pos.y);
+	
+#elif defined(DISTRHO_OS_MAC)
+	NSPoint mouseLoc = [NSEvent mouseLocation];
+	
+	const int x = static_cast<int>(mouseLoc.x);
+	const int y = static_cast<int>(pData->fHeight - mouseLoc.y); //flip y so that the origin is at the top left
+
+	return Point<int>(x, y); 
+
+#else
+	int posX, posY;
+	
+	//unused variables
+	int i;
+	uint u;
+	::Window w;
+
+	XQueryPointer(pData->xDisplay, pData->xWindow, &w, &w, &i, &i, &posX, &posY, &u);
+	 
+	return Point<int>(posX, posY);
+#endif	
+}
+
 /**
  * Set the cursor position relative to the window.
  */
-void Window::setCursorPos(int x, int y)
+void Window::setCursorPos(int x, int y) noexcept
 {
 #if defined(DISTRHO_OS_WINDOWS)
 	RECT winRect;
@@ -1391,8 +1446,68 @@ void Window::setCursorPos(int x, int y)
 
 #else
 	XWarpPointer(pData->xDisplay, None, pData->xWindow, 0, 0, 0, 0, x, y);
-
+	XSync(pData->xDisplay, False); //might not be necessary
 #endif
+}
+
+void Window::setCursorPos(const Point<int>& pos) noexcept
+{
+	setCursorPos(pos.getX(), pos.getY());
+}
+
+void Window::setCursorPos(Widget* const widget) noexcept
+{
+	setCursorPos(widget->getAbsolutePos());
+}
+
+void Window::clipCursor(Rectangle<int> rect) const noexcept
+{
+	pData->fCursorIsClipped = true;
+
+#if defined(DISTRHO_OS_WINDOWS)
+	RECT winRect, clipRect;
+	GetWindowRect(pData->hwnd, &winRect);	
+
+	clipRect.left = rect.getX() + winRect.left;
+	clipRect.right = rect.getX() + rect.getWidth() + winRect.left;
+	clipRect.top = rect.getY() + winRect.top;
+	clipRect.bottom = rect.getY() + rect.getHeight() + winRect.top;
+
+	ClipCursor(&clipRect);
+
+#elif defined(DISTRHO_OS_MAC)
+	CGAssociateMouseAndMouseCursorPosition(false);
+
+#else
+	XMoveResizeWindow(pData->xDisplay, pData->xClipCursorWindow, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+
+	XGrabPointer(pData->xDisplay, pData->xWindow, True, 0, GrabModeAsync, GrabModeAsync, pData->xClipCursorWindow, None, CurrentTime);
+#endif	
+}
+
+void Window::clipCursor(Widget* const widget) const noexcept 
+{
+	const Point<int> pos = widget->getAbsolutePos();
+	const uint width = widget->getWidth();
+	const uint height = widget->getHeight();
+
+	clipCursor(Rectangle<int>(pos, width, height));
+}
+
+void Window::unclipCursor() const noexcept
+{
+	pData->fCursorIsClipped = false;
+
+#if defined(DISTRHO_OS_WINDOWS)
+	ClipCursor(NULL);
+
+#elif defined(DISTRHO_OS_MAC)
+	CGAssociateMouseAndMouseCursorPosition(true);
+
+#else
+	XUngrabPointer(pData->xDisplay, CurrentTime);
+
+#endif	
 }
 
 //end fork------
@@ -1417,8 +1532,8 @@ bool Window::handlePluginSpecial(const bool press, const Key key)
 
 StandaloneWindow::StandaloneWindow()
 	: Application(),
-	Window((Application &)*this),
-	fWidget(nullptr) {}
+	  Window((Application &)*this),
+	  fWidget(nullptr) {}
 
 void StandaloneWindow::exec()
 {

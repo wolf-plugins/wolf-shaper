@@ -122,13 +122,44 @@ public:
 	    Grab,
 	    Grabbing,
 	    Text,
-	    NWSEResize
+	    NW_SE_Resize
     };
     
-    void showCursor();
-    void hideCursor();
-    void setCursorPos(int x, int y);
-    void setCursorStyle(CursorStyle style);
+    /**
+       Show the mouse cursor.
+     */
+    void showCursor() noexcept;
+
+    /**
+       Hide the mouse cursor.
+     */
+    void hideCursor() noexcept;
+
+    /**
+       Get the position of the cursor relative to the window's origin.
+     */
+    const Point<int> getCursorPos() const noexcept;
+
+    /**
+       Confine the mouse cursor to a rectangular area in the window.
+     */
+    void clipCursor(Rectangle<int> rect) const noexcept;
+
+    void clipCursor(Widget* const widget) const noexcept;
+    
+    /**
+       Set the cursor free after calling clipCursor.
+     */
+    void unclipCursor() const noexcept;
+
+    /**
+       Set the position of the cursor in the window.
+     */
+    void setCursorPos(int x, int y) noexcept;
+    void setCursorPos(const Point<int>& pos) noexcept;
+    void setCursorPos(Widget* const widget) noexcept;
+
+    void setCursorStyle(CursorStyle style) noexcept;
     //---------------------
 
   protected:
