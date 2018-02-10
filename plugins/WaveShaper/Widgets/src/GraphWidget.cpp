@@ -10,6 +10,8 @@
 #include "GraphNodesLayer.hpp"
 
 #include <chrono>
+#include <cstdlib>
+#include <cmath>
 
 START_NAMESPACE_DISTRHO
 
