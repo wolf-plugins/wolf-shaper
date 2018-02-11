@@ -38,8 +38,6 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     initializeDefaultVertices();
 
     parent.addIdleCallback(this);
-
-    getParentWindow().clipCursor(this);
 }
 
 GraphWidget::~GraphWidget()
@@ -486,8 +484,6 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 
     if (!ev.press)
     {
-        getParentWindow().unclipCursor();
-
         if (focusedElement != nullptr)
         {
             focusedElement->onMouse(ev);
@@ -496,8 +492,6 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 
         return true;
     }
-
-    getParentWindow().clipCursor(this);
 
     //Testing for mouse hover on graph vertices
     for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
