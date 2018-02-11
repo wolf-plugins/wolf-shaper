@@ -2,9 +2,9 @@
 
 ![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
-Free, cross-platform distortion plugin. Can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
+spoonie WaveShaper (name subject to change) is a free, cross-platform distortion plugin. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
-While kind of usable, the plugin is not done yet. Please check the issues on GitHub before using it :)
+While kind of usable, it is not done yet. You might want to check the issues on GitHub before using the plugin :)
 
 ## Build and install
 
