@@ -4,40 +4,10 @@
 
 START_NAMESPACE_DISTRHO
 
-namespace Art = DistrhoArtworkNekobi;
-
 WaveShaperUI::WaveShaperUI() : UI(600, 600),
                                graphWidgetSocket(this, getParentWindow())
 {
-    // knobs (taken from Nekobi, NanoKnobs would be nice)
-    Image knobImage(Art::knobData, Art::knobWidth, Art::knobHeight);
 
-    fKnobPre = new ImageKnob(this, knobImage, ImageKnob::Vertical);
-    fKnobPre->setId(paramPreGain);
-    fKnobPre->setAbsolutePos(41, 540);
-    fKnobPre->setRange(0.0f, 2.0f);
-    fKnobPre->setDefault(1.0f);
-    fKnobPre->setValue(1.0f);
-    fKnobPre->setRotationAngle(305);
-    fKnobPre->setCallback(this);
-
-    fKnobDryWet = new ImageKnob(this, knobImage, ImageKnob::Vertical);
-    fKnobDryWet->setId(paramWet);
-    fKnobDryWet->setAbsolutePos(261, 540);
-    fKnobDryWet->setRange(0.0f, 1.0f);
-    fKnobDryWet->setDefault(1.0f);
-    fKnobDryWet->setValue(1.0f);
-    fKnobDryWet->setRotationAngle(305);
-    fKnobDryWet->setCallback(this);
-
-    fKnobPost = new ImageKnob(this, knobImage, ImageKnob::Vertical);
-    fKnobPost->setId(paramPostGain);
-    fKnobPost->setAbsolutePos(481, 540);
-    fKnobPost->setRange(0.0f, 1.0f);
-    fKnobPost->setDefault(1.0f);
-    fKnobPost->setValue(1.0f);
-    fKnobPost->setRotationAngle(305);
-    fKnobPost->setCallback(this);
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -46,7 +16,7 @@ WaveShaperUI::~WaveShaperUI()
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
 {
-    switch (index)
+    /*switch (index)
     {
     case paramPreGain:
         fKnobPre->setValue(value);
@@ -57,7 +27,7 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
     case paramPostGain:
         fKnobPost->setValue(value);
         break;
-    }
+    }*/
 
     parameters[index] = value;
 }
@@ -89,17 +59,17 @@ void WaveShaperUI::imageButtonClicked(ImageButton *button, int)
 
 void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)
 {
-    editParameter(knob->getId(), true);
+    //editParameter(knob->getId(), true);
 }
 
 void WaveShaperUI::imageKnobDragFinished(ImageKnob *knob)
 {
-    editParameter(knob->getId(), false);
+    //editParameter(knob->getId(), false);
 }
 
 void WaveShaperUI::imageKnobValueChanged(ImageKnob *knob, float value)
 {
-    setParameterValue(knob->getId(), value);
+    //setParameterValue(knob->getId(), value);
 }
 
 float WaveShaperUI::getParameterValue(uint32_t index) const

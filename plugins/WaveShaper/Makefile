@@ -22,7 +22,6 @@ OBJS_UI  = \
 	Widgets/src/GraphWidget.cpp.o \
 	Widgets/src/GraphWidgetSocket.cpp.o \
 	Widgets/src/GraphNodesLayer.cpp.o \
-	DistrhoArtworkNekobi.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------

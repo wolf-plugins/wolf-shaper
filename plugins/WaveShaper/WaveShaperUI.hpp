@@ -4,7 +4,6 @@
 #include "DistrhoUI.hpp"
 #include "GraphWidgetSocket.hpp"
 #include "ImageWidgets.hpp"
-#include "DistrhoArtworkNekobi.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -47,7 +46,7 @@ private:
   float parameters[paramCount];
   
   //ScopedPointer<ImageButton> fButtonRemoveDC;
-  ScopedPointer<ImageKnob> fKnobPre, fKnobDryWet, fKnobPost;
+  //ScopedPointer<ImageKnob> fKnobPre, fKnobDryWet, fKnobPost;
 
   GraphWidgetSocket graphWidgetSocket;
 
