@@ -4,7 +4,7 @@ Free, cross-platform distortion plugin. Can be built as an LV2, DSSI or VST plug
 
 While kind of usable, the plugin is not done yet. Please check the issues on GitHub before using it :)
 
-# Build and install
+## Build and install
 
 First, clone the repo (note the "--recursive" argument):
 
@@ -23,8 +23,10 @@ Prepend WIN32=true or MACOS=true to the command if applicable.
 
 All plugin builds will then be placed in the bin folder. Copy them to their appropriate place so that your plugin host can find them, and you're done :)
 
-# How to use
+## How to use
 
 Right-click in the graph to add a vertex. 
+
 Left-click and drag a vertex to move it.
+
 Double left-click a vertex to remove it.
