@@ -67,7 +67,7 @@ float Graph::getValueAt(float x)
     const float absX = std::abs(x);
 
     if (absX > 1.0f)
-        return x;
+        return x * vertices[getVertexCount() - 1].y;
 
     //binary search
     int left = 0;
