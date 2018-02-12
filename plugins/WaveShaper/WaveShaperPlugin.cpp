@@ -122,7 +122,7 @@ class WaveShaper : public Plugin
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
 			parameter.ranges.def = 0.0f;
-			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean;
 			break;
 		case paramOversample:
 			//None, 2x, 4x, 8x, 16x
@@ -139,7 +139,7 @@ class WaveShaper : public Plugin
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
 			parameter.ranges.def = 0.0f;
-			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean;
 			break;
 		case paramOut:
 			parameter.name = "Out";
