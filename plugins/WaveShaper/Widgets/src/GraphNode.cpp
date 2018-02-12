@@ -367,7 +367,11 @@ void GraphTensionHandle::render()
     layer->beginPath();
 
     layer->strokeWidth(2.0f);
-    layer->strokeColor(Color(228, 104, 181, 255));
+
+    if(parent->edgeMustBeEmphasized(vertex->getIndex())) //TODO: make that a method on the vertex
+        layer->strokeColor(Color(228, 228, 181, 255));
+    else
+        layer->strokeColor(Color(228, 104, 181, 255)); 
 
     layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 6.0f);
 
