@@ -7,7 +7,10 @@ START_NAMESPACE_DISTRHO
 WaveShaperUI::WaveShaperUI() : UI(600, 600),
                                graphWidgetSocket(this, getParentWindow())
 {
-
+     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16,16));
+     fSwitchRemoveDC->setCallback(this);
+     fSwitchRemoveDC->setAbsolutePos(30, 562);
+     fSwitchRemoveDC->setId(paramRemoveDC);
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -16,18 +19,20 @@ WaveShaperUI::~WaveShaperUI()
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
 {
-    /*switch (index)
+    switch (index)
     {
     case paramPreGain:
-        fKnobPre->setValue(value);
+        //fKnobPre->setValue(value);
         break;
     case paramWet:
-        fKnobDryWet->setValue(value);
+        //fKnobDryWet->setValue(value);
         break;
     case paramPostGain:
-        fKnobPost->setValue(value);
+        //fKnobPost->setValue(value);
         break;
-    }*/
+    case paramRemoveDC:
+        fSwitchRemoveDC->setDown(value > 0.50f);
+    }
 
     parameters[index] = value;
 }
@@ -49,15 +54,22 @@ void WaveShaperUI::uiIdle()
 
 }
 
-void WaveShaperUI::imageButtonClicked(ImageButton *button, int)
+void WaveShaperUI::nanoSwitchClicked(NanoSwitch* nanoSwitch)
 {
-    /*if (button != fButtonRemoveDC)
-        return;
+    uint switchId = nanoSwitch->getId();
 
-    setParameterValue(button->getId(), 1.0f);*/
+    if (nanoSwitch == fSwitchRemoveDC) 
+    {
+        parameters[switchId] = parameters[switchId] > 0.50f ? 0.0f : 1.0f;
+        
+        setParameterValue(switchId, parameters[switchId]);
+    }
+    /*else if(nanoSwitch == fSwitchReset) {
+        graphWidgetSocket.graphWidget.reset();
+    }*/
 }
 
-void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)
+/* void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)
 {
     //editParameter(knob->getId(), true);
 }
@@ -70,7 +82,7 @@ void WaveShaperUI::imageKnobDragFinished(ImageKnob *knob)
 void WaveShaperUI::imageKnobValueChanged(ImageKnob *knob, float value)
 {
     //setParameterValue(knob->getId(), value);
-}
+} */
 
 float WaveShaperUI::getParameterValue(uint32_t index) const
 {
