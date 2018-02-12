@@ -453,16 +453,6 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
     const float width = getWidth();
     const float height = getHeight();
 
-    /*const spoonie::Vertex *vertexLeft = lineEditor.getVertexAtIndex(i);
-    const spoonie::Vertex *vertexRight = lineEditor.getVertexAtIndex(i + 1);
-
-    const float normalizedCenterX = (vertexLeft->x + vertexRight->x) / 2.0f;
-    const float centerX = normalizedCenterX * width;
-
-    const float posY = lineEditor.getValueAt(normalizedCenterX) * height;
-
-    tensionWidgets[i - 1] = Circle<int>(centerX, posY, 8.0f);*/
-
     const float normalizedX = spoonie::normalize(pos.getX(), width);
     const float normalizedY = spoonie::normalize(pos.getY(), height);
 
@@ -535,7 +525,7 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
     if (focusedElement == nullptr)
     {
-        if (ev.press)
+        if (ev.press && contains(ev.pos))
         {
             focusedElement = insertVertex(point);
 
