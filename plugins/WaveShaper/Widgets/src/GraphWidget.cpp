@@ -23,13 +23,13 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       focusedElement(nullptr),
       mouseLeftDown(false),
       mouseRightDown(false),
-      maxInput(0.0f),
-      inOutLabelsFont(createFontFromFile("sans", "../plugins/WaveShaper/Resources/Roboto-Light.ttf"))
+      maxInput(0.0f)
 {
+    loadSharedResources();
+
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
 
-    fprintf(stderr, "%d\n", (int)inOutLabelsFont);
     setSize(width, height);
 
     graphNodesLayer.setSize(ui->getWidth(), ui->getHeight());
@@ -375,30 +375,26 @@ void GraphWidget::idleCallback()
 
 void GraphWidget::drawInOutLabels()
 {
-    beginPath();
+    fontSize(32.f);
+    fillColor(255, 255, 255, 125);
+    textLineHeight(14.f);
 
-    fontSize(40.0f);
-    fontFace("sans");
-    textAlign(Align(ALIGN_CENTER | ALIGN_MIDDLE));
-    textLineHeight(20.0f);
+    textAlign(ALIGN_BOTTOM | ALIGN_RIGHT);
+    text(getWidth() - 5, getHeight(), "In", NULL);
 
-    fillColor(Color(255, 255, 255, 100));
-
-    text(getWidth() - 100, 0, "Input", NULL);
-
-    fill();
-
-    closePath();
+    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    text(5, 0, "Out", NULL);
 }
 
 void GraphWidget::onNanoDisplay()
 {
-    flipYAxis();
 
     drawBackground();
     drawGrid();
 
     drawInOutLabels();
+
+    flipYAxis();
 
     drawGraphLine(5.0f, Color(169, 29, 239, 100), Color(255, 255, 0, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255), Color(255, 255, 0, 255)); //inner

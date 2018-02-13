@@ -118,8 +118,6 @@ protected:
 private:
   WaveShaperUI *ui;
 
-  FontId inOutLabelsFont;
-
   /**
    * Initialize the left and right vertices in the graph.
    */
