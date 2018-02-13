@@ -1414,6 +1414,7 @@ const Point<int> Window::getCursorPos() const noexcept
 	const int x = static_cast<int>(mouseLoc.x);
 	const int y = static_cast<int>(pData->fHeight - mouseLoc.y); //flip y so that the origin is at the top left
 
+	fprintf(stderr, "%d %d\n", x, y);
 	return Point<int>(x, y); 
 
 #else
@@ -1447,6 +1448,7 @@ void Window::setCursorPos(int x, int y) noexcept
 #else
 	XWarpPointer(pData->xDisplay, None, pData->xWindow, 0, 0, 0, 0, x, y);
 	XSync(pData->xDisplay, False); //might not be necessary
+
 #endif
 }
 

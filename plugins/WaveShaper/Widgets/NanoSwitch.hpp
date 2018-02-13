@@ -4,6 +4,8 @@
 #include "Widget.hpp"
 #include "NanoVG.hpp"
 
+START_NAMESPACE_DISTRHO
+
 class NanoSwitch : public NanoWidget
 {
 public:
@@ -20,7 +22,7 @@ public:
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
 
-    void setCallback(Callback* callback);
+    void setCallback(Callback* callback) noexcept;
 
 protected:
     void onNanoDisplay() override;
@@ -35,5 +37,7 @@ private:
 
     DISTRHO_LEAK_DETECTOR(NanoSwitch)
 };
+
+END_NAMESPACE_DISTRHO
 
 #endif

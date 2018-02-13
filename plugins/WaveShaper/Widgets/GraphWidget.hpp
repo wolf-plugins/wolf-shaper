@@ -80,6 +80,8 @@ protected:
    */
   void drawGraphEdge(int vertexIndex, float lineWidth, Color color);
 
+  void drawInOutLabels();
+
   /**
    * Draw the line on the graph according to the current state of the plugin.
    */
@@ -115,6 +117,8 @@ protected:
 
 private:
   WaveShaperUI *ui;
+
+  FontId inOutLabelsFont;
 
   /**
    * Initialize the left and right vertices in the graph.

@@ -4,6 +4,7 @@
 #include "DistrhoUI.hpp"
 #include "GraphWidgetSocket.hpp"
 #include "RemoveDCSwitch.hpp"
+#include "ResetGraphButton.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -20,7 +21,8 @@ enum Parameters
 };
 
 class WaveShaperUI : public UI,
-                     public NanoSwitch::Callback
+                     public NanoSwitch::Callback,
+                     public NanoButton::Callback
 {
 public:
   WaveShaperUI();
@@ -32,6 +34,7 @@ protected:
   void parameterChanged(uint32_t, float value) override;
 
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
+  void nanoButtonClicked(NanoButton *nanoButton);
 
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;
@@ -41,6 +44,7 @@ private:
   float parameters[paramCount];
   
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
+  ScopedPointer<ResetGraphButton> fButtonResetGraph;
 
   //ScopedPointer<ImageKnob> fKnobPre, fKnobDryWet, fKnobPost;
 

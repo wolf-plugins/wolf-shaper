@@ -11,6 +11,10 @@ WaveShaperUI::WaveShaperUI() : UI(600, 600),
      fSwitchRemoveDC->setCallback(this);
      fSwitchRemoveDC->setAbsolutePos(30, 562);
      fSwitchRemoveDC->setId(paramRemoveDC);
+
+     fButtonResetGraph = new ResetGraphButton(getParentWindow(), Size<uint>(16,16));
+     fButtonResetGraph->setCallback(this);
+     fButtonResetGraph->setAbsolutePos(60, 562);  
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -67,6 +71,13 @@ void WaveShaperUI::nanoSwitchClicked(NanoSwitch* nanoSwitch)
     /*else if(nanoSwitch == fSwitchReset) {
         graphWidgetSocket.graphWidget.reset();
     }*/
+}
+
+void WaveShaperUI::nanoButtonClicked(NanoButton* nanoButton) {
+    if(nanoButton != fButtonResetGraph)
+        return;
+    
+    graphWidgetSocket.graphWidget.reset();
 }
 
 /* void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)

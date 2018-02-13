@@ -23,12 +23,13 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       focusedElement(nullptr),
       mouseLeftDown(false),
       mouseRightDown(false),
-      maxInput(0.0f)
-
+      maxInput(0.0f),
+      inOutLabelsFont(createFontFromFile("sans", "../plugins/WaveShaper/Resources/Roboto-Light.ttf"))
 {
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
 
+    fprintf(stderr, "%d\n", (int)inOutLabelsFont);
     setSize(width, height);
 
     graphNodesLayer.setSize(ui->getWidth(), ui->getHeight());
@@ -74,6 +75,9 @@ void GraphWidget::reset()
     resetVerticesPool();
 
     initializeDefaultVertices();
+
+    ui->setState("graph", "0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
+    lineEditor.rebuildFromString("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
 }
 
 void GraphWidget::resetVerticesPool()
@@ -369,12 +373,32 @@ void GraphWidget::idleCallback()
     }
 }
 
+void GraphWidget::drawInOutLabels()
+{
+    beginPath();
+
+    fontSize(40.0f);
+    fontFace("sans");
+    textAlign(Align(ALIGN_CENTER | ALIGN_MIDDLE));
+    textLineHeight(20.0f);
+
+    fillColor(Color(255,255,255,100));
+
+    text(getWidth() - 100, 0, "Input", NULL);
+
+    fill();
+
+    closePath();
+}
+
 void GraphWidget::onNanoDisplay()
 {
     flipYAxis();
 
     drawBackground();
     drawGrid();
+
+    drawInOutLabels();
 
     drawGraphLine(5.0f, Color(169, 29, 239, 100), Color(255, 255, 0, 100));     //outer
     drawGraphLine(1.1416f, Color(245, 112, 188, 255), Color(255, 255, 0, 255)); //inner

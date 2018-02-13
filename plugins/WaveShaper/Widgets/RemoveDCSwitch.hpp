@@ -3,6 +3,8 @@
 
 #include "NanoSwitch.hpp"
 
+START_NAMESPACE_DISTRHO
+
 class RemoveDCSwitch : public NanoSwitch
 {
 public:
@@ -16,5 +18,7 @@ protected:
 private:
     DISTRHO_LEAK_DETECTOR(RemoveDCSwitch)
 };
+
+END_NAMESPACE_DISTRHO
 
 #endif

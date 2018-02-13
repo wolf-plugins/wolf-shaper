@@ -1,5 +1,7 @@
 #include "RemoveDCSwitch.hpp"
 
+START_NAMESPACE_DISTRHO
+
 RemoveDCSwitch::RemoveDCSwitch(Window &parent, Size<uint> size) noexcept
     : NanoSwitch(parent, size)
 {
@@ -41,3 +43,5 @@ void RemoveDCSwitch::drawDown()
 
     closePath();
 }
+
+END_NAMESPACE_DISTRHO

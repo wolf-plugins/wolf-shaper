@@ -1,5 +1,7 @@
 #include "NanoSwitch.hpp"
 
+START_NAMESPACE_DISTRHO
+
 NanoSwitch::NanoSwitch(Window& parent, Size<uint> size) noexcept
     : NanoWidget(parent),
       fIsDown(false),
@@ -36,9 +38,9 @@ void NanoSwitch::onNanoDisplay()
         drawDown();
     else
         drawUp();
-    }
+}
     
-void NanoSwitch::setCallback(Callback* callback) 
+void NanoSwitch::setCallback(Callback* callback) noexcept
 {
     fCallback = callback;
 }
@@ -59,3 +61,5 @@ bool NanoSwitch::onMouse(const MouseEvent& ev)
 
     return false;
 }
+
+END_NAMESPACE_DISTRHO

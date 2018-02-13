@@ -24,6 +24,8 @@ OBJS_UI  = \
 	Widgets/src/GraphNodesLayer.cpp.o \
 	Widgets/src/NanoSwitch.cpp.o \
 	Widgets/src/RemoveDCSwitch.cpp.o \
+	Widgets/src/NanoButton.cpp.o \
+	Widgets/src/ResetGraphButton.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------
