@@ -382,7 +382,7 @@ void GraphWidget::drawInOutLabels()
     textAlign(Align(ALIGN_CENTER | ALIGN_MIDDLE));
     textLineHeight(20.0f);
 
-    fillColor(Color(255,255,255,100));
+    fillColor(Color(255, 255, 255, 100));
 
     text(getWidth() - 100, 0, "Input", NULL);
 
@@ -409,20 +409,32 @@ void GraphWidget::onNanoDisplay()
         drawAlignmentLines();
 }
 
-bool GraphWidget::onScroll(const ScrollEvent &)
+bool GraphWidget::onScroll(const ScrollEvent &ev)
 {
-    /*float oldTension = lineEditor.getVertexAtIndex(0)->tension;
-    lineEditor.setTensionAtIndex(0, spoonie::clamp(oldTension + 0.50f * -ev.delta.getY(), -100.0f, 100.0f));
+    const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
-    //position tension handles
-    const float centerX = (lineEditor.getVertexAtIndex(0)->x + lineEditor.getVertexAtIndex(1)->x) / 2.0f;
-    //tensionWidgets[0].setY(lineEditor.getValueAt(centerX) * getHeight());
+    //Testing for mouse hover on tension handles
+    for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
+    {
+        GraphTensionHandle* tensionHandle = graphVertices[i]->getTensionHandle();
 
-    ui->setState("graph", lineEditor.serialize());
+        if (tensionHandle->contains(point))
+        {
+            const float delta = graphVertices[i]->getY() < graphVertices[i + 1]->getY() ? -ev.delta.getY() : ev.delta.getY();
+            const float oldTension = lineEditor.getVertexAtIndex(i)->tension;
 
-    repaint();
-    */
-    return true;
+            lineEditor.setTensionAtIndex(i, spoonie::clamp(oldTension + 1.5f * delta, -100.0f, 100.0f));
+
+            ui->setState("graph", lineEditor.serialize());
+            repaint();
+
+            getParentWindow().setCursorPos(tensionHandle->getAbsoluteX(), tensionHandle->getAbsoluteY());
+            
+            return true;
+        }
+    }
+
+    return false;
 }
 
 void GraphWidget::removeVertex(int index)
