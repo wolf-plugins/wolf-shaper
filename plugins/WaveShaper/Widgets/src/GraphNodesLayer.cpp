@@ -21,8 +21,8 @@ void GraphNodesLayer::onNanoDisplay()
     {
         GraphVertex *vertex = graph->graphVertices[i];
 
-        vertex->render();
         vertex->getTensionHandle()->render();
+        vertex->render();
     }
 }
 
