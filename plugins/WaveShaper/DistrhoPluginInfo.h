@@ -2,7 +2,7 @@
 #define DISTRHO_PLUGIN_INFO_H_INCLUDED
 
 #define DISTRHO_PLUGIN_NAME  "spoonie WaveShaper"
-#define DISTRHO_PLUGIN_URI   "https://github.com/desaulniersp/spoonie-waveshaper"
+#define DISTRHO_PLUGIN_URI   "https://github.com/pdesaulniers/spoonie-waveshaper"
 
 #define DISTRHO_PLUGIN_HAS_UI          1
 #define DISTRHO_PLUGIN_IS_RT_SAFE      0 //not sure yet
