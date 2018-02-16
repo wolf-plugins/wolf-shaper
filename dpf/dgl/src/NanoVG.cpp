@@ -171,7 +171,7 @@ GLuint NanoImage::getTextureHandle() const
 {
     DISTRHO_SAFE_ASSERT_RETURN(fHandle.context != nullptr && fHandle.imageId != 0, 0);
 
-    return nvglImageHandleGL2(fHandle.context, fHandle.imageId);
+    return nvglImageHandle(fHandle.context, fHandle.imageId);
 }
 
 void NanoImage::_updateSize()
@@ -602,7 +602,7 @@ NanoImage::Handle NanoVG::createImageFromTextureHandle(GLuint textureId, uint w,
     if (! deleteTexture)
         imageFlags |= NVG_IMAGE_NODELETE;
 
-    return NanoImage::Handle(fContext, nvglCreateImageFromHandleGL2(fContext,
+    return NanoImage::Handle(fContext, nvglCreateImageFromHandle(fContext,
                                                                  textureId,
                                                                  static_cast<int>(w),
                                                                  static_cast<int>(h), imageFlags));
