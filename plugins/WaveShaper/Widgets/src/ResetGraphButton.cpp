@@ -2,16 +2,6 @@
 
 START_NAMESPACE_DISTRHO
 
-ResetGraphButton::ResetGraphButton(Window &parent, Size<uint> size) noexcept
-    : NanoButton(parent, size)
-{
-}
-
-ResetGraphButton::ResetGraphButton(Widget *widget, Size<uint> size) noexcept
-    : NanoButton(widget, size)
-{
-}
-
 void ResetGraphButton::drawUp()
 {
     beginPath();

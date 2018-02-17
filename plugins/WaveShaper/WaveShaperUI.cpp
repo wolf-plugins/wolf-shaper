@@ -96,7 +96,6 @@ void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, int value)
     if(nanoWheel != fWheelOversample)
         return;
 
-    fprintf(stderr, "%d\n", value);
     setParameterValue(paramOversample, value);
 }
 
