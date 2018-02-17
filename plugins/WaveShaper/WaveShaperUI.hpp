@@ -36,10 +36,8 @@ protected:
   void parameterChanged(uint32_t, float value) override;
 
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
-
   void nanoButtonClicked(NanoButton *nanoButton);
-
-  void nanoWheelValueChanged(NanoWheel *nanoWheel, int value);
+  void nanoWheelValueChanged(NanoWheel *nanoWheel, const int value);
   
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;

@@ -17,18 +17,14 @@ WaveShaperUI::WaveShaperUI() : UI(600, 600),
     fButtonResetGraph->setCallback(this);
     fButtonResetGraph->setAbsolutePos(60, 562);
 
-    fWheelOversample = new OversampleWheel(getParentWindow(), Size<uint>(24, 20));
+    fWheelOversample = new OversampleWheel(getParentWindow(), Size<uint>(36, 20));
     fWheelOversample->setCallback(this);
     fWheelOversample->setAbsolutePos(90, 562);
     fWheelOversample->setRange(0, 4);
-    /*fDesignWindow = new Window(getParentApp(), getParentWindow());
-     fDesignWindow->setSize(412, 412);
-     fDesignWindow->show();*/
 }
 
 WaveShaperUI::~WaveShaperUI()
 {
-    //fDesignWindow->close();
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
@@ -49,6 +45,10 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         break;
     case paramOversample:
         fWheelOversample->setValue(value);
+        break;
+    case paramBipolarMode:
+        break;
+    default:
         break;
     }
 
@@ -91,11 +91,12 @@ void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     graphWidgetSocket.graphWidget.reset();
 }
 
-void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, int value) 
+void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
 {
-    if(nanoWheel != fWheelOversample)
+    if (nanoWheel != fWheelOversample)
         return;
 
+    parameters[paramOversample] = value;
     setParameterValue(paramOversample, value);
 }
 

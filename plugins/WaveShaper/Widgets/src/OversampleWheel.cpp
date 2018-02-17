@@ -4,24 +4,35 @@ START_NAMESPACE_DISTRHO
 
 void OversampleWheel::draw() 
 {
-    const char* oversamplingFactors[] = {"", "x2", "x4", "x8", "x16"};
+    const float width = getWidth();
+    const float height = getHeight();
+
+    const char* oversamplingFactors[] = {"", "2x", "4x", "8x", "16x"};
+
+    resetTransform();
 
     beginPath();
 
     fillColor(Color(255,0,0,255));
-    rect(0, 0, getWidth(), getHeight());
+    rect(0, 0, width, height);
     fill();
 
     closePath();
 
-    fontSize(4.f);
-    fillColor(Color(100,100,100, 255));
-    textAlign(ALIGN_CENTER);
+    beginPath();
+
+    fontSize(height);
+    fillColor(Color(255,255,255, 255));
+    textAlign(ALIGN_RIGHT | ALIGN_BOTTOM);
 
     const int value = getValue();
 
     if(value > 0)
-        text(0, 0, oversamplingFactors[getValue()], NULL);
+        text(width - 2, height + 1, oversamplingFactors[getValue()], NULL);
+
+    fill();
+
+    closePath();
 }
 
 END_NAMESPACE_DISTRHO
