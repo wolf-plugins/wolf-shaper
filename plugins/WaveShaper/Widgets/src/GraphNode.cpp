@@ -299,10 +299,10 @@ void GraphVertex::clipCursorToNeighbouringVertices()
     GraphVertex* rightVertex = getVertexAtRight();
 
     //properties of the clip rectangle
-    const int left = leftVertex ? leftVertex->getAbsoluteX() : parent->getAbsoluteX();
+    const int left = leftVertex ? leftVertex->getAbsoluteX() : this->getAbsoluteX();
     const int top = parent->getAbsoluteY();
-    const int right = rightVertex ? rightVertex->getAbsoluteX() : parent->getAbsoluteX();
-    const int bottom = parent->getHeight() + parent->marginTop;
+    const int right = rightVertex ? rightVertex->getAbsoluteX() : this->getAbsoluteX();
+    const int bottom = top + parent->getHeight();
 
     getParentWindow().clipCursor(Rectangle<int>(left, top, right - left, bottom - top));
 }
