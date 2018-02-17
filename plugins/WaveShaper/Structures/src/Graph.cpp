@@ -1,6 +1,7 @@
 #include "Graph.hpp"
 
 #include <cmath>
+#include <cstdlib>
 #include <cstdio>
 #include <cassert>
 #include <cstring>
