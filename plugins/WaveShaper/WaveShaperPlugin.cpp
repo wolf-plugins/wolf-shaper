@@ -47,7 +47,7 @@ class WaveShaper : public Plugin
 		parameters[paramWet] = 1.0f;
 		parameters[paramPostGain] = 1.0f;
 		parameters[paramRemoveDC] = 0.0f;
-		parameters[paramOversample] = 0.0f;
+		parameters[paramOversample] = 1.0f;
 		parameters[paramBipolarMode] = 0.0f;
 		parameters[paramOut] = 0.0f;
 	}
@@ -130,7 +130,7 @@ class WaveShaper : public Plugin
 			parameter.symbol = "oversample";
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 4.0f;
-			parameter.ranges.def = 0.0f;
+			parameter.ranges.def = 1.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
 			break;
 		case paramBipolarMode:
