@@ -26,6 +26,8 @@ OBJS_UI  = \
 	Widgets/src/RemoveDCSwitch.cpp.o \
 	Widgets/src/NanoButton.cpp.o \
 	Widgets/src/ResetGraphButton.cpp.o \
+	Widgets/src/NanoWheel.cpp.o \
+	Widgets/src/OversampleWheel.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------

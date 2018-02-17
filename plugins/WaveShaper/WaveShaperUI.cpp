@@ -1,24 +1,34 @@
 #include "DistrhoUI.hpp"
 
 #include "WaveShaperUI.hpp"
+#include "Window.hpp"
 
 START_NAMESPACE_DISTRHO
 
 WaveShaperUI::WaveShaperUI() : UI(600, 600),
                                graphWidgetSocket(this, getParentWindow())
 {
-     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16,16));
-     fSwitchRemoveDC->setCallback(this);
-     fSwitchRemoveDC->setAbsolutePos(30, 562);
-     fSwitchRemoveDC->setId(paramRemoveDC);
+    fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16, 16));
+    fSwitchRemoveDC->setCallback(this);
+    fSwitchRemoveDC->setAbsolutePos(30, 562);
+    fSwitchRemoveDC->setId(paramRemoveDC);
 
-     fButtonResetGraph = new ResetGraphButton(getParentWindow(), Size<uint>(16,16));
-     fButtonResetGraph->setCallback(this);
-     fButtonResetGraph->setAbsolutePos(60, 562);  
+    fButtonResetGraph = new ResetGraphButton(getParentWindow(), Size<uint>(16, 16));
+    fButtonResetGraph->setCallback(this);
+    fButtonResetGraph->setAbsolutePos(60, 562);
+
+    fWheelOversample = new OversampleWheel(getParentWindow(), Size<uint>(24, 20));
+    fWheelOversample->setCallback(this);
+    fWheelOversample->setAbsolutePos(90, 562);
+    fWheelOversample->setRange(0, 4);
+    /*fDesignWindow = new Window(getParentApp(), getParentWindow());
+     fDesignWindow->setSize(412, 412);
+     fDesignWindow->show();*/
 }
 
 WaveShaperUI::~WaveShaperUI()
 {
+    //fDesignWindow->close();
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
@@ -36,6 +46,10 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         break;
     case paramRemoveDC:
         fSwitchRemoveDC->setDown(value > 0.50f);
+        break;
+    case paramOversample:
+        fWheelOversample->setValue(value);
+        break;
     }
 
     parameters[index] = value;
@@ -55,29 +69,35 @@ void WaveShaperUI::onNanoDisplay()
 
 void WaveShaperUI::uiIdle()
 {
-
 }
 
-void WaveShaperUI::nanoSwitchClicked(NanoSwitch* nanoSwitch)
+void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
 {
     uint switchId = nanoSwitch->getId();
 
-    if (nanoSwitch == fSwitchRemoveDC) 
+    if (nanoSwitch == fSwitchRemoveDC)
     {
         parameters[switchId] = parameters[switchId] > 0.50f ? 0.0f : 1.0f;
-        
+
         setParameterValue(switchId, parameters[switchId]);
     }
-    /*else if(nanoSwitch == fSwitchReset) {
-        graphWidgetSocket.graphWidget.reset();
-    }*/
 }
 
-void WaveShaperUI::nanoButtonClicked(NanoButton* nanoButton) {
-    if(nanoButton != fButtonResetGraph)
+void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
+{
+    if (nanoButton != fButtonResetGraph)
         return;
-    
+
     graphWidgetSocket.graphWidget.reset();
+}
+
+void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, int value) 
+{
+    if(nanoWheel != fWheelOversample)
+        return;
+
+    fprintf(stderr, "%d\n", value);
+    setParameterValue(paramOversample, value);
 }
 
 /* void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)
