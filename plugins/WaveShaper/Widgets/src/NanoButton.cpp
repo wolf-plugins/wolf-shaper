@@ -4,14 +4,16 @@ START_NAMESPACE_DISTRHO
 
 NanoButton::NanoButton(Window &parent, Size<uint> size) noexcept
     : NanoWidget(parent),
-      state(kNanoStateNormal)
+      state(kNanoStateNormal),
+      fHasFocus(false)
 {
     setSize(size);
 }
 
 NanoButton::NanoButton(Widget *parent, Size<uint> size) noexcept
     : NanoWidget(parent),
-      state(kNanoStateNormal)
+      state(kNanoStateNormal),
+      fHasFocus(false)
 {
     setSize(size);
 }
@@ -44,37 +46,87 @@ void NanoButton::setButtonState(State state)
     repaint();
 }
 
-bool NanoButton::onMouse(const MouseEvent &ev)
+bool NanoButton::leftClick(const MouseEvent &ev)
 {
-    if (!contains(ev.pos))
+    bool hover = contains(ev.pos);
+
+    if (!ev.press)
     {
-        if (state != kNanoStateNormal)
+        if (fHasFocus == true)
         {
-            setButtonState(kNanoStateNormal);
+            fHasFocus = false;
+
+            if (hover)
+            {
+                setButtonState(kNanoStateHover);
+
+                if (fCallback != nullptr)
+                {
+                    fCallback->nanoButtonClicked(this);
+                }
+            }
+            else
+            {
+                setButtonState(kNanoStateNormal);
+            }
+
+            return true;
         }
 
         return false;
     }
 
-    if (ev.press)
+    if (ev.press && hover)
     {
         setButtonState(kNanoStateDown);
+        fHasFocus = true;
+
+        return true;
     }
-    else
+
+    return false;
+}
+
+bool NanoButton::middleClick(const MouseEvent &ev)
+{
+    return fHasFocus;
+}
+
+bool NanoButton::rightClick(const MouseEvent &ev)
+{
+    return fHasFocus;
+}
+
+bool NanoButton::onMouse(const MouseEvent &ev)
+{
+    switch (ev.button)
     {
-        setButtonState(kNanoStateHover);
-
-        if (fCallback != nullptr)
-        {
-            fCallback->nanoButtonClicked(this);
-        }
+    case 1:
+        return leftClick(ev);
+    case 2:
+        return middleClick(ev);
+    case 3:
+        return rightClick(ev);
     }
 
-    return true;
+    return false;
 }
 
 bool NanoButton::onMotion(const MotionEvent &ev)
 {
+    bool hover = contains(ev.pos);
+
+    if (fHasFocus)
+    {
+        //should be drawn as down only when the mouse is on the widget
+        if (hover)
+            setButtonState(kNanoStateDown);
+        else
+            setButtonState(kNanoStateHover);
+
+        return true;
+    }
+
     if (contains(ev.pos))
     {
         if (state == kNanoStateNormal)

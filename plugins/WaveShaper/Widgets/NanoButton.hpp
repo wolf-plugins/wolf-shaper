@@ -24,6 +24,10 @@ public:
 protected:
     void onNanoDisplay() override;
 
+    bool leftClick(const MouseEvent &ev);
+    bool middleClick(const MouseEvent &ev);
+    bool rightClick(const MouseEvent &ev);
+
     bool onMouse(const MouseEvent&) override;
     bool onMotion(const MotionEvent&) override;
 
@@ -41,6 +45,7 @@ private:
     void setButtonState(State state);
     State state;
 
+    bool fHasFocus;
     Callback* fCallback;
 
     DISTRHO_LEAK_DETECTOR(NanoButton)
