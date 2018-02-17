@@ -41,7 +41,7 @@ void NanoWheel::setCallback(Callback *callback) noexcept
     fCallback = callback;
 }
 
-void NanoWheel::setValue(int value) noexcept
+void NanoWheel::setValue(const int value) noexcept
 {
     fValue = spoonie::clamp(value, fMin, fMax);
     fCallback->nanoWheelValueChanged(this, fValue);
@@ -64,11 +64,17 @@ bool NanoWheel::onMouse(const MouseEvent &ev)
     if (ev.button != 1)
         return fLeftMouseDown;
 
+    Window &window = getParentWindow();
+
     if (!ev.press)
     {
         if (fLeftMouseDown == true)
         {
             fLeftMouseDown = false;
+
+            window.setCursorPos(this);
+            window.showCursor();
+
             return true;
         }
 
@@ -79,6 +85,8 @@ bool NanoWheel::onMouse(const MouseEvent &ev)
     {
         fLeftMouseDownLocation = ev.pos;
         fLeftMouseDown = true;
+
+        window.hideCursor();
 
         return true;
     }
@@ -99,6 +107,12 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
             setValue(fValue + spoonie::clamp(value, -1, 1));
         }
 
+        return true;
+    }
+
+    if (contains(ev.pos))
+    {
+        //getParentWindow().setCursorStyle(Window::CursorStyle::NS_Resize);
         return true;
     }
 

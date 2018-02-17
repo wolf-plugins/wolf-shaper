@@ -19,7 +19,7 @@ class NanoWheel : public NanoWidget
     explicit NanoWheel(Window &parent, Size<uint> size) noexcept;
     explicit NanoWheel(Widget *widget, Size<uint> size) noexcept;
 
-    void setValue(int value) noexcept;
+    void setValue(const int value) noexcept;
     int getValue() noexcept;
     void setRange(int min, int max) noexcept;
 
