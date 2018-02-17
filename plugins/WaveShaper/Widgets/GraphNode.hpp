@@ -38,7 +38,7 @@ public:
   int getAbsoluteX() const;
   int getAbsoluteY() const;
   
-  Window *getParentWindow();
+  Window &getParentWindow();
 
 protected:
   void idleCallback() override;
@@ -119,6 +119,8 @@ protected:
 
   bool onMotion(const Widget::MotionEvent &ev) override;
   bool onMouse(const Widget::MouseEvent &ev) override;
+
+  void clipCursorToNeighbouringVertices();
 
   void updateGraph();
 

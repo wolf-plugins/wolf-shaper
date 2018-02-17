@@ -199,9 +199,9 @@ Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
     return Point<int>(x, y);
 }
 
-Window *GraphNode::getParentWindow()
+Window &GraphNode::getParentWindow()
 {
-    return &parent->getParentWindow();
+    return parent->getParentWindow();
 }
 
 void GraphVertex::updateGraph()
@@ -223,7 +223,7 @@ bool GraphVertex::onMotion(const Widget::MotionEvent &ev)
 {
     if (!grabbed)
     {
-        getParentWindow()->setCursorStyle(Window::CursorStyle::Grab);
+        getParentWindow().setCursorStyle(Window::CursorStyle::Grab);
         return true;
     }
 
@@ -288,9 +288,23 @@ void GraphVertex::removeFromGraph()
 bool GraphVertex::leftDoubleClick(const Widget::MouseEvent &)
 {
     removeFromGraph();
-    getParentWindow()->setCursorStyle(Window::CursorStyle::Default);
+    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
     return true;
+}
+
+void GraphVertex::clipCursorToNeighbouringVertices() 
+{
+    GraphVertex* leftVertex = getVertexAtLeft();
+    GraphVertex* rightVertex = getVertexAtRight();
+
+    //properties of the clip rectangle
+    const int left = leftVertex ? leftVertex->getAbsoluteX() : parent->getAbsoluteX();
+    const int top = parent->getAbsoluteY();
+    const int right = rightVertex ? rightVertex->getAbsoluteX() : parent->getAbsoluteX();
+    const int bottom = parent->getHeight() + parent->marginTop;
+
+    getParentWindow().clipCursor(Rectangle<int>(left, top, right - left, bottom - top));
 }
 
 bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
@@ -311,18 +325,22 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
         return leftDoubleClick(ev);
 
     grabbed = ev.press;
-    Window *window = getParentWindow();
+    Window &window = getParentWindow();
 
     if (grabbed)
     {
-        window->hideCursor();
+        window.hideCursor();
+
+        clipCursorToNeighbouringVertices();
     }
     else
     {
-        window->setCursorPos(getAbsoluteX(), getAbsoluteY());
-        window->setCursorStyle(Window::CursorStyle::Grab);
+        window.setCursorPos(getAbsoluteX(), getAbsoluteY());
+        window.setCursorStyle(Window::CursorStyle::Grab);
+        
+        window.unclipCursor();
 
-        window->showCursor();
+        window.showCursor();
     }
 
     parent->repaint();
@@ -338,20 +356,20 @@ GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphNodesLayer *lay
 bool GraphTensionHandle::onMouse(const Widget::MouseEvent &ev)
 {
     grabbed = ev.press;
-    Window *window = getParentWindow();
+    Window &window = getParentWindow();
 
     if (grabbed)
     {
         mouseDownPosition = spoonie::flipY(ev.pos, parent->getHeight());
 
-        window->hideCursor();
+        window.hideCursor();
     }
     else
     {
-        window->setCursorPos(getAbsoluteX(), getAbsoluteY());
-        window->setCursorStyle(Window::CursorStyle::Grab);
+        window.setCursorPos(getAbsoluteX(), getAbsoluteY());
+        window.setCursorStyle(Window::CursorStyle::Grab);
 
-        window->showCursor();
+        window.showCursor();
     }
 
     parent->repaint();
