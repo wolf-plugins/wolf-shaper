@@ -44,7 +44,6 @@ void NanoWheel::setCallback(Callback *callback) noexcept
 void NanoWheel::setValue(const int value) noexcept
 {
     fValue = spoonie::clamp(value, fMin, fMax);
-    fCallback->nanoWheelValueChanged(this, fValue);
 
     repaint();
 }
@@ -104,7 +103,9 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
         {
             //getParentWindow().setCursorPos(this);
             fLeftMouseDownLocation.setY(ev.pos.getY());
+
             setValue(fValue + spoonie::clamp(value, -1, 1));
+            fCallback->nanoWheelValueChanged(this, fValue);
         }
 
         return true;
