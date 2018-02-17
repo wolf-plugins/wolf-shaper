@@ -302,9 +302,8 @@ void GraphVertex::clipCursorToNeighbouringVertices()
     const int left = leftVertex ? leftVertex->getAbsoluteX() : this->getAbsoluteX();
     const int top = parent->getAbsoluteY();
     const int right = rightVertex ? rightVertex->getAbsoluteX() : this->getAbsoluteX();
-    const int bottom = top + parent->getHeight();
 
-    getParentWindow().clipCursor(Rectangle<int>(left, top, right - left, bottom - top));
+    getParentWindow().clipCursor(Rectangle<int>(left, top, right - left, parent->getHeight()));
 }
 
 bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
@@ -369,7 +368,7 @@ bool GraphTensionHandle::onMouse(const Widget::MouseEvent &ev)
         window.setCursorPos(getAbsoluteX(), getAbsoluteY());
         window.setCursorStyle(Window::CursorStyle::Grab);
 
-        window.showCursor();
+       window.showCursor();
     }
 
     parent->repaint();
