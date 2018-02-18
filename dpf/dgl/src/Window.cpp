@@ -1459,7 +1459,7 @@ void Window::setCursorPos(const Point<int>& pos) noexcept
 
 void Window::setCursorPos(Widget* const widget) noexcept
 {
-	setCursorPos(widget->getAbsolutePos());
+	setCursorPos(widget->getAbsoluteX() + widget->getWidth() / 2, widget->getAbsoluteY() + widget->getHeight() / 2);
 }
 
 void Window::clipCursor(Rectangle<int> rect) const noexcept
