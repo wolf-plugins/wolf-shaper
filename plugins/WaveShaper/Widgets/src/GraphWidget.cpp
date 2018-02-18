@@ -377,7 +377,6 @@ void GraphWidget::drawInOutLabels()
 {
     fontSize(32.f);
     fillColor(255, 255, 255, 125);
-    textLineHeight(14.f);
 
     textAlign(ALIGN_BOTTOM | ALIGN_RIGHT);
     text(getWidth() - 5, getHeight(), "In", NULL);
@@ -388,7 +387,6 @@ void GraphWidget::drawInOutLabels()
 
 void GraphWidget::onNanoDisplay()
 {
-
     drawBackground();
     drawGrid();
 
@@ -495,6 +493,29 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
     return vertex;
 }
 
+GraphNode *GraphWidget::getHoveredNode(Point<int> cursorPos) 
+{
+    //Testing for mouse hover on graph vertices
+    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
+    {
+        if (graphVertices[i]->contains(cursorPos))
+        {
+            return graphVertices[i];
+        }
+    }
+
+    //Testing for mouse hover on tension handles
+    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
+    {
+        if (graphVertices[i]->tensionHandle.contains(cursorPos))
+        {
+            return &graphVertices[i]->tensionHandle;
+        }
+    }
+
+    return nullptr;
+}
+
 bool GraphWidget::leftClick(const MouseEvent &ev)
 {
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
@@ -515,26 +536,13 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
         return true;
     }
 
-    //Testing for mouse hover on graph vertices
-    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
+    GraphNode *hoveredNode = getHoveredNode(point);
+
+    if(hoveredNode != nullptr) 
     {
-        if (graphVertices[i]->contains(point))
-        {
-            focusedElement = graphVertices[i];
+        focusedElement = hoveredNode;
 
-            return focusedElement->onMouse(ev);
-        }
-    }
-
-    //Testing for mouse hover on tension handles
-    for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
-    {
-        if (graphVertices[i]->tensionHandle.contains(point))
-        {
-            focusedElement = &graphVertices[i]->tensionHandle;
-
-            return focusedElement->onMouse(ev);
-        }
+        return focusedElement->onMouse(ev);
     }
 
     //The cursor is not over any graph node
@@ -557,6 +565,9 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
     if (focusedElement == nullptr)
     {
+        if(getHoveredNode(point) != nullptr)
+            return true;
+            
         if (ev.press && contains(ev.pos))
         {
             focusedElement = insertVertex(point);
@@ -592,7 +603,7 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
 }
 
 bool GraphWidget::onMotion(const MotionEvent &ev)
-{
+{      
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
     if (focusedElement)
@@ -600,17 +611,11 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
         return focusedElement->onMotion(ev);
     }
 
-    //Testing for mouse hover on graph nodes
-    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    GraphNode *hoveredNode = getHoveredNode(point);
+
+    if(hoveredNode != nullptr) 
     {
-        if (graphVertices[i]->contains(point))
-        {
-            return graphVertices[i]->onMotion(ev);
-        }
-        else if (graphVertices[i]->tensionHandle.contains(point))
-        {
-            return graphVertices[i]->tensionHandle.onMotion(ev);
-        }
+        return hoveredNode->onMotion(ev);
     }
 
     //The cursor is not over any graph node

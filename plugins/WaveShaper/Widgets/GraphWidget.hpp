@@ -128,6 +128,8 @@ private:
    */
   void resetVerticesPool();
 
+  GraphNode *getHoveredNode(Point<int> cursorPos);
+
   /**
    * The data structure that contains the graph. Kept synchronized with the dsp side of the plugin.
    */
