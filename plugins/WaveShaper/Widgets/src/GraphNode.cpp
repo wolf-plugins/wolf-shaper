@@ -255,20 +255,22 @@ bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
         return true;
     }
 
+    const float resistance = 3.5f;
+
     Point<int> pos = spoonie::flipY(ev.pos, parent->getHeight());
 
     const GraphVertex *leftVertex = vertex;
     const GraphVertex *rightVertex = vertex->getVertexAtRight();
 
     float tension = vertex->getTension();
-    float difference = (mouseDownPosition.getY() - pos.getY()) / 2.0f;
+    float difference = mouseDownPosition.getY() - pos.getY();
 
     if (leftVertex->getY() > rightVertex->getY())
         difference = -difference;
 
     mouseDownPosition = pos;
 
-    tension = spoonie::clamp(tension + difference, -100.0f, 100.0f);
+    tension = spoonie::clamp(tension + difference / resistance, -100.0f, 100.0f);
 
     spoonie::Graph *lineEditor = getLineEditor();
     lineEditor->getVertexAtIndex(vertex->getIndex())->tension = tension;

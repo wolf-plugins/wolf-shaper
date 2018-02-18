@@ -51,12 +51,12 @@ float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1
     //FIXME: smoothing should be done in the ui, not here
     if (tensionIsPositive)
     {
-        tension = std::pow(tension, 1.6f);
+        tension = std::pow(tension, 1.2f);
         result = y * std::pow((input - p1x) / x, 1 + (tension * 14)) + p1y;
     }
     else
     {
-        tension = -std::pow(-tension, 1.6f);
+        tension = -std::pow(-tension, 1.2f);
         result = 1 - (y * std::pow(1 - (input - p1x) / x, 1 + (-tension * 14)) + p1y) + p2y - (1 - p1y);
     }
 
