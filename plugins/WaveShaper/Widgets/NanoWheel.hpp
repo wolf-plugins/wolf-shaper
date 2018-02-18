@@ -28,6 +28,7 @@ class NanoWheel : public NanoWidget
   protected:
     void onNanoDisplay() override;
 
+    bool onScroll(const ScrollEvent &ev) override;
     bool onMouse(const MouseEvent &) override;
     bool onMotion(const MotionEvent &) override;
 

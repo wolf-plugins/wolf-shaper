@@ -58,6 +58,17 @@ void NanoWheel::onNanoDisplay()
     draw();
 }
 
+bool NanoWheel::onScroll(const ScrollEvent &ev) 
+{
+    if(contains(ev.pos)) {
+        setValue(getValue() + ev.delta.getY());
+        
+        return true;
+    }
+
+    return false;
+}
+
 bool NanoWheel::onMouse(const MouseEvent &ev)
 {
     if (ev.button != 1)
@@ -97,7 +108,7 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
 {
     if (fLeftMouseDown)
     {
-        const int value = (fLeftMouseDownLocation.getY() - ev.pos.getY()) / 30;
+        const int value = (fLeftMouseDownLocation.getY() - ev.pos.getY()) / 20;
 
         if (value != 0)
         {
