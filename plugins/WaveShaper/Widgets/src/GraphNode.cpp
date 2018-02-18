@@ -322,8 +322,12 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
         lastClickButton = ev.button;
     }
 
-    if (doubleClick)
-        return leftDoubleClick(ev);
+    if (doubleClick) {
+        lastClickButton = -1;
+
+        if(this->type == GraphVertexType::Middle) //vertices on the sides don't receive double click, cause they can't get removed
+            return leftDoubleClick(ev);
+    }
 
     grabbed = ev.press;
     Window &window = getParentWindow();
