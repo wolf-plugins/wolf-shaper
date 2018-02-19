@@ -33,7 +33,7 @@ void NanoWheel::setRange(int min, int max) noexcept
     fMin = min;
     fMax = max;
 
-    spoonie::clamp(fValue, min, max);
+    fValue = spoonie::clamp(fValue, min, max);
 }
 
 void NanoWheel::setCallback(Callback *callback) noexcept
@@ -41,9 +41,15 @@ void NanoWheel::setCallback(Callback *callback) noexcept
     fCallback = callback;
 }
 
-void NanoWheel::setValue(const int value) noexcept
+void NanoWheel::setValue(const int value, bool sendCallback) noexcept
 {
+    if(fValue == value)
+        return;
+
     fValue = spoonie::clamp(value, fMin, fMax);
+
+    if(sendCallback)
+        fCallback->nanoWheelValueChanged(this, fValue);
 
     repaint();
 }
@@ -58,11 +64,12 @@ void NanoWheel::onNanoDisplay()
     draw();
 }
 
-bool NanoWheel::onScroll(const ScrollEvent &ev) 
+bool NanoWheel::onScroll(const ScrollEvent &ev)
 {
-    if(contains(ev.pos)) {
-        setValue(getValue() + ev.delta.getY());
-        
+    if (contains(ev.pos))
+    {
+        setValue(getValue() + ev.delta.getY(), true);
+
         return true;
     }
 
@@ -115,8 +122,7 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
             //getParentWindow().setCursorPos(this);
             fLeftMouseDownLocation.setY(ev.pos.getY());
 
-            setValue(fValue + spoonie::clamp(value, -1, 1));
-            fCallback->nanoWheelValueChanged(this, fValue);
+            setValue(fValue + spoonie::clamp(value, -1, 1), true);
         }
 
         return true;
