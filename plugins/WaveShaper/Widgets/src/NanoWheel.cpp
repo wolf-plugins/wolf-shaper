@@ -41,14 +41,16 @@ void NanoWheel::setCallback(Callback *callback) noexcept
     fCallback = callback;
 }
 
-void NanoWheel::setValue(const int value, bool sendCallback) noexcept
+void NanoWheel::setValue(int value, bool sendCallback) noexcept
 {
-    if(fValue == value)
+    value = spoonie::clamp(value, fMin, fMax);
+
+    if (fValue == value)
         return;
 
-    fValue = spoonie::clamp(value, fMin, fMax);
+    fValue = value;
 
-    if(sendCallback)
+    if (sendCallback && fCallback != nullptr)
         fCallback->nanoWheelValueChanged(this, fValue);
 
     repaint();
@@ -66,14 +68,12 @@ void NanoWheel::onNanoDisplay()
 
 bool NanoWheel::onScroll(const ScrollEvent &ev)
 {
-    if (contains(ev.pos))
-    {
-        setValue(getValue() + ev.delta.getY(), true);
+    if (!contains(ev.pos))
+        return false;
 
-        return true;
-    }
+    setValue(getValue() + ev.delta.getY(), true);
 
-    return false;
+    return true;
 }
 
 bool NanoWheel::onMouse(const MouseEvent &ev)

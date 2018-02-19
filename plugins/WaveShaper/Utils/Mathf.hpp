@@ -76,6 +76,23 @@ static DGL_NAMESPACE::Point<T> flipY(const DGL_NAMESPACE::Point<T> point, const 
 
     return DGL_NAMESPACE::Point<T>(x, y);
 }
+
+static float logScale(const float value, const float min, const float max)
+{
+    const float b = std::log(max / min) / (max - min);
+    const float a = max / std::exp(max * b);
+
+    return a * std::exp(b * value);
+}
+
+static float invLogScale(const float value, const float min, const float max)
+{
+    const float b = std::log(max / min) / (max - min);
+    const float a = max / std::exp(max * b);
+
+    return std::log(value / a) / b;
+}
+
 }
 
 #endif
