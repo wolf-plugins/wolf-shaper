@@ -119,18 +119,11 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
 
         if (value != 0)
         {
-            //getParentWindow().setCursorPos(this);
             fLeftMouseDownLocation.setY(ev.pos.getY());
 
             setValue(fValue + spoonie::clamp(value, -1, 1), true);
         }
 
-        return true;
-    }
-
-    if (contains(ev.pos))
-    {
-        //getParentWindow().setCursorStyle(Window::CursorStyle::NS_Resize);
         return true;
     }
 

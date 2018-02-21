@@ -144,18 +144,10 @@ bool NanoKnob::onMotion(const MotionEvent &ev)
         const float resistance = 280.0f;
         const float difference = (fLeftMouseDownLocation.getY() - ev.pos.getY()) / resistance * (fMax - fMin);
 
-        if (difference != 0)
-        {
-            fLeftMouseDownLocation.setY(ev.pos.getY());
+        fLeftMouseDownLocation.setY(ev.pos.getY());
 
-            setValue(fValue + difference, true);
-        }
+        setValue(fValue + difference, true);
 
-        return true;
-    }
-
-    if (contains(ev.pos))
-    {
         return true;
     }
 
