@@ -21,6 +21,27 @@ WaveShaperUI::WaveShaperUI() : UI(600, 600),
     fWheelOversample->setCallback(this);
     fWheelOversample->setAbsolutePos(90, 562);
     fWheelOversample->setRange(0, 4);
+
+    fKnobPreGain = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobPreGain->setCallback(this);
+    fKnobPreGain->setAbsolutePos(280, 545);
+    fKnobPreGain->setRange(0.0f, 2.0f);
+    fKnobPreGain->setId(paramPreGain);
+    fKnobPreGain->setColor(Color(255,50,50,255));
+
+    fKnobWet = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobWet->setCallback(this);
+    fKnobWet->setAbsolutePos(350, 545);
+    fKnobWet->setRange(0.0f, 1.0f);
+    fKnobWet->setId(paramWet);
+    fKnobWet->setColor(Color(0,200,255,255));
+
+    fKnobPostGain = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobPostGain->setCallback(this);
+    fKnobPostGain->setAbsolutePos(420, 545);
+    fKnobPostGain->setRange(0.0f, 1.0f);
+    fKnobPostGain->setId(paramPostGain);
+    fKnobPostGain->setColor(Color(0,255,100,255));
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -32,13 +53,13 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
     switch (index)
     {
     case paramPreGain:
-        //fKnobPre->setValue(value);
+        fKnobPreGain->setValue(value);
         break;
     case paramWet:
-        //fKnobDryWet->setValue(value);
+        fKnobWet->setValue(value);
         break;
     case paramPostGain:
-        //fKnobPost->setValue(value);
+        fKnobPostGain->setValue(value);
         break;
     case paramRemoveDC:
         fSwitchRemoveDC->setDown(value > 0.50f);
@@ -96,8 +117,16 @@ void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
     if (nanoWheel != fWheelOversample)
         return;
 
-    parameters[paramOversample] = value;
+    //parameters[paramOversample] = value;
     setParameterValue(paramOversample, value);
+}
+
+void WaveShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
+{
+    const int id = nanoKnob->getId();
+
+    parameters[id] = value;
+    setParameterValue(id, value);
 }
 
 /* void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)

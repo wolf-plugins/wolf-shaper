@@ -1,34 +1,31 @@
 #include "NanoKnob.hpp"
+#include "Mathf.hpp"
 
 START_NAMESPACE_DISTRHO
 
 NanoKnob::NanoKnob(Window &parent, Size<uint> size) noexcept
-    : Widget(parent),
-      fMinimum(0.0f),
-      fMaximum(1.0f),
+    : NanoWidget(parent),
+      fMin(0.0f),
+      fMax(1.0f),
       fStep(0.0f),
       fValue(0.5f),
       fUsingLog(false),
-      fRotationAngle(0),
-      fDragging(false),
-      fLastX(0),
-      fLastY(0),
+      fLeftMouseDown(false),
+      fColor(Color(255, 0, 0, 255)),
       fCallback(nullptr)
 {
     setSize(size);
 }
 
 NanoKnob::NanoKnob(Widget *widget, Size<uint> size) noexcept
-    : Widget(widget->getParentWindow()),
-      fMinimum(0.0f),
-      fMaximum(1.0f),
+    : NanoWidget(widget->getParentWindow()),
+      fMin(0.0f),
+      fMax(1.0f),
       fStep(0.0f),
       fValue(0.5f),
       fUsingLog(false),
-      fRotationAngle(0),
-      fDragging(false),
-      fLastX(0),
-      fLastY(0),
+      fLeftMouseDown(false),
+      fColor(Color(255, 0, 0, 255)),
       fCallback(nullptr)
 {
     setSize(size);
@@ -41,8 +38,10 @@ float NanoKnob::getValue() const noexcept
 
 void NanoKnob::setRange(float min, float max) noexcept
 {
-    fMinimum = min;
-    fMaximum = max;
+    DISTRHO_SAFE_ASSERT(min < max);
+
+    fMin = min;
+    fMax = max;
 
     fValue = spoonie::clamp(fValue, min, max);
 }
@@ -50,6 +49,16 @@ void NanoKnob::setRange(float min, float max) noexcept
 void NanoKnob::setStep(float step) noexcept
 {
     fStep = step;
+}
+
+float NanoKnob::getMin() noexcept
+{
+    return fMin;
+}
+
+float NanoKnob::getMax() noexcept
+{
+    return fMax;
 }
 
 // NOTE: value is assumed to be scaled if using log
@@ -78,44 +87,89 @@ void NanoKnob::setCallback(Callback *callback) noexcept
     fCallback = callback;
 }
 
-void NanoKnob::setRotationAngle(int angle)
+void NanoKnob::setColor(Color color) noexcept
 {
-    if (fRotationAngle == angle)
-        return;
+    fColor = color;
+}
 
-    DISTRHO_SAFE_ASSERT(angle < 210 || angle > 330);
-    DISTRHO_SAFE_ASSERT(angle >= 0 && angle <= 360);
-
-    fRotationAngle = angle % 360;
+Color NanoKnob::getColor() noexcept
+{
+    return fColor;
 }
 
 void NanoKnob::onNanoDisplay()
 {
-    /*drawNormal();
-      drawHover();
-      drawTurning();*/
+    drawNormal();
 }
 
 bool NanoKnob::onMouse(const MouseEvent &ev)
 {
     if (ev.button != 1)
+        return fLeftMouseDown;
+
+    Window &window = getParentWindow();
+
+    if (!ev.press)
+    {
+        if (fLeftMouseDown == true)
+        {
+            fLeftMouseDown = false;
+
+            window.setCursorPos(this);
+            window.showCursor();
+
+            return true;
+        }
+
         return false;
+    }
+
+    if (contains(ev.pos))
+    {
+        fLeftMouseDownLocation = ev.pos;
+        fLeftMouseDown = true;
+
+        window.hideCursor();
+
+        return true;
+    }
 
     return false;
 }
 
 bool NanoKnob::onMotion(const MotionEvent &ev)
 {
-    if (!fDragging)
-        return false;
+    if (fLeftMouseDown)
+    {
+        const float resistance = 280.0f;
+        const float difference = (fLeftMouseDownLocation.getY() - ev.pos.getY()) / resistance * (fMax - fMin);
 
-    return true;
+        if (difference != 0)
+        {
+            fLeftMouseDownLocation.setY(ev.pos.getY());
+
+            setValue(fValue + difference, true);
+        }
+
+        return true;
+    }
+
+    if (contains(ev.pos))
+    {
+        return true;
+    }
+
+    return false;
 }
 
 bool NanoKnob::onScroll(const ScrollEvent &ev)
 {
     if (!contains(ev.pos))
         return false;
+
+    const float resistance = 38.0f;
+
+    setValue(getValue() + ev.delta.getY() / resistance * (fMax - fMin), true);
 
     return true;
 }

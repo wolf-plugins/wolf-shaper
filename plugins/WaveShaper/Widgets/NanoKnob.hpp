@@ -3,61 +3,71 @@
 
 #include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "Window.hpp"
 
 START_NAMESPACE_DISTRHO
 
 class NanoKnob : public NanoWidget
 {
 public:
-    class Callback
-    {
-    public:
-        virtual ~Callback() {}
-        virtual void nanoKnobDragStarted(NanoKnob* nanoKnob) = 0;
-        virtual void nanoKnobDragFinished(NanoKnob* nanoKnob) = 0;
-        virtual void nanoKnobValueChanged(NanoKnob* nanoKnob, float value) = 0;
-    };
+  class Callback
+  {
+  public:
+    virtual ~Callback() {}
+    virtual void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value) = 0;
+  };
 
-    explicit NanoKnob(Window& parent) noexcept;
-    explicit NanoKnob(Widget* widget) noexcept;
+  explicit NanoKnob(Window &parent, Size<uint> size) noexcept;
+  explicit NanoKnob(Widget *widget, Size<uint> size) noexcept;
 
-    float getValue() const noexcept;
-    void setValue(float value, bool sendCallback = false) noexcept;
+  float getValue() const noexcept;
+  void setValue(float value, bool sendCallback = false) noexcept;
 
-    void setDefault(float def) noexcept;
-    void setRange(float min, float max) noexcept;
-    void setStep(float step) noexcept;
-    void setUsingLogScale(bool yesNo) noexcept;
-    void setCallback(Callback* callback) noexcept;
+  void setDefault(float def) noexcept;
+  void setRange(float min, float max) noexcept;
+  void setStep(float step) noexcept;
+  void setUsingLogScale(bool yesNo) noexcept;
+  void setCallback(Callback *callback) noexcept;
+  void setColor(Color color) noexcept;
 
 protected:
-     void onNanoDisplay() override;
-     bool onMouse(const MouseEvent&) override;
-     bool onMotion(const MotionEvent&) override;
-     bool onScroll(const ScrollEvent&) override;
+  void onNanoDisplay() override;
+  bool onMouse(const MouseEvent &) override;
+  bool onMotion(const MotionEvent &) override;
+  bool onScroll(const ScrollEvent &) override;
+
+  Color getColor() noexcept;
+  float getMin() noexcept;
+  float getMax() noexcept;
+
+  virtual void drawNormal() = 0;
+  virtual void drawHover() = 0;
+  virtual void drawTurning() = 0;
 
 private:
-    float fMinimum;
-    float fMaximum;
-    float fStep;
-    float fValue;
-    float fValueDef;
-    float fValueTmp;
-    bool  fUsingDefault;
-    bool  fUsingLog;
+  float fMin;
+  float fMax;
+  float fStep;
+  float fValue;
+  bool fUsingLog;
 
-    int  fRotationAngle;
-    bool fDragging;
-    int  fLastX;
-    int  fLastY;
+  bool fLeftMouseDown;
+  Point<int> fLeftMouseDownLocation;
+  
+  int fRotationAngle;
+  bool fDragging;
+  int fLastX;
+  int fLastY;
 
-    Callback* fCallback;
+  Color fColor;
 
-    bool fIsReady;
+  Callback *fCallback;
 
-    void setRotationAngle(const int angle);
+  void setRotationAngle(const int angle);
 
-    DISTRHO_LEAK_DETECTOR(NanoKnob)
+  DISTRHO_LEAK_DETECTOR(NanoKnob)
 };
 
 END_NAMESPACE_DISTRHO
+
+#endif

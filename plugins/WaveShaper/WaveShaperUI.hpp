@@ -6,6 +6,7 @@
 #include "RemoveDCSwitch.hpp"
 #include "ResetGraphButton.hpp"
 #include "OversampleWheel.hpp"
+#include "VolumeKnob.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -24,7 +25,8 @@ enum Parameters
 class WaveShaperUI : public UI,
                      public NanoSwitch::Callback,
                      public NanoButton::Callback,
-                     public NanoWheel::Callback
+                     public NanoWheel::Callback,
+                     public NanoKnob::Callback
 {
 public:
   WaveShaperUI();
@@ -38,7 +40,8 @@ protected:
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
   void nanoButtonClicked(NanoButton *nanoButton);
   void nanoWheelValueChanged(NanoWheel *nanoWheel, const int value);
-  
+  void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value);
+
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;
   void uiIdle() override;
@@ -49,6 +52,7 @@ private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<OversampleWheel> fWheelOversample;
+  ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
 
   //ScopedPointer<ImageKnob> fKnobPre, fKnobDryWet, fKnobPost;
 

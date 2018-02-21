@@ -28,6 +28,8 @@ OBJS_UI  = \
 	Widgets/src/ResetGraphButton.cpp.o \
 	Widgets/src/NanoWheel.cpp.o \
 	Widgets/src/OversampleWheel.cpp.o \
+	Widgets/src/NanoKnob.cpp.o \
+	Widgets/src/VolumeKnob.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------
