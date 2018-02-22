@@ -38,8 +38,7 @@ void GraphWidgetSocket::onNanoDisplay()
     beginPath();
 
     rect(0.f, 0.f, width, height);
-    Paint gradient = linearGradient(centerX, 0.0f, centerX, height, Color(37, 38, 46, 255), Color(32, 33, 42, 255));
-    fillPaint(gradient);
+    fillColor(Color(37,38,46,255));
 
     fill();
 
@@ -70,7 +69,7 @@ void GraphWidgetSocket::onNanoDisplay()
 
     rect(0.0f, graphBottom + marginSize, getWidth(), graphBottomShadowHeight);
     
-    gradient = linearGradient(centerX, graphBottom + marginSize, centerX, graphBottom + marginSize + graphBottomShadowHeight, Color(21,22,30,0), Color(21,22,30,255));
+    Paint gradient = linearGradient(centerX, graphBottom + marginSize, centerX, graphBottom + marginSize + graphBottomShadowHeight, Color(21,22,30,0), Color(21,22,30,255));
     fillPaint(gradient);
 
     fill();
