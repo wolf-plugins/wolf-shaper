@@ -8,7 +8,8 @@ START_NAMESPACE_DISTRHO
 class OversampleWheel : public NanoWheel
 {
 public:
-    using NanoWheel::NanoWheel;
+    explicit OversampleWheel(Window &parent, Size<uint> size) noexcept;
+    explicit OversampleWheel(Widget *widget, Size<uint> size) noexcept;
 
 protected:
     void draw() override;

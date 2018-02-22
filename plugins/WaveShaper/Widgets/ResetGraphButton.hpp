@@ -7,7 +7,9 @@ START_NAMESPACE_DISTRHO
 
 class ResetGraphButton : public NanoButton
 {
-using NanoButton::NanoButton;
+public:
+    explicit ResetGraphButton(Window &parent, Size<uint> size) noexcept;
+    explicit ResetGraphButton(Widget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawUp() override;

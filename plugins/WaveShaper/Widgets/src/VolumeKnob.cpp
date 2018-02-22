@@ -2,6 +2,14 @@
 
 START_NAMESPACE_DISTRHO
 
+VolumeKnob::VolumeKnob(Window &parent, Size<uint> size) noexcept : NanoKnob(parent, size)
+{
+}
+
+VolumeKnob::VolumeKnob(Widget *widget, Size<uint> size) noexcept : NanoKnob(widget, size)
+{
+}
+
 void VolumeKnob::drawNormal()
 {
     const float width = getWidth();

@@ -2,6 +2,14 @@
 
 START_NAMESPACE_DISTRHO
 
+RemoveDCSwitch::RemoveDCSwitch(Window &parent, Size<uint> size) noexcept : NanoSwitch(parent, size)
+{
+}
+
+RemoveDCSwitch::RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept : NanoSwitch(widget, size)
+{
+}
+
 void RemoveDCSwitch::drawUp()
 {
     beginPath();

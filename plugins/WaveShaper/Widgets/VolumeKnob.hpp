@@ -7,7 +7,9 @@ START_NAMESPACE_DISTRHO
 
 class VolumeKnob : public NanoKnob
 {
-using NanoKnob::NanoKnob;
+public:
+    explicit VolumeKnob(Window &parent, Size<uint> size) noexcept;
+    explicit VolumeKnob(Widget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawNormal() override;

@@ -2,6 +2,14 @@
 
 START_NAMESPACE_DISTRHO
 
+OversampleWheel::OversampleWheel(Window &parent, Size<uint> size) noexcept : NanoWheel(parent, size)
+{
+}
+
+OversampleWheel::OversampleWheel(Widget *widget, Size<uint> size) noexcept : NanoWheel(widget, size)
+{
+}
+
 void OversampleWheel::draw() 
 {
     const float width = getWidth();

@@ -7,8 +7,9 @@ START_NAMESPACE_DISTRHO
 
 class RemoveDCSwitch : public NanoSwitch
 {
-    
-using NanoSwitch::NanoSwitch;
+public:
+    explicit RemoveDCSwitch(Window &parent, Size<uint> size) noexcept;
+    explicit RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawUp() override;
