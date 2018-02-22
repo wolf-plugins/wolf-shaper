@@ -248,20 +248,26 @@ public:
         fData->sendNoteCallbackFunc  = sendNoteCall;
         fData->setSizeCallbackFunc   = setSizeCall;
 
+#if !defined(DISTRHO_PLUGIN_TARGET_DSSI) && !defined(DISTRHO_PLUGIN_TARGET_JACK)
+
         fIdleThread = new IdleThread(this);
         fIdleThread->startThread();
 
-#ifdef HAVE_DGL
         // unused
         return; (void)bundlePath;
 #endif
 }
-    friend class IdleThread;
+
+friend class IdleThread;
+
+#if !defined(DISTRHO_PLUGIN_TARGET_DSSI) && !defined(DISTRHO_PLUGIN_TARGET_JACK)
 
     ~UIExporter() 
     {
         fIdleThread->stopThread(-1);
     }
+
+#endif
 
     // -------------------------------------------------------------------
 
