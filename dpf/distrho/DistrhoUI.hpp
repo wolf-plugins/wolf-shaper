@@ -208,6 +208,7 @@ private:
     PrivateData* const pData;
     friend class UIExporter;
     friend class UIExporterWindow;
+    friend class IdleThread;
 
 #ifdef HAVE_DGL
     // these should not be used
