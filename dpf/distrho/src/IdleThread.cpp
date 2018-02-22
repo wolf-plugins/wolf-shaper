@@ -1,5 +1,6 @@
 #include "DistrhoUIInternal.hpp"
 #include "IdleThread.hpp"
+#include "unistd.h"
 
 START_NAMESPACE_DISTRHO
 
@@ -17,7 +18,7 @@ void IdleThread::run()
         if (ui->glWindow.isReady())
             ui->fUI->uiIdle();
 
-        usleep(12 * 1000);
+        usleep(16 * 1000);
     } while (!shouldThreadExit());
 }
 
