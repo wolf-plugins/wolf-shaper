@@ -252,7 +252,8 @@ public:
 
         fIdleThread = new IdleThread(this);
         fIdleThread->startThread();
-
+#endif
+#ifdef HAVE_DGL
         // unused
         return; (void)bundlePath;
 #endif
@@ -372,7 +373,19 @@ friend class IdleThread;
 
     bool idle()
     {
-        return false;
+        DISTRHO_SAFE_ASSERT_RETURN(fUI != nullptr, false);
+
+#if defined(HAVE_DGL) 
+#if defined(DISTRHO_PLUGIN_TARGET_DSSI)
+        glApp.idle();
+
+        if (glWindow.isReady())
+            fUI->uiIdle();
+#endif
+#else
+        return fUI->isRunning();
+#endif
+        return ! glApp.isQuiting();
     }
 
     void quit()
