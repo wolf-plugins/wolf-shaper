@@ -1465,15 +1465,15 @@ void Window::setCursorPos(Widget* const widget) noexcept
 void Window::clipCursor(Rectangle<int> rect) const noexcept
 {
 	pData->fCursorIsClipped = true;
-
+	
 #if defined(DISTRHO_OS_WINDOWS)
 	RECT winRect, clipRect;
 	GetWindowRect(pData->hwnd, &winRect);	
 
 	clipRect.left = rect.getX() + winRect.left;
-	clipRect.right = rect.getX() + rect.getWidth() + winRect.left;
+	clipRect.right = rect.getX() + rect.getWidth() + winRect.left + 1;
 	clipRect.top = rect.getY() + winRect.top;
-	clipRect.bottom = rect.getY() + rect.getHeight() + winRect.top;
+	clipRect.bottom = rect.getY() + rect.getHeight() + winRect.top + 1;
 
 	ClipCursor(&clipRect);
 
@@ -1481,7 +1481,7 @@ void Window::clipCursor(Rectangle<int> rect) const noexcept
 	//CGAssociateMouseAndMouseCursorPosition(false);
 
 #else
-	XMoveResizeWindow(pData->xDisplay, pData->xClipCursorWindow, rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+	XMoveResizeWindow(pData->xDisplay, pData->xClipCursorWindow, rect.getX(), rect.getY(), rect.getWidth() + 1, rect.getHeight() + 1);
 
 	XGrabPointer(pData->xDisplay, pData->xWindow, True, 0, GrabModeAsync, GrabModeAsync, pData->xClipCursorWindow, None, CurrentTime);
 #endif	

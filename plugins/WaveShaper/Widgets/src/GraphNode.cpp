@@ -190,7 +190,7 @@ Point<int> GraphVertex::clampVertexPosition(const Point<int> point) const
     if (!isLockedX())
     {
         //clamp to neighbouring vertices
-        x = spoonie::clamp<int>(point.getX(), leftVertex->getX() + 1, rightVertex->getX());
+        x = spoonie::clamp<int>(point.getX(), leftVertex->getX() + 1, rightVertex->getX() - 1);
     }
     
     //clamp to graph

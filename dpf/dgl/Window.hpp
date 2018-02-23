@@ -141,7 +141,7 @@ public:
     const Point<int> getCursorPos() const noexcept;
 
     /**
-       Confine the mouse cursor to a rectangular area in the window.
+       Confine the mouse cursor to a rectangular area in the window. The rectangle is endpoint-inclusive.
      */
     void clipCursor(Rectangle<int> rect) const noexcept;
 
