@@ -30,6 +30,7 @@ OBJS_UI  = \
 	Widgets/src/OversampleWheel.cpp.o \
 	Widgets/src/NanoKnob.cpp.o \
 	Widgets/src/VolumeKnob.cpp.o \
+	Resources/Fonts/roboto_light.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------

@@ -9,6 +9,8 @@
 #include "Mathf.hpp"
 #include "GraphNodesLayer.hpp"
 
+#include "Fonts/roboto_light.hpp"
+
 #include <chrono>
 #include <cstdlib>
 #include <cmath>
@@ -25,7 +27,9 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       mouseRightDown(false),
       maxInput(0.0f)
 {
-    loadSharedResources();
+    using namespace SPOONIE_FONTS;
+
+    createFontFromMemory("roboto_light", (const uchar*)roboto_light, sizeof(roboto_light) / sizeof(roboto_light[0]), 0);
 
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
@@ -375,6 +379,7 @@ void GraphWidget::idleCallback()
 
 void GraphWidget::drawInOutLabels()
 {
+    fontFace("roboto_light");
     fontSize(32.f);
     fillColor(255, 255, 255, 125);
 

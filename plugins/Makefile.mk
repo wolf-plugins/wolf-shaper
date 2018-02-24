@@ -18,7 +18,7 @@ endif
 TARGET_DIR = ../../bin
 
 BUILD_C_FLAGS   += -I.
-BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils
+BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources
 
 ifeq ($(HAVE_DGL),true)
 BASE_FLAGS += -DHAVE_DGL
@@ -82,6 +82,8 @@ clean:
 	rm -f *.d *.o
 	rm -f Structures/src/*.d Structures/src/*.o
 	rm -f Widgets/src/*.d Widgets/src/*.o
+	rm -f Utils/Fonts/getchunk
+	rm -f Resources/Fonts/*.d Resources/Fonts/*.o
 	rm -rf $(TARGET_DIR)/$(NAME) $(TARGET_DIR)/$(NAME)-* $(TARGET_DIR)/$(NAME).lv2/
 
 # --------------------------------------------------------------
