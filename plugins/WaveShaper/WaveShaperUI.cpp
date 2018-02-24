@@ -42,6 +42,11 @@ WaveShaperUI::WaveShaperUI() : UI(600, 600),
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(0,255,100,255));
+
+    fHandleResize = new ResizeHandle(getParentWindow(), Size<uint>(24,24));
+    fHandleResize->setCallback(this);
+    fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
+    fHandleResize->setMinSize(256,256);
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -86,10 +91,16 @@ void WaveShaperUI::stateChanged(const char *key, const char *value)
 
 void WaveShaperUI::onNanoDisplay()
 {
+
 }
 
 void WaveShaperUI::uiIdle()
 {
+}
+
+void WaveShaperUI::uiReshape(uint width,uint height)
+{
+    repaint();
 }
 
 void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
@@ -129,20 +140,10 @@ void WaveShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
     setParameterValue(id, value);
 }
 
-/* void WaveShaperUI::imageKnobDragStarted(ImageKnob *knob)
+void WaveShaperUI::resizeHandleMoved(int width, int height)
 {
-    //editParameter(knob->getId(), true);
+    //setSize(width, height);
 }
-
-void WaveShaperUI::imageKnobDragFinished(ImageKnob *knob)
-{
-    //editParameter(knob->getId(), false);
-}
-
-void WaveShaperUI::imageKnobValueChanged(ImageKnob *knob, float value)
-{
-    //setParameterValue(knob->getId(), value);
-} */
 
 float WaveShaperUI::getParameterValue(uint32_t index) const
 {

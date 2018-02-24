@@ -27,10 +27,6 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       mouseRightDown(false),
       maxInput(0.0f)
 {
-    using namespace SPOONIE_FONTS;
-
-    createFontFromMemory("roboto_light", (const uchar*)roboto_light, sizeof(roboto_light) / sizeof(roboto_light[0]), 0);
-
     const int width = ui->getWidth() - marginLeft - marginRight;
     const int height = ui->getHeight() - marginTop - marginBottom;
 
@@ -43,6 +39,9 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     initializeDefaultVertices();
 
     parent.addIdleCallback(this);
+
+    using namespace SPOONIE_FONTS;
+    createFontFromMemory("roboto_light", (const uchar *)roboto_light, roboto_light_size, 0);
 }
 
 GraphWidget::~GraphWidget()
@@ -415,7 +414,7 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
     //Testing for mouse hover on tension handles
     for (int i = 0; i < lineEditor.getVertexCount() - 1; ++i)
     {
-        GraphTensionHandle* tensionHandle = graphVertices[i]->getTensionHandle();
+        GraphTensionHandle *tensionHandle = graphVertices[i]->getTensionHandle();
 
         if (tensionHandle->contains(point))
         {
@@ -428,7 +427,7 @@ bool GraphWidget::onScroll(const ScrollEvent &ev)
             repaint();
 
             getParentWindow().setCursorPos(tensionHandle->getAbsoluteX(), tensionHandle->getAbsoluteY());
-            
+
             return true;
         }
     }
@@ -498,7 +497,7 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
     return vertex;
 }
 
-GraphNode *GraphWidget::getHoveredNode(Point<int> cursorPos) 
+GraphNode *GraphWidget::getHoveredNode(Point<int> cursorPos)
 {
     //Testing for mouse hover on graph vertices
     for (int i = lineEditor.getVertexCount() - 1; i >= 0; --i)
@@ -543,7 +542,7 @@ bool GraphWidget::leftClick(const MouseEvent &ev)
 
     GraphNode *hoveredNode = getHoveredNode(point);
 
-    if(hoveredNode != nullptr) 
+    if (hoveredNode != nullptr)
     {
         focusedElement = hoveredNode;
 
@@ -570,9 +569,9 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
     if (focusedElement == nullptr)
     {
-        if(getHoveredNode(point) != nullptr)
+        if (getHoveredNode(point) != nullptr)
             return true;
-            
+
         if (ev.press && contains(ev.pos))
         {
             focusedElement = insertVertex(point);
@@ -608,7 +607,7 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
 }
 
 bool GraphWidget::onMotion(const MotionEvent &ev)
-{      
+{
     const Point<int> point = spoonie::flipY(ev.pos, getHeight());
 
     if (focusedElement)
@@ -618,7 +617,7 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
 
     GraphNode *hoveredNode = getHoveredNode(point);
 
-    if(hoveredNode != nullptr) 
+    if (hoveredNode != nullptr)
     {
         return hoveredNode->onMotion(ev);
     }

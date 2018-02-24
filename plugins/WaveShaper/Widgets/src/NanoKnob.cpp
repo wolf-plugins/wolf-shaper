@@ -1,6 +1,8 @@
 #include "NanoKnob.hpp"
 #include "Mathf.hpp"
 
+#include "Fonts/roboto_light.hpp"
+
 START_NAMESPACE_DISTRHO
 
 NanoKnob::NanoKnob(Window &parent, Size<uint> size) noexcept
@@ -15,6 +17,9 @@ NanoKnob::NanoKnob(Window &parent, Size<uint> size) noexcept
       fCallback(nullptr)
 {
     setSize(size);
+
+    using namespace SPOONIE_FONTS;
+    createFontFromMemory("roboto_light", (const uchar*)roboto_light, roboto_light_size, 0);
 }
 
 NanoKnob::NanoKnob(Widget *widget, Size<uint> size) noexcept
@@ -29,6 +34,9 @@ NanoKnob::NanoKnob(Widget *widget, Size<uint> size) noexcept
       fCallback(nullptr)
 {
     setSize(size);
+
+    using namespace SPOONIE_FONTS;
+    createFontFromMemory("roboto_light", (const uchar*)roboto_light, roboto_light_size, 0);
 }
 
 float NanoKnob::getValue() const noexcept

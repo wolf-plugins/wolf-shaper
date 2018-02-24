@@ -72,6 +72,17 @@ void VolumeKnob::drawNormal()
 
     restore();
 
+    //Label
+    /*fontFace("roboto_light");
+    fontSize(32.f);
+    fillColor(255, 255, 255, 125);
+
+    textAlign(ALIGN_BOTTOM | ALIGN_RIGHT);
+    text(getWidth() - 5, getHeight(), "In", NULL);
+
+    textAlign(ALIGN_TOP | ALIGN_LEFT);
+    text(5, 0, "Out", NULL);*/
+    
     closePath();
 }
 
