@@ -900,8 +900,6 @@ int fonsAddFontMem(FONScontext* stash, const char* name, const unsigned char* da
 	font->dataSize = dataSize;
 	font->data = data;
 	font->freeData = (unsigned char)freeData;
-
-	fprintf(stderr, "Preinit\n");
 	
 	// Init font
 	stash->nscratch = 0;
