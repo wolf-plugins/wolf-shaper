@@ -1,4 +1,4 @@
-[submodule "dpf"]
+[submodule "DPF"]
 	path = dpf
 	url = git@github.com:pdesaulniers/DPF.git
 	branch = waveshaper
