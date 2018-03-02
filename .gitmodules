@@ -2,3 +2,6 @@
 	path = dpf
 	url = git@github.com:pdesaulniers/DPF.git
 	branch = waveshaper
+[submodule "plugins/WaveShaper/Libs/inih"]
+	path = plugins/WaveShaper/Libs/inih
+	url = git@github.com:pdesaulniers/inih.git
