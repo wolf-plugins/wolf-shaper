@@ -1,4 +1,5 @@
 #include "Graph.hpp"
+#include "Mathf.hpp"
 
 #include <cmath>
 #include <cstdlib>
@@ -147,10 +148,14 @@ const char *Graph::serialize()
 
     int length = 0;
 
+#if defined(DISTRHO_OS_WINDOWS)
+#error "The plugin is broken on Windows for now. Please wait :)"  
+#endif
+
     for (int i = 0; i < vertexCount; ++i)
     {
         vertex = vertices[i];
-        length += snprintf(serializationBuffer + length, sizeof(char) * 32 * 4 + 4 + 1, "%A,%A,%A,%d;", vertex.x, vertex.y, vertex.tension, vertex.type);
+        length += std::snprintf(serializationBuffer + length, sizeof(char) * 32 * 4 + 4 + 1, "%A,%A,%A,%d;", vertex.x, vertex.y, vertex.tension, vertex.type);
     }
 
     return serializationBuffer;
@@ -163,20 +168,20 @@ void Graph::clear()
 
 void Graph::rebuildFromString(const char *serializedGraph)
 {
-    char *rest = (char *)serializedGraph;
-
+    char *rest = (char * const)serializedGraph;
+    
     int i = 0;
 
     do
     {
-        const float x = strtof(rest, &rest);
-        const float y = strtof(++rest, &rest);
-        const float tension = strtof(++rest, &rest);
-        const CurveType type = static_cast<CurveType>(strtol(++rest, &rest, 10));
+        const float x = spoonie::parseHexFloat(rest, &rest);
+        const float y = spoonie::parseHexFloat(++rest, &rest);
+        const float tension = spoonie::parseHexFloat(++rest, &rest);
+        const CurveType type = static_cast<CurveType>(std::strtol(++rest, &rest, 10));
 
         vertices[i++] = Vertex(x, y, tension, type);
     } while (strcmp(++rest, "\0") != 0);
-
+    
     vertexCount = i;
 }
 }
