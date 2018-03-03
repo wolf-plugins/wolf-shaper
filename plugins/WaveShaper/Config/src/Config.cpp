@@ -3,9 +3,17 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+
+#include "src/DistrhoDefines.h"
+
+#if defined(DISTRHO_OS_WINDOWS)
+#include <windows.h>
+#include <shlobj.h>
+#else
 #include <pwd.h>
 #include <unistd.h>
 #include <sys/types.h>
+#endif
 
 #include "Color.hpp"
 #include "INIReader.h"
@@ -56,6 +64,28 @@ Color graph_margin = Color(33, 32, 39, 255);
 Color top_border = Color(0, 0, 0, 255);
 Color side_borders = Color(100, 100, 100, 255);
 
+static std::string getConfigPath()
+{
+#if defined(DISTRHO_OS_WINDOWS)
+    CHAR my_documents[MAX_PATH];
+    HRESULT result = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, my_documents);
+
+    if (result != S_OK)
+        return "";
+
+    return std::string(my_documents) + "\\spoonie-waveshaper.conf";
+#else
+    const char *homeDirectory;
+
+    if ((homeDirectory = getenv("HOME")) == NULL)
+    {
+        homeDirectory = getpwuid(getuid())->pw_dir;
+    }
+
+    return std::string(homeDirectory) + "/.config/spoonie-waveshaper.conf";
+#endif
+}
+
 /**
  * Convert a string containing color values to a Color struct.
  * Supported formats: rgb(rgb), rgba(r,g,b,a), hsl(h,s,l), hsla(h,s,l,a)
@@ -64,7 +94,6 @@ static void colorFromString(std::string colorStr, Color *targetColor)
 {
     if (colorStr == "")
     {
-        fprintf(stderr, "Key not loaded: %s\n", colorStr.c_str());
         return;
     }
 
@@ -122,17 +151,7 @@ static void colorFromString(std::string colorStr, Color *targetColor)
 
 void load()
 {
-    const char *homeDirectory;
-
-    if ((homeDirectory = getenv("HOME")) == NULL)
-    {
-        homeDirectory = getpwuid(getuid())->pw_dir;
-    }
-
-    const std::string pathToConfig = std::string(homeDirectory) + "/.config/spoonie-waveshaper.conf";
-
-    std::cout << pathToConfig << "\n";
-    INIReader reader(pathToConfig);
+    INIReader reader(getConfigPath());
 
     if (reader.ParseError() < 0)
     {
