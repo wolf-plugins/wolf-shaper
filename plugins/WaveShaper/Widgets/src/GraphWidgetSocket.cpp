@@ -5,6 +5,7 @@
 #include "GraphWidget.hpp"
 #include "GraphWidgetSocket.hpp"
 #include "WaveShaperUI.hpp"
+#include "Config.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -38,7 +39,7 @@ void GraphWidgetSocket::onNanoDisplay()
     beginPath();
 
     rect(0.f, 0.f, width, height);
-    fillColor(Color(37,38,46,255));
+    fillColor(WaveShaperConfig::plugin_background);
 
     fill();
 
@@ -56,7 +57,7 @@ void GraphWidgetSocket::onNanoDisplay()
 
     rect(marginLeft, marginTop, marginWidth, marginHeight);
     
-    fillColor(Color(33,32,39,255));
+    fillColor(WaveShaperConfig::graph_margin);
 
     fill();
 
@@ -97,7 +98,7 @@ void GraphWidgetSocket::onNanoDisplay()
     beginPath();
 
     rect(marginLeft, marginTop, marginWidth, marginHeight);   
-    strokeColor(Color(100,100,100,255));
+    strokeColor(WaveShaperConfig::side_borders);
 
     scissor(marginLeft, marginTop + 1, marginWidth, marginHeight - 1);
     stroke();
@@ -110,7 +111,7 @@ void GraphWidgetSocket::onNanoDisplay()
     moveTo(marginLeft, marginTop);
     lineTo(marginLeft + marginWidth, marginTop); 
 
-    strokeColor(Color(0, 0, 0, 255));
+    strokeColor(WaveShaperConfig::top_border);
 
     stroke();
 

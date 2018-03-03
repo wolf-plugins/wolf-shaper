@@ -8,6 +8,7 @@
 #include "GraphNode.hpp"
 #include "Mathf.hpp"
 #include "GraphNodesLayer.hpp"
+#include "Config.hpp"
 
 #include "Fonts/roboto_light.hpp"
 
@@ -145,9 +146,9 @@ void GraphWidget::drawGrid()
     const float verticalStep = width / squaresPerRow;
     const float horizontalStep = height / squaresPerRow;
 
-    const Color gridForegroundColor = Color(103, 98, 102, 255);
-    const Color gridBackgroundColor = Color(25, 24, 26, 255);
-    const Color subGridColor = Color(27, 27, 27, 255);
+    const Color gridForegroundColor = WaveShaperConfig::grid_foreground;
+    const Color gridBackgroundColor = WaveShaperConfig::grid_background;
+    const Color subGridColor = WaveShaperConfig::sub_grid;
 
     //vertical
     for (int i = 0; i < squaresPerRow + 1; ++i)
@@ -243,7 +244,7 @@ void GraphWidget::drawBackground()
     rect(0.f, 0.f, width, height);
     //Paint gradient = radialGradient(centerX, centerY, 1.0f, centerX, Color(42, 42, 42, 255), Color(33, 32, 39, 255));
     //fillPaint(gradient);
-    fillColor(Color(40, 40, 47, 255));
+    fillColor(WaveShaperConfig::graph_background);
     fill();
 
     closePath();
@@ -319,7 +320,7 @@ void GraphWidget::drawAlignmentLines()
     beginPath();
 
     strokeWidth(1.0f);
-    strokeColor(Color(255, 255, 255, 180));
+    strokeColor(WaveShaperConfig::alignment_lines);
 
     moveTo(x, 0);
     lineTo(x, height);
@@ -344,7 +345,7 @@ void GraphWidget::drawInputIndicator()
 
     beginPath();
 
-    strokeColor(Color(255, 255, 255, 122));
+    strokeColor(WaveShaperConfig::input_volume_indicator);
     strokeWidth(2.0f);
 
     moveTo(inputIndicatorX, 0);
@@ -398,8 +399,8 @@ void GraphWidget::onNanoDisplay()
 
     flipYAxis();
 
-    drawGraphLine(5.0f, Color(169, 29, 239, 100), Color(255, 255, 0, 100));     //outer
-    drawGraphLine(1.1416f, Color(245, 112, 188, 255), Color(255, 255, 0, 255)); //inner
+    drawGraphLine(5.0f, WaveShaperConfig::graph_edges_background_normal, WaveShaperConfig::graph_edges_background_focused);     //outer
+    drawGraphLine(1.1416f, WaveShaperConfig::graph_edges_foreground_normal, WaveShaperConfig::graph_edges_foreground_focused); //inner
 
     drawInputIndicator();
 

@@ -6,12 +6,12 @@
 #include "GraphWidget.hpp"
 #include "GraphNode.hpp"
 #include "Mathf.hpp"
+#include "Config.hpp"
 
 START_NAMESPACE_DISTRHO
 
 GraphNode::GraphNode(GraphWidget *parent, GraphNodesLayer *layer) : parent(parent),
                                                                     layer(layer),
-                                                                    color(Color(255, 255, 255, 255)),
                                                                     grabbed(false)
 {
 }
@@ -43,7 +43,6 @@ GraphVertex::GraphVertex(GraphWidget *parent, GraphNodesLayer *layer, GraphVerte
 void GraphVertex::reset()
 {
     surface = Circle<int>(0, 0, 8.0f);
-    color = Color(255, 255, 255, 255);
     type = GraphVertexType::Middle;
     grabbed = false;
 }
@@ -59,8 +58,8 @@ void GraphVertex::render()
 
     layer->strokeWidth(2.0f);
 
-    layer->strokeColor(Color(0, 0, 0, 255));
-    layer->fillColor(color);
+    layer->strokeColor(WaveShaperConfig::vertex_stroke_normal);
+    layer->fillColor(WaveShaperConfig::vertex_fill_normal);
 
     layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, getSize());
 
@@ -392,9 +391,9 @@ void GraphTensionHandle::render()
     layer->strokeWidth(2.0f);
 
     if(parent->edgeMustBeEmphasized(vertex->getIndex())) //TODO: make that a method on the vertex
-        layer->strokeColor(Color(228, 228, 181, 255));
+        layer->strokeColor(WaveShaperConfig::tension_handle_focused);
     else
-        layer->strokeColor(Color(228, 104, 181, 255)); 
+        layer->strokeColor(WaveShaperConfig::tension_handle_normal); 
 
     layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 6.0f);
 
