@@ -3,6 +3,9 @@
 #include <sstream>
 #include <iostream>
 #include <vector>
+#include <pwd.h>
+#include <unistd.h>
+#include <sys/types.h>
 
 #include "Color.hpp"
 #include "INIReader.h"
@@ -43,7 +46,7 @@ Color vertex_fill_focused = Color(0, 0, 0, 255);
 Color vertex_halo = Color(0, 0, 0, 255);
 
 Color vertex_stroke_normal = Color(0, 0, 0, 255);
-Color vertex_stroke_focused;
+Color vertex_stroke_focused = Color(0, 0, 0, 255);
 
 Color tension_handle_normal = Color(228, 104, 181, 255);
 Color tension_handle_focused = Color(228, 228, 181, 255);
@@ -60,7 +63,10 @@ Color side_borders = Color(100, 100, 100, 255);
 static void colorFromString(std::string colorStr, Color *targetColor)
 {
     if (colorStr == "")
+    {
+        fprintf(stderr, "Key not loaded: %s\n", colorStr.c_str());
         return;
+    }
 
     const char *str = colorStr.c_str();
     char const *rest;
@@ -94,7 +100,7 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     }
     else
     {
-        fprintf(stderr, "spoonie-waveshaper: Warning! Invalid color in config file.\n");
+        fprintf(stderr, "spoonie-waveshaper: Warning! Invalid color type in config file: %s.\n", colorStr.c_str());
 
         return;
     }
@@ -106,17 +112,26 @@ static void colorFromString(std::string colorStr, Color *targetColor)
         else
             *targetColor = Color::fromHSL(x, y, z, a / 255.f);
     }
-
-    fprintf(stderr, "spoonie-waveshaper: Warning! Invalid color in config file.\n");
+    else
+    {
+        fprintf(stderr, "spoonie-waveshaper: Warning! Color has an invalid number of arguments: %s.\n", colorStr.c_str());
+    }
 
     return;
 }
 
 void load()
 {
-    std::string homeDirectory = std::string(getenv("HOME"), 255);
-    std::string pathToConfig = homeDirectory + "/.config/spoonie-waveshaper.conf";
+    const char *homeDirectory;
 
+    if ((homeDirectory = getenv("HOME")) == NULL)
+    {
+        homeDirectory = getpwuid(getuid())->pw_dir;
+    }
+
+    const std::string pathToConfig = std::string(homeDirectory) + "/.config/spoonie-waveshaper.conf";
+
+    std::cout << pathToConfig << "\n";
     INIReader reader(pathToConfig);
 
     if (reader.ParseError() < 0)
@@ -126,6 +141,27 @@ void load()
     }
 
     colorFromString(reader.Get("colors", "grid_foreground", ""), &grid_foreground);
+    colorFromString(reader.Get("colors", "grid_background", ""), &grid_background);
+    colorFromString(reader.Get("colors", "sub_grid", ""), &sub_grid);
+    colorFromString(reader.Get("colors", "graph_background", ""), &graph_background);
+    colorFromString(reader.Get("colors", "in_out_labels", ""), &in_out_labels);
+    colorFromString(reader.Get("colors", "alignment_lines", ""), &alignment_lines);
+    colorFromString(reader.Get("colors", "input_volume_indicator", ""), &input_volume_indicator);
+    colorFromString(reader.Get("colors", "graph_edges_background_normal", ""), &graph_edges_background_normal);
+    colorFromString(reader.Get("colors", "graph_edges_background_focused", ""), &graph_edges_background_focused);
+    colorFromString(reader.Get("colors", "graph_edges_foreground_normal", ""), &graph_edges_foreground_normal);
+    colorFromString(reader.Get("colors", "graph_edges_foreground_focused", ""), &graph_edges_foreground_focused);
+    colorFromString(reader.Get("colors", "vertex_fill_normal", ""), &vertex_fill_normal);
+    colorFromString(reader.Get("colors", "vertex_fill_focused", ""), &vertex_fill_focused);
+    colorFromString(reader.Get("colors", "vertex_halo", ""), &vertex_halo);
+    colorFromString(reader.Get("colors", "vertex_stroke_normal", ""), &vertex_stroke_normal);
+    colorFromString(reader.Get("colors", "vertex_stroke_focused", ""), &vertex_stroke_focused);
+    colorFromString(reader.Get("colors", "tension_handle_normal", ""), &tension_handle_normal);
+    colorFromString(reader.Get("colors", "tension_handle_focused", ""), &tension_handle_focused);
+    colorFromString(reader.Get("colors", "plugin_background", ""), &plugin_background);
+    colorFromString(reader.Get("colors", "graph_margin", ""), &graph_margin);
+    colorFromString(reader.Get("colors", "top_border", ""), &top_border);
+    colorFromString(reader.Get("colors", "side_borders", ""), &side_borders);
 
     isLoaded = true;
     std::cout << "Config loaded from 'spoonie-waveshaper.conf'\n";
