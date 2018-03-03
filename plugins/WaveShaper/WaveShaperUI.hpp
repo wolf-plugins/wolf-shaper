@@ -38,6 +38,8 @@ public:
 
 protected:
   void parameterChanged(uint32_t, float value) override;
+  
+  void positionWidgets();
 
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
   void nanoButtonClicked(NanoButton *nanoButton);

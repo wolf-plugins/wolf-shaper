@@ -5,6 +5,7 @@
 #include "DistrhoUI.hpp"
 #include "Graph.hpp"
 #include "GraphNodesLayer.hpp"
+#include "Layout.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -35,11 +36,15 @@ public:
    */
   void reset();
 
+  const Margin getMargin();
+  void setMargin(const Margin margin);
+
 protected:
   /**
    * DPF stuff
    */
   void onNanoDisplay() override;
+  void onResize(const ResizeEvent &ev) override;
   bool onScroll(const ScrollEvent &ev) override;
   bool onMouse(const MouseEvent &ev) override;
   bool onMotion(const MotionEvent &ev) override;
@@ -169,14 +174,18 @@ private:
   /**
    * Define the space around the grid of the graph.
    */
-  const int marginTop = 36;
+  /*const int marginTop = 36;
   const int marginLeft = 48;
   const int marginRight = 48;
-  const int marginBottom = 84;
+  const int marginBottom = 84;*/
+
+  Margin margin;
 
   float maxInput;
   float maxInputAcceleration = 0.0f;
 
+  Size<uint> initialSize;
+  
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GraphWidget)
 };
 

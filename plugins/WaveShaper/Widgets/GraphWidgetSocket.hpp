@@ -16,6 +16,7 @@ public:
   ~GraphWidgetSocket();
 
 protected:
+  void onResize(const ResizeEvent &) override;
   void onNanoDisplay() override;
 
 private:

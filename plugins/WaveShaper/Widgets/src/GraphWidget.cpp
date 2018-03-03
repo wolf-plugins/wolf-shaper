@@ -26,16 +26,19 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
       focusedElement(nullptr),
       mouseLeftDown(false),
       mouseRightDown(false),
+      margin(48, 48, 36, 84),
       maxInput(0.0f)
 {
-    const int width = ui->getWidth() - marginLeft - marginRight;
-    const int height = ui->getHeight() - marginTop - marginBottom;
+    
+    const int width = ui->getWidth() - margin.left - margin.right;
+    const int height = ui->getHeight() - margin.top - margin.bottom;
 
     setSize(width, height);
+    initialSize = getSize();
 
     graphNodesLayer.setSize(ui->getWidth(), ui->getHeight());
 
-    setAbsolutePos(marginLeft, marginTop);
+    setAbsolutePos(margin.left, margin.top);
 
     initializeDefaultVertices();
 
@@ -50,6 +53,23 @@ GraphWidget::~GraphWidget()
     for (int i = 0; i < lineEditor.getVertexCount(); ++i)
     {
         delete graphVertices[i];
+    }
+}
+
+void GraphWidget::onResize(const ResizeEvent &ev)
+{
+    if(ev.oldSize.isNull())
+        return;
+
+    setAbsolutePos(margin.left, margin.top);
+    graphNodesLayer.setSize(ui->getWidth(), ui->getHeight());
+
+    for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+    {
+        GraphVertex *vertexWidget = graphVertices[i];
+        spoonie::Vertex *logicalVertex = lineEditor.getVertexAtIndex(i);
+
+        vertexWidget->setPos(logicalVertex->x * ev.size.getWidth(), logicalVertex->y * ev.size.getHeight());
     }
 }
 
@@ -399,7 +419,7 @@ void GraphWidget::onNanoDisplay()
 
     flipYAxis();
 
-    drawGraphLine(5.0f, WaveShaperConfig::graph_edges_background_normal, WaveShaperConfig::graph_edges_background_focused);     //outer
+    drawGraphLine(5.0f, WaveShaperConfig::graph_edges_background_normal, WaveShaperConfig::graph_edges_background_focused);    //outer
     drawGraphLine(1.1416f, WaveShaperConfig::graph_edges_foreground_normal, WaveShaperConfig::graph_edges_foreground_focused); //inner
 
     drawInputIndicator();
@@ -627,6 +647,16 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
     getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
     return false;
+}
+
+const Margin GraphWidget::getMargin()
+{
+    return margin;
+}
+
+void GraphWidget::setMargin(Margin margin)
+{
+    this->margin = margin;
 }
 
 END_NAMESPACE_DISTRHO

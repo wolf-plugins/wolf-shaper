@@ -21,64 +21,74 @@ GraphWidgetSocket::~GraphWidgetSocket()
 {
 }
 
-void GraphWidgetSocket::onNanoDisplay() 
+void GraphWidgetSocket::onResize(const ResizeEvent &)
 {
-    const float width = getWidth();
-    const float height = getHeight();
+  const Margin margin = graphWidget.getMargin();
 
-    const float centerX = width / 2.0f;
-    //const float centerY = height / 2.0f;
+  const int width = ui->getWidth() - margin.left - margin.right;
+  const int height = ui->getHeight() - margin.top - margin.bottom;
 
-    const int graphLeft = graphWidget.getAbsoluteX();
-    //const int graphRight = graphLeft + graphWidget.getWidth();
+  graphWidget.setSize(width, height);
+}
 
-    const int graphTop = graphWidget.getAbsoluteY();
-    const int graphBottom = graphWidget.getAbsoluteY() + graphWidget.getHeight();
+void GraphWidgetSocket::onNanoDisplay()
+{
+  const float width = getWidth();
+  const float height = getHeight();
 
-    //background
-    beginPath();
+  const float centerX = width / 2.0f;
+  //const float centerY = height / 2.0f;
 
-    rect(0.f, 0.f, width, height);
-    fillColor(WaveShaperConfig::plugin_background);
+  const int graphLeft = graphWidget.getAbsoluteX();
+  //const int graphRight = graphLeft + graphWidget.getWidth();
 
-    fill();
+  const int graphTop = graphWidget.getAbsoluteY();
+  const int graphBottom = graphWidget.getAbsoluteY() + graphWidget.getHeight();
 
-    closePath();
+  //background
+  beginPath();
 
-    //graph margin
-    beginPath();
+  rect(0.f, 0.f, width, height);
+  fillColor(WaveShaperConfig::plugin_background);
 
-    const int marginSize = 16;
+  fill();
 
-    const int marginLeft = graphLeft - marginSize;
-    const int marginTop = graphTop - marginSize;
-    const int marginWidth = graphWidget.getWidth() + marginSize * 2;
-    const int marginHeight = graphWidget.getHeight() + marginSize * 2;
+  closePath();
 
-    rect(marginLeft, marginTop, marginWidth, marginHeight);
-    
-    fillColor(WaveShaperConfig::graph_margin);
+  //graph margin
+  beginPath();
 
-    fill();
+  const int marginSize = 16;
 
-    closePath();
+  const int marginLeft = graphLeft - marginSize;
+  const int marginTop = graphTop - marginSize;
+  const int marginWidth = graphWidget.getWidth() + marginSize * 2;
+  const int marginHeight = graphWidget.getHeight() + marginSize * 2;
 
-    //graph shadow at the bottom
-    beginPath();
+  rect(marginLeft, marginTop, marginWidth, marginHeight);
 
-    const int graphBottomShadowHeight = 8;
+  fillColor(WaveShaperConfig::graph_margin);
 
-    rect(0.0f, graphBottom + marginSize, getWidth(), graphBottomShadowHeight);
-    
-    Paint gradient = linearGradient(centerX, graphBottom + marginSize, centerX, graphBottom + marginSize + graphBottomShadowHeight, Color(21,22,30,0), Color(21,22,30,255));
-    fillPaint(gradient);
+  fill();
 
-    fill();
+  closePath();
 
-    closePath();
+  //graph shadow at the bottom
+  beginPath();
 
-    //lines on the background
-    /*beginPath();
+  const int graphBottomShadowHeight = 8;
+
+  rect(0.0f, graphBottom + marginSize, getWidth(), graphBottomShadowHeight);
+
+  Paint gradient = linearGradient(centerX, graphBottom + marginSize, centerX, graphBottom + marginSize + graphBottomShadowHeight, Color(21, 22, 30, 0), Color(21, 22, 30, 255));
+  fillPaint(gradient);
+
+  fill();
+
+  closePath();
+
+  //lines on the background
+  /*beginPath();
 
     const int lineSpacing = 4;
 
@@ -94,28 +104,28 @@ void GraphWidgetSocket::onNanoDisplay()
 
     closePath();*/
 
-    //graph margin outline
-    beginPath();
+  //graph margin outline
+  beginPath();
 
-    rect(marginLeft, marginTop, marginWidth, marginHeight);   
-    strokeColor(WaveShaperConfig::side_borders);
+  rect(marginLeft, marginTop, marginWidth, marginHeight);
+  strokeColor(WaveShaperConfig::side_borders);
 
-    scissor(marginLeft, marginTop + 1, marginWidth, marginHeight - 1);
-    stroke();
-    resetScissor();
-    
-    closePath();
+  scissor(marginLeft, marginTop + 1, marginWidth, marginHeight - 1);
+  stroke();
+  resetScissor();
 
-    beginPath();
+  closePath();
 
-    moveTo(marginLeft, marginTop);
-    lineTo(marginLeft + marginWidth, marginTop); 
+  beginPath();
 
-    strokeColor(WaveShaperConfig::top_border);
+  moveTo(marginLeft, marginTop);
+  lineTo(marginLeft + marginWidth, marginTop);
 
-    stroke();
+  strokeColor(WaveShaperConfig::top_border);
 
-    closePath();
+  stroke();
+
+  closePath();
 }
 
 END_NAMESPACE_DISTRHO

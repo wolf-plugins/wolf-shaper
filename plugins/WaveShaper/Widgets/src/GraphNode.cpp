@@ -61,7 +61,9 @@ void GraphVertex::render()
     layer->strokeColor(WaveShaperConfig::vertex_stroke_normal);
     layer->fillColor(WaveShaperConfig::vertex_fill_normal);
 
-    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, getSize());
+    const Margin margin = parent->getMargin();
+
+    layer->circle(margin.left + getX(), parent->getHeight() - getY() + margin.top, getSize());
 
     layer->fill();
     layer->stroke();
@@ -395,7 +397,9 @@ void GraphTensionHandle::render()
     else
         layer->strokeColor(WaveShaperConfig::tension_handle_normal); 
 
-    layer->circle(parent->marginLeft + getX(), parent->getHeight() - getY() + parent->marginTop, 6.0f);
+    const Margin margin = parent->getMargin();
+
+    layer->circle(margin.left + getX(), parent->getHeight() - getY() + margin.top, 6.0f);
 
     layer->stroke();
 
