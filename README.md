@@ -32,3 +32,21 @@ Right-click in the graph to add a vertex.
 Left-click and drag a vertex to move it.
 
 Double left-click a vertex to remove it.
+
+## Customization
+
+The UI can be customized using a configuration file.
+Copy the [default configuration](https://github.com/pdesaulniers/spoonie-waveshaper/blob/master/plugins/WaveShaper/Config/Themes/default.conf) to its appropriate location:
+
+Linux:
+```
+~/.config/spoonie-waveshaper.conf
+```
+Mac:
+```
+~/Library/Application Support/spoonie-waveshaper.conf
+```
+Windows:
+```
+<My Documents>\spoonie-waveshaper.conf
+```
