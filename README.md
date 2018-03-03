@@ -50,3 +50,5 @@ Windows:
 ```
 <My Documents>\spoonie-waveshaper.conf
 ```
+
+You can then edit the plugin's colors to your liking.
