@@ -43,53 +43,6 @@ std::string takeUntil(const char *str, char stopCharacter, char const **rest = n
 
     return std::string(begin, str);
 }
-
-/**
- * Take a string containing a tuple in the form (1,2,3,n) and return its elements.
- */
-std::vector<std::string> tupleToVector(const char *tuple)
-{
-    if (tuple == nullptr || *tuple == '\0')
-        return std::vector<std::string>();
-
-    std::vector<std::string> result;
-    int numberOfElements = 0;
-
-    while (*tuple != '(' && *tuple)
-        ++tuple;
-
-    if (*tuple == '\0' || *(++tuple) == '\0')
-        return std::vector<std::string>();
-
-    do
-    {
-        result.push_back("");
-
-        while (*tuple != ',' && *tuple != ')' && *tuple)
-        {
-            if (isalnum(*tuple))
-                result[numberOfElements] += *tuple;
-
-            ++tuple;
-        }
-
-        if (*tuple == '\0')
-            return std::vector<std::string>();
-
-        ++numberOfElements;
-
-        if(*tuple == ')')
-            break;
-
-        ++tuple;
-
-    } while (*tuple);
-
-    if(*tuple == '\0')
-        return std::vector<std::string>();
-
-    return result;
-}
 }
 
 #endif
