@@ -82,7 +82,14 @@ static std::string getConfigPath()
         homeDirectory = getpwuid(getuid())->pw_dir;
     }
 
-    return std::string(homeDirectory) + "/.config/spoonie-waveshaper.conf";
+    std::string fileLocation;
+
+#if defined(DISTRHO_OS_MAC)
+    fileLocation = "/Library/Application Support/spoonie-waveshaper.conf";
+#else
+    fileLocation = "/.config/spoonie-waveshaper.conf";
+#endif
+    return homeDirectory + fileLocation;
 #endif
 }
 
