@@ -31,9 +31,9 @@ OBJS_UI  = \
 	Widgets/src/NanoKnob.cpp.o \
 	Widgets/src/VolumeKnob.cpp.o \
 	Widgets/src/ResizeHandle.cpp.o \
+	Config/src/Config.cpp.o \
 	Libs/inih/ini.c.o \
 	Libs/inih/INIReader.cpp.o \
-	Config/src/ConfigManager.cpp.o \
 	Resources/Fonts/roboto_light.cpp.o \
 	WaveShaperUI.cpp.o 
 

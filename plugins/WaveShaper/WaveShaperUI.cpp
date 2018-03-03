@@ -2,12 +2,15 @@
 
 #include "WaveShaperUI.hpp"
 #include "Window.hpp"
+#include "Config.hpp"
 
 START_NAMESPACE_DISTRHO
 
 WaveShaperUI::WaveShaperUI() : UI(600, 600),
                                graphWidgetSocket(this, getParentWindow())
 {
+    WaveShaperConfig::load();
+
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16, 16));
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setAbsolutePos(30, 562);
