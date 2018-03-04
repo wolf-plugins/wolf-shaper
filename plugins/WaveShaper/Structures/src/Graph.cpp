@@ -148,14 +148,16 @@ const char *Graph::serialize()
 
     int length = 0;
 
-#if defined(DISTRHO_OS_WINDOWS)
-#error "The plugin is broken on Windows for now. Please wait :)"  
-#endif
-
     for (int i = 0; i < vertexCount; ++i)
     {
         vertex = vertices[i];
-        length += std::snprintf(serializationBuffer + length, sizeof(char) * 32 * 4 + 4 + 1, "%A,%A,%A,%d;", vertex.x, vertex.y, vertex.tension, vertex.type);
+
+        length += spoonie::toHexFloat(serializationBuffer + length, vertex.x);
+        length += std::sprintf(serializationBuffer + length, ",");
+        length += spoonie::toHexFloat(serializationBuffer + length, vertex.y);
+        length += std::sprintf(serializationBuffer + length,  ",");
+        length += spoonie::toHexFloat(serializationBuffer + length, vertex.tension);
+        length += std::sprintf(serializationBuffer + length, ",%d;", vertex.type);
     }
 
     return serializationBuffer;

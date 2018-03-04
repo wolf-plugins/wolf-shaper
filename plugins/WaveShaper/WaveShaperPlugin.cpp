@@ -169,7 +169,7 @@ class WaveShaper : public Plugin
 		}
 
 		//generated with fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, spoonie::CurveType::Exponential, 1.0f, 1.0f, 0.0f, spoonie::CurveType::Exponential);
-		defaultStateValue = String("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
+		defaultStateValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
 	}
 
 	void setState(const char *key, const char *value) override

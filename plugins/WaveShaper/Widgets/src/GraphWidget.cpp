@@ -18,6 +18,8 @@
 
 START_NAMESPACE_DISTRHO
 
+const char *graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;";
+
 GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
     : NanoWidget(parent),
       ui(ui),
@@ -100,8 +102,8 @@ void GraphWidget::reset()
 
     initializeDefaultVertices();
 
-    ui->setState("graph", "0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
-    lineEditor.rebuildFromString("0X0P+0,0X0P+0,0X0P+0,0;0X1P+0,0X1P+0,0X0P+0,0;");
+    ui->setState("graph", graphDefaultState);
+    lineEditor.rebuildFromString(graphDefaultState);
 }
 
 void GraphWidget::resetVerticesPool()
