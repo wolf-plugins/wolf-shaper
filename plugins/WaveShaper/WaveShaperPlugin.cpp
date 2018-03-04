@@ -204,22 +204,22 @@ class WaveShaper : public Plugin
 
 		for (uint32_t i = 0; i < frames; i++)
 		{
-			float inputL = parameters[paramPreGain] * inputs[0][i];
-			float inputR = parameters[paramPreGain] * inputs[1][i];
+			const float inputL = parameters[paramPreGain] * inputs[0][i];
+			const float inputR = parameters[paramPreGain] * inputs[1][i];
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
 
-			outputs[0][i] = lineEditor.getValueAt(inputL);
-			outputs[1][i] = lineEditor.getValueAt(inputR);
+			const float graphL = lineEditor.getValueAt(inputL);
+			const float graphR = lineEditor.getValueAt(inputR);
 
 			const float wet = parameters[paramWet];
 			const float dry = 1.0f - wet;
 			const float postGain = parameters[paramPostGain];
 			const bool mustRemoveDC = parameters[paramRemoveDC] > 0.50f;
 
-			outputs[0][i] = (dry * inputs[0][i] + wet * outputs[0][i]) * postGain;
-			outputs[1][i] = (dry * inputs[1][i] + wet * outputs[1][i]) * postGain;
+			outputs[0][i] = (dry * inputs[0][i] + wet * graphL) * postGain;
+			outputs[1][i] = (dry * inputs[1][i] + wet * graphR) * postGain;
 
 			if (mustRemoveDC)
 			{
