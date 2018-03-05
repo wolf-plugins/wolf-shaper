@@ -23,7 +23,7 @@ class GraphWidget : public NanoWidget,
   friend class GraphNodesLayer;
 
 public:
-  GraphWidget(WaveShaperUI *ui, Window &parent);
+  GraphWidget(WaveShaperUI *ui);
   ~GraphWidget();
 
   /**

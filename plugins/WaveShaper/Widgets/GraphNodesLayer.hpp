@@ -11,7 +11,7 @@ class GraphWidget;
 class GraphNodesLayer : public NanoWidget
 {
 public:
-  GraphNodesLayer(GraphWidget *graph, Window &parent);
+  GraphNodesLayer(GraphWidget *graph);
   ~GraphNodesLayer();
 
 protected:

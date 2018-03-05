@@ -4,10 +4,12 @@ START_NAMESPACE_DISTRHO
 
 OversampleWheel::OversampleWheel(Window &parent, Size<uint> size) noexcept : NanoWheel(parent, size)
 {
+    loadSharedResources();
 }
 
-OversampleWheel::OversampleWheel(Widget *widget, Size<uint> size) noexcept : NanoWheel(widget, size)
+OversampleWheel::OversampleWheel(NanoWidget *widget, Size<uint> size) noexcept : NanoWheel(widget, size)
 {
+    loadSharedResources();
 }
 
 void OversampleWheel::draw() 
@@ -28,7 +30,8 @@ void OversampleWheel::draw()
     closePath();
 
     beginPath();
-
+    
+    fontFace(NANOVG_DEJAVU_SANS_TTF);
     fontSize(height);
     fillColor(Color(255,255,255, 255));
     textAlign(ALIGN_RIGHT | ALIGN_BOTTOM);

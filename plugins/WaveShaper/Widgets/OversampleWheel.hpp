@@ -9,7 +9,7 @@ class OversampleWheel : public NanoWheel
 {
 public:
     explicit OversampleWheel(Window &parent, Size<uint> size) noexcept;
-    explicit OversampleWheel(Widget *widget, Size<uint> size) noexcept;
+    explicit OversampleWheel(NanoWidget *widget, Size<uint> size) noexcept;
 
 protected:
     void draw() override;

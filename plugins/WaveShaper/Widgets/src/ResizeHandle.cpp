@@ -10,7 +10,7 @@ ResizeHandle::ResizeHandle(Window &parent, Size<uint> size) noexcept
     setSize(size);
 }
 
-ResizeHandle::ResizeHandle(Widget *parent, Size<uint> size) noexcept
+ResizeHandle::ResizeHandle(NanoWidget *parent, Size<uint> size) noexcept
     : NanoWidget(parent),
       fHasFocus(false)
 {

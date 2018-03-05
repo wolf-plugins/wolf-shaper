@@ -9,7 +9,7 @@ class RemoveDCSwitch : public NanoSwitch
 {
 public:
     explicit RemoveDCSwitch(Window &parent, Size<uint> size) noexcept;
-    explicit RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept;
+    explicit RemoveDCSwitch(NanoWidget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawUp() override;

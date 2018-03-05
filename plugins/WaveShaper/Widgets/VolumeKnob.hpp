@@ -9,7 +9,7 @@ class VolumeKnob : public NanoKnob
 {
 public:
     explicit VolumeKnob(Window &parent, Size<uint> size) noexcept;
-    explicit VolumeKnob(Widget *widget, Size<uint> size) noexcept;
+    explicit VolumeKnob(NanoWidget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawNormal() override;

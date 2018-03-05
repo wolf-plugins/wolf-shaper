@@ -22,8 +22,8 @@ NanoKnob::NanoKnob(Window &parent, Size<uint> size) noexcept
     createFontFromMemory("roboto_light", (const uchar*)roboto_light, roboto_light_size, 0);
 }
 
-NanoKnob::NanoKnob(Widget *widget, Size<uint> size) noexcept
-    : NanoWidget(widget->getParentWindow()),
+NanoKnob::NanoKnob(NanoWidget *widget, Size<uint> size) noexcept
+    : NanoWidget(widget),
       fMin(0.0f),
       fMax(1.0f),
       fStep(0.0f),

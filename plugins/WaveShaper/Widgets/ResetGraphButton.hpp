@@ -9,7 +9,7 @@ class ResetGraphButton : public NanoButton
 {
 public:
     explicit ResetGraphButton(Window &parent, Size<uint> size) noexcept;
-    explicit ResetGraphButton(Widget *widget, Size<uint> size) noexcept;
+    explicit ResetGraphButton(NanoWidget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawUp() override;

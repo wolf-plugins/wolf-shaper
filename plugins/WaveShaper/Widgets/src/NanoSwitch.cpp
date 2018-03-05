@@ -10,8 +10,8 @@ NanoSwitch::NanoSwitch(Window& parent, Size<uint> size) noexcept
     setSize(size);
 }
 
-NanoSwitch::NanoSwitch(Widget* widget, Size<uint> size) noexcept
-    : NanoWidget(widget->getParentWindow()),
+NanoSwitch::NanoSwitch(NanoWidget* widget, Size<uint> size) noexcept
+    : NanoWidget(widget),
       fIsDown(false),
       fCallback(nullptr)
 {

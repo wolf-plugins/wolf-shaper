@@ -17,7 +17,7 @@ class NanoWheel : public NanoWidget
     };
 
     explicit NanoWheel(Window &parent, Size<uint> size) noexcept;
-    explicit NanoWheel(Widget *widget, Size<uint> size) noexcept;
+    explicit NanoWheel(NanoWidget *widget, Size<uint> size) noexcept;
 
     void setValue(int value, bool sendCallback = false) noexcept;
     int getValue() noexcept;

@@ -6,7 +6,7 @@ RemoveDCSwitch::RemoveDCSwitch(Window &parent, Size<uint> size) noexcept : NanoS
 {
 }
 
-RemoveDCSwitch::RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept : NanoSwitch(widget, size)
+RemoveDCSwitch::RemoveDCSwitch(NanoWidget *widget, Size<uint> size) noexcept : NanoSwitch(widget, size)
 {
 }
 

@@ -18,7 +18,7 @@ public:
   };
 
   explicit NanoKnob(Window &parent, Size<uint> size) noexcept;
-  explicit NanoKnob(Widget *widget, Size<uint> size) noexcept;
+  explicit NanoKnob(NanoWidget *widget, Size<uint> size) noexcept;
 
   float getValue() const noexcept;
   void setValue(float value, bool sendCallback = false) noexcept;

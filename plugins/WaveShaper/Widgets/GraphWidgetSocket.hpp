@@ -12,7 +12,7 @@ class GraphWidgetSocket : public NanoWidget
   friend class WaveShaperUI;
 
 public:
-  GraphWidgetSocket(WaveShaperUI *ui, Window &parent);
+  GraphWidgetSocket(WaveShaperUI *ui);
   ~GraphWidgetSocket();
 
 protected:

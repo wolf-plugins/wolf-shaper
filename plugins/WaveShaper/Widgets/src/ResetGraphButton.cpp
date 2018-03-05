@@ -6,7 +6,7 @@ ResetGraphButton::ResetGraphButton(Window &parent, Size<uint> size) noexcept : N
 {
 }
 
-ResetGraphButton::ResetGraphButton(Widget *widget, Size<uint> size) noexcept : NanoButton(widget, size)
+ResetGraphButton::ResetGraphButton(NanoWidget *widget, Size<uint> size) noexcept : NanoButton(widget, size)
 {
 }
 

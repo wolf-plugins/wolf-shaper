@@ -10,7 +10,7 @@ NanoButton::NanoButton(Window &parent, Size<uint> size) noexcept
     setSize(size);
 }
 
-NanoButton::NanoButton(Widget *parent, Size<uint> size) noexcept
+NanoButton::NanoButton(NanoWidget *parent, Size<uint> size) noexcept
     : NanoWidget(parent),
       state(kNanoStateNormal),
       fHasFocus(false)

@@ -17,7 +17,7 @@ public:
     };
 
     explicit ResizeHandle(Window& parent, Size<uint> size) noexcept;
-    explicit ResizeHandle(Widget* widget, Size<uint> size) noexcept;
+    explicit ResizeHandle(NanoWidget* widget, Size<uint> size) noexcept;
 
     void setCallback(Callback* callback) noexcept;
     void setMinSize(int minX, int minY);

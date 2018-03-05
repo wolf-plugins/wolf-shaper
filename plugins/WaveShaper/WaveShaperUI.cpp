@@ -7,7 +7,7 @@
 START_NAMESPACE_DISTRHO
 
 WaveShaperUI::WaveShaperUI() : UI(450, 450),
-                               graphWidgetSocket(this, getParentWindow())
+                               graphWidgetSocket(this)
 {
     WaveShaperConfig::load();
 
@@ -15,32 +15,32 @@ WaveShaperUI::WaveShaperUI() : UI(450, 450),
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
 
-    fButtonResetGraph = new ResetGraphButton(getParentWindow(), Size<uint>(16, 16));
+    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
     fButtonResetGraph->setCallback(this);
 
-    fWheelOversample = new OversampleWheel(getParentWindow(), Size<uint>(36, 20));
+    fWheelOversample = new OversampleWheel(this, Size<uint>(36, 20));
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
-    fKnobPreGain = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobPreGain = new VolumeKnob(this, Size<uint>(48, 48));
     fKnobPreGain->setCallback(this);
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
     fKnobPreGain->setColor(Color(255,50,50,255));
 
-    fKnobWet = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobWet = new VolumeKnob(this, Size<uint>(48, 48));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
     fKnobWet->setColor(Color(0,200,255,255));
 
-    fKnobPostGain = new VolumeKnob(getParentWindow(), Size<uint>(48, 48));
+    fKnobPostGain = new VolumeKnob(this, Size<uint>(48, 48));
     fKnobPostGain->setCallback(this);
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(0,255,100,255));
 
-    fHandleResize = new ResizeHandle(getParentWindow(), Size<uint>(24,24));
+    fHandleResize = new ResizeHandle(this, Size<uint>(24,24));
     fHandleResize->setCallback(this);
     fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
     fHandleResize->setMinSize(450, 450);

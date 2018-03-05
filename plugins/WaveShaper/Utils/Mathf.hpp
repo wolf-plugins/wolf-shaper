@@ -104,7 +104,7 @@ static float invLogScale(const float value, const float min, const float max)
 /* Hexfloat stuff------------------------------------- */
 
 
-//Adapted from https://cs.chromium.org/chromium/src/v8/src/conversions.cc
+// Adapted from https://cs.chromium.org/chromium/src/v8/src/conversions.cc
 // Copyright 2015 The Chromium Authors. All rights reserved.
 //
 // Redistribution and use in source and binary forms, with or without

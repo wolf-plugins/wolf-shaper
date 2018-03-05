@@ -17,7 +17,7 @@ public:
     };
 
     explicit NanoSwitch(Window& parent, Size<uint> size) noexcept;
-    explicit NanoSwitch(Widget* widget, Size<uint> size) noexcept;
+    explicit NanoSwitch(NanoWidget* widget, Size<uint> size) noexcept;
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;

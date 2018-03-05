@@ -9,10 +9,10 @@
 
 START_NAMESPACE_DISTRHO
 
-GraphWidgetSocket::GraphWidgetSocket(WaveShaperUI *ui, Window &parent)
-    : NanoWidget(parent),
+GraphWidgetSocket::GraphWidgetSocket(WaveShaperUI *ui)
+    : NanoWidget((NanoWidget*)ui),
       ui(ui),
-      graphWidget(ui, getParentWindow())
+      graphWidget(ui)
 {
   setSize(ui->getWidth(), ui->getHeight());
 }

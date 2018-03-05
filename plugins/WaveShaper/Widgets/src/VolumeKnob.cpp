@@ -6,7 +6,7 @@ VolumeKnob::VolumeKnob(Window &parent, Size<uint> size) noexcept : NanoKnob(pare
 {
 }
 
-VolumeKnob::VolumeKnob(Widget *widget, Size<uint> size) noexcept : NanoKnob(widget, size)
+VolumeKnob::VolumeKnob(NanoWidget *widget, Size<uint> size) noexcept : NanoKnob(widget, size)
 {
 }
 

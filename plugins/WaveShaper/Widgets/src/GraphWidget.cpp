@@ -20,10 +20,10 @@ START_NAMESPACE_DISTRHO
 
 const char *graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;";
 
-GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
-    : NanoWidget(parent),
+GraphWidget::GraphWidget(WaveShaperUI *ui)
+    : NanoWidget((NanoWidget*)ui),
       ui(ui),
-      graphNodesLayer(this, parent),
+      graphNodesLayer(this),
       graphVerticesPool(spoonie::maxVertices, this, &graphNodesLayer, GraphVertexType::Middle),
       focusedElement(nullptr),
       mouseLeftDown(false),
@@ -44,7 +44,7 @@ GraphWidget::GraphWidget(WaveShaperUI *ui, Window &parent)
 
     initializeDefaultVertices();
 
-    parent.addIdleCallback(this);
+    //getParentWindow().addIdleCallback(this);
 
     using namespace SPOONIE_FONTS;
     createFontFromMemory("roboto_light", (const uchar *)roboto_light, roboto_light_size, 0);

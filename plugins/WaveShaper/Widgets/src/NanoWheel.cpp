@@ -11,20 +11,16 @@ NanoWheel::NanoWheel(Window &parent, Size<uint> size) noexcept
       fMin(0),
       fMax(0)
 {
-    loadSharedResources();
-
     setSize(size);
 }
 
-NanoWheel::NanoWheel(Widget *parent, Size<uint> size) noexcept
+NanoWheel::NanoWheel(NanoWidget *parent, Size<uint> size) noexcept
     : NanoWidget(parent),
       fLeftMouseDown(false),
       fValue(0),
       fMin(0),
       fMax(0)
 {
-    loadSharedResources();
-
     setSize(size);
 }
 

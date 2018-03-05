@@ -17,7 +17,7 @@ public:
     };
 
     explicit NanoButton(Window& parent, Size<uint> size) noexcept;
-    explicit NanoButton(Widget* widget, Size<uint> size) noexcept;
+    explicit NanoButton(NanoWidget* widget, Size<uint> size) noexcept;
 
     void setCallback(Callback* callback) noexcept;
 
