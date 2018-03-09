@@ -4,12 +4,21 @@
 #include "Window.hpp"
 #include "Config.hpp"
 
+#include <string>
+
+#if defined(DISTRHO_OS_WINDOWS)
+    #include "windows.h"
+#endif
+
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(450, 450),
-                               graphWidgetSocket(this)
+WaveShaperUI::WaveShaperUI() : UI(450, 450)
 {
     WaveShaperConfig::load();
+
+    tryRememberSize();
+
+    fGraphWidgetSocket = new GraphWidgetSocket(this);
 
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16, 16));
     fSwitchRemoveDC->setCallback(this);
@@ -26,21 +35,21 @@ WaveShaperUI::WaveShaperUI() : UI(450, 450),
     fKnobPreGain->setCallback(this);
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
-    fKnobPreGain->setColor(Color(255,50,50,255));
+    fKnobPreGain->setColor(Color(255, 50, 50, 255));
 
     fKnobWet = new VolumeKnob(this, Size<uint>(48, 48));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
-    fKnobWet->setColor(Color(0,200,255,255));
+    fKnobWet->setColor(Color(0, 200, 255, 255));
 
     fKnobPostGain = new VolumeKnob(this, Size<uint>(48, 48));
     fKnobPostGain->setCallback(this);
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
-    fKnobPostGain->setColor(Color(0,255,100,255));
+    fKnobPostGain->setColor(Color(0, 255, 100, 255));
 
-    fHandleResize = new ResizeHandle(this, Size<uint>(24,24));
+    fHandleResize = new ResizeHandle(this, Size<uint>(24, 24));
     fHandleResize->setCallback(this);
     fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
     fHandleResize->setMinSize(450, 450);
@@ -52,7 +61,35 @@ WaveShaperUI::~WaveShaperUI()
 {
 }
 
-void WaveShaperUI::positionWidgets() 
+void WaveShaperUI::tryRememberSize()
+{
+    int width, height;
+    FILE* file;
+
+#if defined(DISTRHO_OS_WINDOWS)
+    CHAR tempPath[MAX_PATH + 1];
+
+    GetTempPath(MAX_PATH + 1, tempPath);
+    std::string path = std::string(tempPath) + "spoonie-waveshaper.tmp";
+    file = fopen(path.c_str(), "r");
+#else
+    file = fopen("/tmp/spoonie-waveshaper.tmp", "r");
+#endif
+
+    if(file == NULL)
+        return;
+
+    const int numberScanned = fscanf(file, "%d %d", &width, &height);
+
+    if (numberScanned == 2 && width && height)
+    {
+        setSize(width, height);
+    }
+
+    fclose(file);
+}
+
+void WaveShaperUI::positionWidgets()
 {
     fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 43);
     fButtonResetGraph->setAbsolutePos(60, getHeight() - 43);
@@ -93,14 +130,13 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
 void WaveShaperUI::stateChanged(const char *key, const char *value)
 {
     if (std::strcmp(key, "graph") == 0)
-        graphWidgetSocket.graphWidget.rebuildFromString(value);
+        fGraphWidgetSocket->graphWidget.rebuildFromString(value);
 
     repaint();
 }
 
 void WaveShaperUI::onNanoDisplay()
 {
-
 }
 
 void WaveShaperUI::uiIdle()
@@ -129,7 +165,7 @@ void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     if (nanoButton != fButtonResetGraph)
         return;
 
-    graphWidgetSocket.graphWidget.reset();
+    fGraphWidgetSocket->graphWidget.reset();
 }
 
 void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
@@ -151,8 +187,10 @@ void WaveShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
 
 void WaveShaperUI::resizeHandleMoved(int width, int height)
 {
-    graphWidgetSocket.setSize(width, height);
+    fGraphWidgetSocket->setSize(width, height);
     setSize(width, height);
+
+    getParentWindow().saveSizeAtExit(true);
 }
 
 float WaveShaperUI::getParameterValue(uint32_t index) const

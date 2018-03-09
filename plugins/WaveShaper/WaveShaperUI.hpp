@@ -38,7 +38,7 @@ public:
 
 protected:
   void parameterChanged(uint32_t, float value) override;
-  
+  void tryRememberSize();
   void positionWidgets();
 
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
@@ -61,8 +61,7 @@ private:
   ScopedPointer<OversampleWheel> fWheelOversample;
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<ResizeHandle> fHandleResize;
-
-  GraphWidgetSocket graphWidgetSocket;
+  ScopedPointer<GraphWidgetSocket> fGraphWidgetSocket;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
 };
