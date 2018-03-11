@@ -44,7 +44,7 @@ GraphWidget::GraphWidget(WaveShaperUI *ui)
 
     initializeDefaultVertices();
 
-    //getParentWindow().addIdleCallback(this);
+    getParentWindow().addIdleCallback(this);
 
     using namespace SPOONIE_FONTS;
     createFontFromMemory("roboto_light", (const uchar *)roboto_light, roboto_light_size, 0);
