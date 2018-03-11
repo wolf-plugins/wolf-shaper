@@ -2,7 +2,7 @@
 
 ![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
-spoonie WaveShaper (name subject to change) is a free, cross-platform distortion plugin. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
+Wolf Shaper is a free, cross-platform distortion plugin. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
 While kind of usable, it is not done yet. You might want to check the issues on GitHub before using the plugin :)
 
@@ -11,8 +11,8 @@ While kind of usable, it is not done yet. You might want to check the issues on 
 First, clone the repo (note the "--recursive" argument):
 
 ```
-git clone --recursive https://github.com/pdesaulniers/spoonie-waveshaper.git
-cd spoonie-waveshaper
+git clone --recursive https://github.com/pdesaulniers/wolf-shaper.git
+cd wolf-shaper
 ```
 
 Then:
