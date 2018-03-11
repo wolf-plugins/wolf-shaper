@@ -122,7 +122,7 @@ class WaveShaper : public Plugin
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
 			parameter.ranges.def = 0.0f;
-			parameter.hints = kParameterIsAutomable | kParameterIsBoolean;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
 			break;
 		case paramOversample:
 			//None, 2x, 4x, 8x, 16x
@@ -139,7 +139,7 @@ class WaveShaper : public Plugin
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
 			parameter.ranges.def = 0.0f;
-			parameter.hints = kParameterIsAutomable | kParameterIsBoolean;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
 			break;
 		case paramOut:
 			parameter.name = "Out";
@@ -218,8 +218,8 @@ class WaveShaper : public Plugin
 			const float postGain = parameters[paramPostGain];
 			const bool mustRemoveDC = parameters[paramRemoveDC] > 0.50f;
 
-			outputs[0][i] = (dry * inputs[0][i] + wet * graphL) * postGain;
-			outputs[1][i] = (dry * inputs[1][i] + wet * graphR) * postGain;
+			outputs[0][i] = (dry * inputL + wet * graphL) * postGain;
+			outputs[1][i] = (dry * inputR + wet * graphR) * postGain;
 
 			if (mustRemoveDC)
 			{
