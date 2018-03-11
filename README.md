@@ -1,8 +1,8 @@
-# Wolf Shaper
+# wolf shaper
 
 ![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
-Wolf Shaper is a free, cross-platform distortion plugin. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
+Free, cross-platform distortion plugin with a spline-based graph. Can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
 While kind of usable, it is not done yet. You might want to check the issues on GitHub before using the plugin :)
 
@@ -40,15 +40,15 @@ Copy the [default configuration](https://github.com/pdesaulniers/spoonie-wavesha
 
 Linux:
 ```
-~/.config/spoonie-waveshaper.conf
+~/.config/wolf-shaper.conf
 ```
 Mac:
 ```
-~/Library/Application Support/spoonie-waveshaper.conf
+~/Library/Application Support/wolf-shaper.conf
 ```
 Windows:
 ```
-<My Documents>\spoonie-waveshaper.conf
+<My Documents>\wolf-shaper.conf
 ```
 
 You can then edit the plugin's colors to your liking.
