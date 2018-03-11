@@ -1,5 +1,5 @@
 /*
- * spoonie WaveShaper
+ * wolf shaper
  * Copyright (C) 2018 Patrick Desaulniers
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
