@@ -55,12 +55,12 @@ class WaveShaper : public Plugin
   protected:
 	const char *getLabel() const noexcept override
 	{
-		return "spoonie WaveShaper";
+		return "wolf shaper";
 	}
 
 	const char *getDescription() const noexcept override
 	{
-		return "Waveshaping distortion plugin with editable graph.";
+		return "Waveshaping distortion plugin with spline-based graph.";
 	}
 
 	const char *getMaker() const noexcept override
@@ -70,7 +70,7 @@ class WaveShaper : public Plugin
 
 	const char *getHomePage() const noexcept override
 	{
-		return "https://github.com/pdesaulniers/spoonie-waveshaper";
+		return "https://github.com/pdesaulniers/wolf-shaper";
 	}
 
 	const char *getLicense() const noexcept override

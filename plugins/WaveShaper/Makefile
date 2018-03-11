@@ -7,7 +7,7 @@
 # --------------------------------------------------------------
 # Project name, used for binaries
 
-NAME = spoonie-waveshaper
+NAME = wolf-shaper
 
 # --------------------------------------------------------------
 # Files to build

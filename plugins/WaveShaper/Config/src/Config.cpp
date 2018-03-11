@@ -66,6 +66,8 @@ Color side_borders = Color(100, 100, 100, 255);
 
 static std::string getConfigPath()
 {
+    const std::string configName = "wolf-shaper.conf";
+
 #if defined(DISTRHO_OS_WINDOWS)
     CHAR my_documents[MAX_PATH];
     HRESULT result = SHGetFolderPath(NULL, CSIDL_PERSONAL, NULL, SHGFP_TYPE_CURRENT, my_documents);
@@ -73,7 +75,7 @@ static std::string getConfigPath()
     if (result != S_OK)
         return "";
 
-    return std::string(my_documents) + "\\spoonie-waveshaper.conf";
+    return std::string(my_documents) + "\\" + configName;
 #else
     const char *homeDirectory;
 
@@ -85,11 +87,11 @@ static std::string getConfigPath()
     std::string fileLocation;
 
 #if defined(DISTRHO_OS_MAC)
-    fileLocation = "/Library/Application Support/spoonie-waveshaper.conf";
+    fileLocation = "/Library/Application Support/";
 #else
-    fileLocation = "/.config/spoonie-waveshaper.conf";
+    fileLocation = "/.config/";
 #endif
-    return homeDirectory + fileLocation;
+    return homeDirectory + fileLocation + configName;
 #endif
 }
 
@@ -136,7 +138,7 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     }
     else
     {
-        fprintf(stderr, "spoonie-waveshaper: Warning! Invalid color type in config file: %s.\n", colorStr.c_str());
+        fprintf(stderr, "wolf-shaper: Warning! Invalid color type in config file: %s.\n", colorStr.c_str());
 
         return;
     }
@@ -150,7 +152,7 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     }
     else
     {
-        fprintf(stderr, "spoonie-waveshaper: Warning! Color has an invalid number of arguments: %s.\n", colorStr.c_str());
+        fprintf(stderr, "wolf-shaper: Warning! Color has an invalid number of arguments: %s.\n", colorStr.c_str());
     }
 
     return;
@@ -162,7 +164,7 @@ void load()
 
     if (reader.ParseError() < 0)
     {
-        std::cout << "Can't load 'spoonie-waveshaper.conf', using defaults\n";
+        std::cout << "Can't load 'wolf-shaper.conf', using defaults\n";
         return;
     }
 
@@ -190,7 +192,7 @@ void load()
     colorFromString(reader.Get("colors", "side_borders", ""), &side_borders);
 
     isLoaded = true;
-    std::cout << "Config loaded from 'spoonie-waveshaper.conf'\n";
+    std::cout << "Config loaded from 'wolf-shaper.conf'\n";
 }
 }
 

@@ -65,15 +65,16 @@ void WaveShaperUI::tryRememberSize()
 {
     int width, height;
     FILE* file;
+    std::string tmpFileName = "wolf-shaper.tmp";
 
 #if defined(DISTRHO_OS_WINDOWS)
     CHAR tempPath[MAX_PATH + 1];
 
     GetTempPath(MAX_PATH + 1, tempPath);
-    std::string path = std::string(tempPath) + "spoonie-waveshaper.tmp";
+    std::string path = std::string(tempPath) + tmpFileName;
     file = fopen(path.c_str(), "r");
 #else
-    file = fopen("/tmp/spoonie-waveshaper.tmp", "r");
+    file = fopen(("/tmp/" + tmpFileName).c_str(), "r");
 #endif
 
     if(file == NULL)
