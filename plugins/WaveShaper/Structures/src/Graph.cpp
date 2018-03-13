@@ -68,16 +68,15 @@ float Graph::getOutValue(float input, float tension, float p1x, float p1y, float
 float Graph::getValueAt(float x)
 {
     const float absX = std::abs(x);
-    const bool positiveInput = x >= 0.0f;
 
     if (absX > 1.0f)
     {
         if (bipolarMode)
         {
-            if (positiveInput)
-                return x * vertices[getVertexCount() - 1].y * 2;
-            else
-                return x * (1.0f - vertices[0].y * 2);
+            const bool positiveInput = x >= 0.0f;
+            const float vertexY = vertices[positiveInput ? getVertexCount() - 1 : 0].y;
+
+			return absX * (-1.0f + vertexY * 2.0f);
         }
         else
         {
