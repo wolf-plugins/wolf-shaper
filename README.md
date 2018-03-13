@@ -1,4 +1,4 @@
-# wolf shaper
+# Wolf Shaper
 
 ![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
