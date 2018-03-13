@@ -55,7 +55,7 @@ class WaveShaper : public Plugin
   protected:
 	const char *getLabel() const noexcept override
 	{
-		return "wolf shaper";
+		return "Wolf Shaper";
 	}
 
 	const char *getDescription() const noexcept override
@@ -210,8 +210,24 @@ class WaveShaper : public Plugin
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
 
-			const float graphL = lineEditor.getValueAt(inputL);
-			const float graphR = lineEditor.getValueAt(inputR);
+			const bool bipolarMode = parameters[paramBipolarMode] > 0.50f;
+			lineEditor.setBipolarMode(bipolarMode);
+
+			float graphL, graphR;
+
+			if(bipolarMode)
+			{
+				const float xl = (1.0f + inputL) * 0.5f;
+				const float xr = (1.0f + inputR) * 0.5f;
+
+				graphL = -1.0f + lineEditor.getValueAt(xl) * 2.0f;
+				graphR = -1.0f + lineEditor.getValueAt(xr) * 2.0f;
+			}
+			else
+			{
+				graphL = lineEditor.getValueAt(inputL);
+				graphR = lineEditor.getValueAt(inputR);
+			}
 
 			const float wet = parameters[paramWet];
 			const float dry = 1.0f - wet;

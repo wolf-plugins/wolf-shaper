@@ -42,10 +42,7 @@ public:
    */
   int getVertexCount();
 
-  /**
-   * Waveshaping function that acts the same on both negative and positive input.
-   */
-  static float getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y); //TODO: bipolar mode
+  static float getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y);
 
   /**
    * Get the y value at x in the graph. 
@@ -62,6 +59,9 @@ public:
    */
   const char* serialize();
 
+  bool getBipolarMode();
+  void setBipolarMode(bool bipolarMode);
+
   /**
    * Rebuild the graph from a string.
    */
@@ -70,7 +70,9 @@ public:
 private:
   Vertex vertices[maxVertices];
   int vertexCount;
-  
+
+  bool bipolarMode;
+
   //format: x,y,tension,type;
   char serializationBuffer[(sizeof(char) * 256 + 4) * maxVertices + 1];
 };

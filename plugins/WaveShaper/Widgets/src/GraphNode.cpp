@@ -156,7 +156,7 @@ float GraphTensionHandle::getY() const
     float tension = vertex->getTension();
 
     //calculate value for generic curve
-    return spoonie::Graph::getOutValueUnipolar(0.5f, tension, 0.0f, leftVertex->getY() / parent->getHeight(), 1.0f, rightVertex->getY() / parent->getHeight()) * parent->getHeight();
+    return spoonie::Graph::getOutValue(0.5f, tension, 0.0f, leftVertex->getY() / parent->getHeight(), 1.0f, rightVertex->getY() / parent->getHeight()) * parent->getHeight();
 }
 
 GraphVertex *GraphVertex::getVertexAtLeft() const

@@ -24,13 +24,14 @@ Vertex::Vertex(float posX, float posY, float tension, CurveType type) : x(posX),
 {
 }
 
-Graph::Graph() : vertexCount(0)
+Graph::Graph() : vertexCount(0),
+                 bipolarMode(false)
 {
     insertVertex(0.0f, 0.0f);
     insertVertex(1.0f, 1.0f);
 }
 
-float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1y, float p2x, float p2y)
+float Graph::getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y)
 {
     const float inputSign = input >= 0 ? 1 : -1;
     const bool tensionIsPositive = tension >= 0.0f;
@@ -67,9 +68,22 @@ float Graph::getOutValueUnipolar(float input, float tension, float p1x, float p1
 float Graph::getValueAt(float x)
 {
     const float absX = std::abs(x);
+    const bool positiveInput = x >= 0.0f;
 
     if (absX > 1.0f)
-        return x * vertices[getVertexCount() - 1].y;
+    {
+        if (bipolarMode)
+        {
+            if (positiveInput)
+                return x * vertices[getVertexCount() - 1].y * 2;
+            else
+                return x * (1.0f - vertices[0].y * 2);
+        }
+        else
+        {
+            return x * vertices[getVertexCount() - 1].y;
+        }
+    }
 
     //binary search
     int left = 0;
@@ -94,7 +108,7 @@ float Graph::getValueAt(float x)
     const float p2x = vertices[left].x;
     const float p2y = vertices[left].y;
 
-    return getOutValueUnipolar(x, vertices[left - 1].tension, p1x, p1y, p2x, p2y);
+    return getOutValue(x, vertices[left - 1].tension, p1x, p1y, p2x, p2y);
 }
 
 void Graph::insertVertex(float x, float y, float tension, CurveType type)
@@ -140,6 +154,16 @@ Vertex *Graph::getVertexAtIndex(int index)
 int Graph::getVertexCount()
 {
     return vertexCount;
+}
+
+bool Graph::getBipolarMode()
+{
+    return bipolarMode;
+}
+
+void Graph::setBipolarMode(bool bipolarMode)
+{
+    this->bipolarMode = bipolarMode;
 }
 
 const char *Graph::serialize()
