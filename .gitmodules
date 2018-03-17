@@ -8,3 +8,6 @@
 [submodule "plugins/WaveShaper/Widgets"]
 	path = plugins/WaveShaper/Widgets
 	url = git@github.com:pdesaulniers/wolf-dpf-widgets.git
+[submodule "plugins/WaveShaper/Utils"]
+	path = plugins/WaveShaper/Utils
+	url = git@github.com:pdesaulniers/wolf-dpf-utils.git
