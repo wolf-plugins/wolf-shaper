@@ -3,10 +3,15 @@
 # ---------------------------- #
 # Created by falkTX
 #
+# Modified by Patrick Desaulniers
+#
 
 AR  ?= ar
 CC  ?= gcc
 CXX ?= g++
+
+PLUGIN_NAME ?= wolf-shaper
+DISTRHO_NAMESPACE ?= WOLF_SHAPER_DISTRHO
 
 EXTRA_INCLUDES ?=
 EXTRA_LIBS ?=
@@ -83,6 +88,8 @@ ifeq ($(MACOS),true)
 BUILD_CXX_FLAGS = $(BASE_FLAGS) $(CXXFLAGS) $(CPPFLAGS) $(EXTRA_INCLUDES)
 LINK_FLAGS      = $(LINK_OPTS) $(LDFLAGS) $(EXTRA_LIBS)
 endif
+
+CXXFLAGS += -DPLUGIN_NAME=\"$(PLUGIN_NAME)\" -DDISTRHO_NAMESPACE=$(DISTRHO_NAMESPACE)
 
 # --------------------------------------------------------------
 # Check for optional libs

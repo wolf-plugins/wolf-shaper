@@ -14,3 +14,7 @@ CTestTestfile.cmake
 *.kdev4 
 .kdev4
 /build_windows32
+*.cpp.d
+*.cpp.o
+*.so
+/bin/

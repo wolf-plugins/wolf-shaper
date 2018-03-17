@@ -3,11 +3,14 @@
 # ---------------------------- #
 # Created by falkTX
 #
-
+# Modified by Patrick Desaulniers
+#
 # --------------------------------------------------------------
 # Project name, used for binaries
+# Set PLUGIN_NAME in Makefile.mk at the project's root directory
+#
 
-NAME = wolf-shaper
+NAME = $(PLUGIN_NAME)
 
 # --------------------------------------------------------------
 # Files to build

@@ -65,7 +65,7 @@ void WaveShaperUI::tryRememberSize()
 {
     int width, height;
     FILE* file;
-    std::string tmpFileName = "wolf-shaper.tmp";
+    std::string tmpFileName = PLUGIN_NAME".tmp";
 
 #if defined(DISTRHO_OS_WINDOWS)
     CHAR tempPath[MAX_PATH + 1];
