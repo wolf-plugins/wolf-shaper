@@ -7,6 +7,7 @@
 #
 # --------------------------------------------------------------
 # Project name, used for binaries
+#
 # Set PLUGIN_NAME in Makefile.mk at the project's root directory
 #
 
@@ -16,25 +17,25 @@ NAME = $(PLUGIN_NAME)
 # Files to build
 
 OBJS_DSP = \
-	Structures/src/Graph.cpp.o \
+	Common/Structures/src/Graph.cpp.o \
 	WaveShaperPlugin.cpp.o
 
 OBJS_UI  = \
-	Structures/src/Graph.cpp.o \
-	Structures/src/Layout.cpp.o \
-	Widgets/src/GraphNode.cpp.o \
-	Widgets/src/GraphWidget.cpp.o \
-	Widgets/src/GraphWidgetSocket.cpp.o \
-	Widgets/src/GraphNodesLayer.cpp.o \
-	Widgets/src/NanoSwitch.cpp.o \
-	Widgets/src/RemoveDCSwitch.cpp.o \
-	Widgets/src/NanoButton.cpp.o \
-	Widgets/src/ResetGraphButton.cpp.o \
-	Widgets/src/NanoWheel.cpp.o \
-	Widgets/src/OversampleWheel.cpp.o \
-	Widgets/src/NanoKnob.cpp.o \
-	Widgets/src/VolumeKnob.cpp.o \
-	Widgets/src/ResizeHandle.cpp.o \
+	Common/Structures/src/Graph.cpp.o \
+	Common/Structures/src/Layout.cpp.o \
+	Common/Widgets/src/GraphNode.cpp.o \
+	Common/Widgets/src/GraphWidget.cpp.o \
+	Common/Widgets/src/GraphWidgetSocket.cpp.o \
+	Common/Widgets/src/GraphNodesLayer.cpp.o \
+	Common/Widgets/src/NanoSwitch.cpp.o \
+	Common/Widgets/src/RemoveDCSwitch.cpp.o \
+	Common/Widgets/src/NanoButton.cpp.o \
+	Common/Widgets/src/ResetGraphButton.cpp.o \
+	Common/Widgets/src/NanoWheel.cpp.o \
+	Common/Widgets/src/OversampleWheel.cpp.o \
+	Common/Widgets/src/NanoKnob.cpp.o \
+	Common/Widgets/src/VolumeKnob.cpp.o \
+	Common/Widgets/src/ResizeHandle.cpp.o \
 	Config/src/Config.cpp.o \
 	Libs/inih/ini.c.o \
 	Libs/inih/INIReader.cpp.o \
