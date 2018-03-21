@@ -80,10 +80,10 @@ all:
 
 clean:
 	rm -f *.d *.o
-	rm -f Structures/src/*.d Structures/src/*.o
-	rm -f Structures/test/*.d Structures/test/*.o
-	rm -f Widgets/src/*.d Widgets/src/*.o
-	rm -f Utils/Fonts/getchunk
+	rm -f Common/Structures/src/*.d Common/Structures/src/*.o
+	rm -f Common/Structures/test/*.d Common/Structures/test/*.o
+	rm -f Common/Widgets/src/*.d Common/Widgets/src/*.o
+	rm -f Common/Utils/Fonts/getchunk
 	rm -f Resources/Fonts/*.d Resources/Fonts/*.o
 	rm -f Config/src/*.d Config/src/*.o
 	rm -f Libs/inih/*.d Libs/inih/*.o
