@@ -23,6 +23,7 @@ OBJS_DSP = \
 OBJS_UI  = \
 	Common/Structures/src/Graph.cpp.o \
 	Common/Structures/src/Layout.cpp.o \
+	Common/Structures/src/Animation.cpp.o \
 	Common/Widgets/src/GraphNode.cpp.o \
 	Common/Widgets/src/GraphWidget.cpp.o \
 	Common/Widgets/src/GraphWidgetSocket.cpp.o \
