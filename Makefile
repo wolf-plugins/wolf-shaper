@@ -15,7 +15,7 @@ DESTDIR ?=
 
 define MISSING_SUBMODULES_ERROR
 
-Cannot find DGL! Please run "make submodules", then retry building the plugin.
+Cannot find DGL! Please run "make submodules" to clone the missing submodules, then retry building the plugin.
 
 endef
 
