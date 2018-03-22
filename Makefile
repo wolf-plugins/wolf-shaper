@@ -13,9 +13,22 @@ all: libs plugins gen
 PREFIX  ?= /usr/local
 DESTDIR ?=
 
+define MISSING_SUBMODULES_ERROR
+
+Cannot find DGL! Please run "make submodules", then retry building the plugin.
+
+endef
+
 # --------------------------------------------------------------
 
+submodules: 
+	git submodule update --init --recursive
+
 libs:
+ifeq (,$(wildcard dpf/dgl))
+	$(error $(MISSING_SUBMODULES_ERROR))
+endif
+
 ifeq ($(HAVE_DGL),true)
 	$(MAKE) -C dpf/dgl
 endif
