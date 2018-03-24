@@ -12,7 +12,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(450, 450)
+WaveShaperUI::WaveShaperUI() : UI(500, 500)
 {
     WaveShaperConfig::load();
 
