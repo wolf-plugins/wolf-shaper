@@ -31,19 +31,19 @@ WaveShaperUI::WaveShaperUI() : UI(450, 450)
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
-    fKnobPreGain = new VolumeKnob(this, Size<uint>(48, 48));
+    fKnobPreGain = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobPreGain->setCallback(this);
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
-    fKnobPreGain->setColor(Color(255, 50, 50, 255));
+    fKnobPreGain->setColor(Color(0, 200, 255, 255));
 
-    fKnobWet = new VolumeKnob(this, Size<uint>(48, 48));
+    fKnobWet = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
-    fKnobWet->setColor(Color(0, 200, 255, 255));
+    fKnobWet->setColor(Color(237,237,143, 255));
 
-    fKnobPostGain = new VolumeKnob(this, Size<uint>(48, 48));
+    fKnobPostGain = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobPostGain->setCallback(this);
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
@@ -95,9 +95,9 @@ void WaveShaperUI::positionWidgets()
     fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 43);
     fButtonResetGraph->setAbsolutePos(60, getHeight() - 43);
     fWheelOversample->setAbsolutePos(90, getHeight() - 44);
-    fKnobPreGain->setAbsolutePos(getWidth() - 250, getHeight() - 55);
-    fKnobWet->setAbsolutePos(getWidth() - 180, getHeight() - 55);
-    fKnobPostGain->setAbsolutePos(getWidth() - 110, getHeight() - 55);
+    fKnobPreGain->setAbsolutePos(getWidth() - 280, getHeight() - 90);
+    fKnobWet->setAbsolutePos(getWidth() - 200, getHeight() - 90);
+    fKnobPostGain->setAbsolutePos(getWidth() - 120, getHeight() - 90);
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
