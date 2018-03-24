@@ -16,6 +16,8 @@ WaveShaperUI::WaveShaperUI() : UI(500, 564)
 {
     const uint minWidth = 500;
     const uint minHeight = 564;
+    const uint labelBoxWidth = 54;
+    const uint labelBoxHeight = 19;
 
     WaveShaperConfig::load();
 
@@ -34,17 +36,26 @@ WaveShaperUI::WaveShaperUI() : UI(500, 564)
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
+    fLabelPreGain = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelPreGain->setText("PRE");
+
     fKnobPreGain = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobPreGain->setCallback(this);
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
     fKnobPreGain->setColor(Color(0, 200, 255, 255));
 
+    fLabelWet = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelWet->setText("WET");
+
     fKnobWet = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
     fKnobWet->setColor(Color(237,237,143, 255));
+
+    fLabelPostGain = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelPostGain->setText("POST");
 
     fKnobPostGain = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobPostGain->setCallback(this);
@@ -98,9 +109,15 @@ void WaveShaperUI::positionWidgets()
     fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 43);
     fButtonResetGraph->setAbsolutePos(60, getHeight() - 43);
     fWheelOversample->setAbsolutePos(90, getHeight() - 44);
+
     fKnobPreGain->setAbsolutePos(getWidth() - 280, getHeight() - 90);
+    fLabelPreGain->setAbsolutePos(getWidth() - 280, getHeight() - fLabelPreGain->getHeight() - 12);
+
     fKnobWet->setAbsolutePos(getWidth() - 200, getHeight() - 90);
+    fLabelWet->setAbsolutePos(getWidth() - 200, getHeight() - fLabelPreGain->getHeight() - 12);
+
     fKnobPostGain->setAbsolutePos(getWidth() - 120, getHeight() - 90);
+    fLabelPostGain->setAbsolutePos(getWidth() - 120, getHeight() - fLabelPreGain->getHeight() - 12);
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)

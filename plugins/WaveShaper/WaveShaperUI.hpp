@@ -8,6 +8,7 @@
 #include "OversampleWheel.hpp"
 #include "VolumeKnob.hpp"
 #include "ResizeHandle.hpp"
+#include "LabelBox.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -60,6 +61,7 @@ private:
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<OversampleWheel> fWheelOversample;
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
+  ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
   ScopedPointer<ResizeHandle> fHandleResize;
   ScopedPointer<GraphWidgetSocket> fGraphWidgetSocket;
 

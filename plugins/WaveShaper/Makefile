@@ -37,6 +37,7 @@ OBJS_UI  = \
 	Common/Widgets/src/NanoKnob.cpp.o \
 	Common/Widgets/src/VolumeKnob.cpp.o \
 	Common/Widgets/src/ResizeHandle.cpp.o \
+	Common/Widgets/src/LabelBox.cpp.o \
 	Config/src/Config.cpp.o \
 	Libs/inih/ini.c.o \
 	Libs/inih/INIReader.cpp.o \

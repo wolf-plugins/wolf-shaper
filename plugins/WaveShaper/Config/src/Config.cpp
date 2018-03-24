@@ -59,7 +59,7 @@ Color vertex_stroke_focused = Color(0, 0, 0, 255);
 Color tension_handle_normal = Color(228, 104, 181, 255);
 Color tension_handle_focused = Color(228, 228, 181, 255);
 
-Color plugin_background = Color(37, 38, 46, 255);
+Color plugin_background = Color(50, 50, 50, 255);
 Color graph_margin = Color(33, 32, 39, 255);
 Color top_border = Color(0, 0, 0, 255);
 Color side_borders = Color(100, 100, 100, 255);
