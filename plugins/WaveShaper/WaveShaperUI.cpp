@@ -12,8 +12,11 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(500, 500)
+WaveShaperUI::WaveShaperUI() : UI(500, 564)
 {
+    const uint minWidth = 500;
+    const uint minHeight = 564;
+
     WaveShaperConfig::load();
 
     tryRememberSize();
@@ -52,7 +55,7 @@ WaveShaperUI::WaveShaperUI() : UI(500, 500)
     fHandleResize = new ResizeHandle(this, Size<uint>(24, 24));
     fHandleResize->setCallback(this);
     fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
-    fHandleResize->setMinSize(450, 450);
+    fHandleResize->setMinSize(minWidth, minHeight);
 
     positionWidgets();
 }
