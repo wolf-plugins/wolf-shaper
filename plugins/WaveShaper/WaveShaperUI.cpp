@@ -7,17 +7,18 @@
 #include <string>
 
 #if defined(DISTRHO_OS_WINDOWS)
-    #include "windows.h"
+#include "windows.h"
 #endif
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(500, 564)
+WaveShaperUI::WaveShaperUI() : UI(616, 651)
 {
-    const uint minWidth = 500;
-    const uint minHeight = 564;
-    const uint labelBoxWidth = 54;
-    const uint labelBoxHeight = 19;
+    const uint minWidth = 616;
+    const uint minHeight = 651;
+    
+    const uint knobsLabelBoxWidth = 66;
+    const uint knobsLabelBoxHeight = 21;
 
     WaveShaperConfig::load();
 
@@ -32,11 +33,14 @@ WaveShaperUI::WaveShaperUI() : UI(500, 564)
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
     fButtonResetGraph->setCallback(this);
 
-    fWheelOversample = new OversampleWheel(this, Size<uint>(36, 20));
+    fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
+    fLabelWheelOversample->setText("OVERSAMPLE");
+
+    fWheelOversample = new OversampleWheel(this, Size<uint>(67, 38));
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
-    fLabelPreGain = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
 
     fKnobPreGain = new VolumeKnob(this, Size<uint>(54, 54));
@@ -45,16 +49,16 @@ WaveShaperUI::WaveShaperUI() : UI(500, 564)
     fKnobPreGain->setId(paramPreGain);
     fKnobPreGain->setColor(Color(0, 200, 255, 255));
 
-    fLabelWet = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelWet = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelWet->setText("WET");
 
     fKnobWet = new VolumeKnob(this, Size<uint>(54, 54));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
-    fKnobWet->setColor(Color(237,237,143, 255));
+    fKnobWet->setColor(Color(237, 237, 143, 255));
 
-    fLabelPostGain = new LabelBox(this, Size<uint>(labelBoxWidth, labelBoxHeight));
+    fLabelPostGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPostGain->setText("POST");
 
     fKnobPostGain = new VolumeKnob(this, Size<uint>(54, 54));
@@ -78,8 +82,8 @@ WaveShaperUI::~WaveShaperUI()
 void WaveShaperUI::tryRememberSize()
 {
     int width, height;
-    FILE* file;
-    std::string tmpFileName = PLUGIN_NAME".tmp";
+    FILE *file;
+    std::string tmpFileName = PLUGIN_NAME ".tmp";
 
 #if defined(DISTRHO_OS_WINDOWS)
     CHAR tempPath[MAX_PATH + 1];
@@ -91,7 +95,7 @@ void WaveShaperUI::tryRememberSize()
     file = fopen(("/tmp/" + tmpFileName).c_str(), "r");
 #endif
 
-    if(file == NULL)
+    if (file == NULL)
         return;
 
     const int numberScanned = fscanf(file, "%d %d", &width, &height);
@@ -106,18 +110,32 @@ void WaveShaperUI::tryRememberSize()
 
 void WaveShaperUI::positionWidgets()
 {
+    //TODO: Clean that up
+
+    const float knobLabelMarginBottom = 12;
+
     fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 43);
     fButtonResetGraph->setAbsolutePos(60, getHeight() - 43);
-    fWheelOversample->setAbsolutePos(90, getHeight() - 44);
+
+    float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
+
+    fWheelOversample->setAbsolutePos(160, getHeight() - 82);
+    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, getHeight() - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
+
+    centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
     fKnobPreGain->setAbsolutePos(getWidth() - 280, getHeight() - 90);
-    fLabelPreGain->setAbsolutePos(getWidth() - 280, getHeight() - fLabelPreGain->getHeight() - 12);
+    fLabelPreGain->setAbsolutePos(getWidth() - 280 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+
+    centerAlignDifference = (fLabelWet->getWidth() - fKnobWet->getWidth()) / 2.0f;
 
     fKnobWet->setAbsolutePos(getWidth() - 200, getHeight() - 90);
-    fLabelWet->setAbsolutePos(getWidth() - 200, getHeight() - fLabelPreGain->getHeight() - 12);
+    fLabelWet->setAbsolutePos(getWidth() - 200 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+
+    centerAlignDifference = (fLabelPostGain->getWidth() - fKnobPostGain->getWidth()) / 2.0f;
 
     fKnobPostGain->setAbsolutePos(getWidth() - 120, getHeight() - 90);
-    fLabelPostGain->setAbsolutePos(getWidth() - 120, getHeight() - fLabelPreGain->getHeight() - 12);
+    fLabelPostGain->setAbsolutePos(getWidth() - 120 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)

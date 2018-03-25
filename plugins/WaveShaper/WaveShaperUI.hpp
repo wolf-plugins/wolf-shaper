@@ -60,6 +60,7 @@ private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<OversampleWheel> fWheelOversample;
+  ScopedPointer<LabelBox> fLabelWheelOversample;
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
   ScopedPointer<ResizeHandle> fHandleResize;
