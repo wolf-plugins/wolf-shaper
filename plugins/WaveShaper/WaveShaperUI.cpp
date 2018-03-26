@@ -67,7 +67,7 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(0, 255, 100, 255));
 
-    fHandleResize = new ResizeHandle(this, Size<uint>(24, 24));
+    fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
     fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
     fHandleResize->setMinSize(minWidth, minHeight);
@@ -185,6 +185,17 @@ void WaveShaperUI::uiIdle()
 void WaveShaperUI::uiReshape(uint, uint)
 {
     positionWidgets();
+}
+
+bool WaveShaperUI::onKeyboard(const KeyboardEvent& ev)
+{
+    if(ev.press)
+    {
+        WaveShaperConfig::load();
+        repaint();
+    }
+
+    return true;
 }
 
 void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)

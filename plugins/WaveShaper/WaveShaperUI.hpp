@@ -53,6 +53,7 @@ protected:
   void onNanoDisplay() override;
   void uiIdle() override;
   void uiReshape(uint width, uint height) override;
+  bool onKeyboard(const KeyboardEvent& ev);
 
 private:
   float parameters[paramCount];

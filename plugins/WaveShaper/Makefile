@@ -43,6 +43,7 @@ OBJS_UI  = \
 	Libs/inih/INIReader.cpp.o \
 	Resources/Fonts/roboto_light.cpp.o \
 	Resources/Fonts/chivo_bold.cpp.o \
+	Resources/Fonts/chivo_italic.cpp.o \
 	WaveShaperUI.cpp.o 
 
 # --------------------------------------------------------------

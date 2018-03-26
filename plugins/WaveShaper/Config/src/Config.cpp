@@ -26,10 +26,10 @@ namespace WaveShaperConfig
 
 enum ColorType
 {
-    kColorTypeRGB = 3,
-    kColorTypeRGBA = 4,
-    kColorTypeHSL = 3,
-    kColorTypeHSLA = 4
+    kColorTypeRGB = 0,
+    kColorTypeRGBA,
+    kColorTypeHSL,
+    kColorTypeHSLA
 };
 
 bool isLoaded = false;
@@ -59,7 +59,7 @@ Color vertex_stroke_focused = Color(0, 0, 0, 255);
 Color tension_handle_normal = Color(228, 104, 181, 255);
 Color tension_handle_focused = Color(228, 228, 181, 255);
 
-Color plugin_background = Color(50, 50, 50, 255);
+Color plugin_background = Color(38, 39, 42, 255);
 Color graph_margin = Color(33, 32, 39, 255);
 Color top_border = Color(0, 0, 0, 255);
 Color side_borders = Color(100, 100, 100, 255);
@@ -112,8 +112,8 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     std::string colorTypeString = spoonie::takeUntil(str, '(');
     ColorType colorType;
 
-    unsigned char x, y, z;
-    unsigned char a = 255;
+    unsigned char x = 255, y = 255, z = 255, a = 255;
+
     int scanStatus;
 
     if (colorTypeString == "rgb")
@@ -143,12 +143,12 @@ static void colorFromString(std::string colorStr, Color *targetColor)
         return;
     }
 
-    if (scanStatus == colorType)
+    if (scanStatus == 3 || scanStatus == 4)
     {
         if (colorType == kColorTypeRGB || colorType == kColorTypeRGBA)
             *targetColor = Color(x, y, z, a);
         else
-            *targetColor = Color::fromHSL(x, y, z, a / 255.f);
+            *targetColor = Color::fromHSL(x / 255.f, y / 255.f, z / 255.f, a / 255.f);
     }
     else
     {
