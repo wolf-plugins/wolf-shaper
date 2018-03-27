@@ -38,6 +38,7 @@ OBJS_UI  = \
 	Common/Widgets/src/VolumeKnob.cpp.o \
 	Common/Widgets/src/ResizeHandle.cpp.o \
 	Common/Widgets/src/LabelBox.cpp.o \
+	Common/Widgets/src/BipolarModeSwitch.cpp.o \
 	Config/src/Config.cpp.o \
 	Libs/inih/ini.c.o \
 	Libs/inih/INIReader.cpp.o \

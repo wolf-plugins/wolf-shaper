@@ -16,7 +16,7 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
 {
     const uint minWidth = 616;
     const uint minHeight = 651;
-    
+
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
 
@@ -29,6 +29,10 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16, 16));
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
+
+    fSwitchBipolarMode = new BipolarModeSwitch(this, Size<uint>(16, 32));
+    fSwitchBipolarMode->setCallback(this);
+    fSwitchBipolarMode->setId(paramBipolarMode);
 
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
     fButtonResetGraph->setCallback(this);
@@ -114,8 +118,9 @@ void WaveShaperUI::positionWidgets()
 
     const float knobLabelMarginBottom = 12;
 
-    fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 43);
-    fButtonResetGraph->setAbsolutePos(60, getHeight() - 43);
+    fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 33);
+    fSwitchBipolarMode->setAbsolutePos(30, getHeight() - 86);
+    fButtonResetGraph->setAbsolutePos(60, getHeight() - 33);
 
     float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
 
@@ -187,9 +192,9 @@ void WaveShaperUI::uiReshape(uint, uint)
     positionWidgets();
 }
 
-bool WaveShaperUI::onKeyboard(const KeyboardEvent& ev)
+bool WaveShaperUI::onKeyboard(const KeyboardEvent &ev)
 {
-    if(ev.press)
+    if (ev.press)
     {
         WaveShaperConfig::load();
         repaint();
@@ -201,13 +206,9 @@ bool WaveShaperUI::onKeyboard(const KeyboardEvent& ev)
 void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
 {
     uint switchId = nanoSwitch->getId();
+    parameters[switchId] = parameters[switchId] > 0.50f ? 0.0f : 1.0f;
 
-    if (nanoSwitch == fSwitchRemoveDC)
-    {
-        parameters[switchId] = parameters[switchId] > 0.50f ? 0.0f : 1.0f;
-
-        setParameterValue(switchId, parameters[switchId]);
-    }
+    setParameterValue(switchId, parameters[switchId]);
 }
 
 void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)

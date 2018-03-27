@@ -9,6 +9,7 @@
 #include "VolumeKnob.hpp"
 #include "ResizeHandle.hpp"
 #include "LabelBox.hpp"
+#include "BipolarModeSwitch.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -59,6 +60,7 @@ private:
   float parameters[paramCount];
 
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
+  ScopedPointer<BipolarModeSwitch> fSwitchBipolarMode;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<OversampleWheel> fWheelOversample;
   ScopedPointer<LabelBox> fLabelWheelOversample;
