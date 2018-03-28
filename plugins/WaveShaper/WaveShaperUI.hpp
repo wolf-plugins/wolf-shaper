@@ -10,6 +10,7 @@
 #include "ResizeHandle.hpp"
 #include "LabelBox.hpp"
 #include "BipolarModeSwitch.hpp"
+#include "GlowingLabelsBox.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -47,20 +48,21 @@ protected:
   void nanoButtonClicked(NanoButton *nanoButton);
   void nanoWheelValueChanged(NanoWheel *nanoWheel, const int value);
   void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value);
-  
+
   void resizeHandleMoved(int width, int height);
 
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;
   void uiIdle() override;
   void uiReshape(uint width, uint height) override;
-  bool onKeyboard(const KeyboardEvent& ev);
+  bool onKeyboard(const KeyboardEvent &ev);
 
 private:
   float parameters[paramCount];
 
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<BipolarModeSwitch> fSwitchBipolarMode;
+  ScopedPointer<GlowingLabelsBox> fLabelsBoxBipolarMode;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<OversampleWheel> fWheelOversample;
   ScopedPointer<LabelBox> fLabelWheelOversample;
