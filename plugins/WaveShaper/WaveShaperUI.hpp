@@ -11,6 +11,7 @@
 #include "LabelBox.hpp"
 #include "BipolarModeSwitch.hpp"
 #include "GlowingLabelsBox.hpp"
+#include "NanoLabel.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -61,6 +62,7 @@ private:
   float parameters[paramCount];
 
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
+  ScopedPointer<NanoLabel> fLabelRemoveDC;
   ScopedPointer<BipolarModeSwitch> fSwitchBipolarMode;
   ScopedPointer<GlowingLabelsBox> fLabelsBoxBipolarMode;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;

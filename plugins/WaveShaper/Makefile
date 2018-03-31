@@ -40,6 +40,7 @@ OBJS_UI  = \
 	Common/Widgets/src/LabelBox.cpp.o \
 	Common/Widgets/src/BipolarModeSwitch.cpp.o \
 	Common/Widgets/src/GlowingLabelsBox.cpp.o \
+	Common/Widgets/src/NanoLabel.cpp.o \
 	Config/src/Config.cpp.o \
 	Libs/inih/ini.c.o \
 	Libs/inih/INIReader.cpp.o \

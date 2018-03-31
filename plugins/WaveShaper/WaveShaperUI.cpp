@@ -3,6 +3,7 @@
 #include "WaveShaperUI.hpp"
 #include "Window.hpp"
 #include "Config.hpp"
+#include "Layout.hpp"
 
 #include <string>
 
@@ -19,16 +20,22 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
-    
+
     WaveShaperConfig::load();
 
     tryRememberSize();
 
     fGraphWidgetSocket = new GraphWidgetSocket(this);
 
-    fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(16, 16));
+    fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30, 29));
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
+
+    fLabelRemoveDC = new NanoLabel(this, Size<uint>(50, 29));
+    fLabelRemoveDC->setText("CENTER");
+    fLabelRemoveDC->setFontSize(14.0f);
+    fLabelRemoveDC->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+    fLabelRemoveDC->setMargin(Margin(3, 0, fSwitchRemoveDC->getWidth() / 2.0f, 0));
 
     fSwitchBipolarMode = new BipolarModeSwitch(this, Size<uint>(16, 34));
     fSwitchBipolarMode->setCallback(this);
@@ -36,14 +43,14 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
 
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
-    
+
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
     fButtonResetGraph->setCallback(this);
 
     fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
     fLabelWheelOversample->setText("OVERSAMPLE");
 
-    fWheelOversample = new OversampleWheel(this, Size<uint>(67, 38));
+    fWheelOversample = new OversampleWheel(this, Size<uint>(58, 34));
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
@@ -121,12 +128,13 @@ void WaveShaperUI::positionWidgets()
 
     const float knobLabelMarginBottom = 12;
 
-    fSwitchRemoveDC->setAbsolutePos(30, getHeight() - 33);
+    fSwitchRemoveDC->setAbsolutePos(24, getHeight() - 38);
+    fLabelRemoveDC->setAbsolutePos(24 + fSwitchRemoveDC->getWidth(), getHeight() - 38);
 
-    fSwitchBipolarMode->setAbsolutePos(60, getHeight() - 86);
-    fLabelsBoxBipolarMode->setAbsolutePos(22, getHeight() - 90);
+    fSwitchBipolarMode->setAbsolutePos(31, getHeight() - 86);
+    fLabelsBoxBipolarMode->setAbsolutePos(53, getHeight() - 90);
 
-    fButtonResetGraph->setAbsolutePos(60, getHeight() - 33);
+    fButtonResetGraph->setAbsolutePos(200, getHeight() - 33);
 
     float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
 
