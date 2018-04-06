@@ -60,12 +60,10 @@ endif
 # --------------------------------------------------------------
 
 install:
-	install -d $(DESTDIR)$(PREFIX)/lib/ladspa/
 	install -d $(DESTDIR)$(PREFIX)/lib/dssi/
 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/
 	install -d $(DESTDIR)$(PREFIX)/lib/vst/
 
-	cp bin/*-ladspa.* $(DESTDIR)$(PREFIX)/lib/ladspa/
 	cp bin/*-dssi.*   $(DESTDIR)$(PREFIX)/lib/dssi/
 	cp bin/*-vst.*    $(DESTDIR)$(PREFIX)/lib/vst/
 
