@@ -2,7 +2,7 @@
 #define WAVESHAPER_UI_HPP_INCLUDED
 
 #include "DistrhoUI.hpp"
-#include "GraphWidgetSocket.hpp"
+#include "GraphWidget.hpp"
 #include "RemoveDCSwitch.hpp"
 #include "ResetGraphButton.hpp"
 #include "OversampleWheel.hpp"
@@ -43,7 +43,7 @@ public:
 protected:
   void parameterChanged(uint32_t, float value) override;
   void tryRememberSize();
-  void positionWidgets();
+  void positionWidgets(uint width, uint height);
 
   void nanoSwitchClicked(NanoSwitch *nanoSwitch);
   void nanoButtonClicked(NanoButton *nanoButton);
@@ -59,8 +59,6 @@ protected:
   bool onKeyboard(const KeyboardEvent &ev);
 
 private:
-  float parameters[paramCount];
-
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<NanoLabel> fLabelRemoveDC;
   ScopedPointer<BipolarModeSwitch> fSwitchBipolarMode;
@@ -71,7 +69,7 @@ private:
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
   ScopedPointer<ResizeHandle> fHandleResize;
-  ScopedPointer<GraphWidgetSocket> fGraphWidgetSocket;
+  ScopedPointer<GraphWidget> fGraphWidget;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
 };

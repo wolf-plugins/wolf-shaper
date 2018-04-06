@@ -4,6 +4,7 @@
 #include "Window.hpp"
 #include "Config.hpp"
 #include "Layout.hpp"
+#include "Fonts/chivo_bold.hpp"
 
 #include <string>
 
@@ -13,19 +14,26 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(616, 651)
+WaveShaperUI::WaveShaperUI() : UI(580, 615)
 {
-    const uint minWidth = 616;
-    const uint minHeight = 651;
+    const uint minWidth = 580;
+    const uint minHeight = 615;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
 
+    using namespace SPOONIE_FONTS;
+    NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
+
     WaveShaperConfig::load();
 
     tryRememberSize();
+    getParentWindow().saveSizeAtExit(true);
 
-    fGraphWidgetSocket = new GraphWidgetSocket(this);
+    const float width = getWidth();
+    const float height = getHeight();
+
+    fGraphWidget = new GraphWidget(this, Size<uint>(width - 4 * 2, height - 4 * 2 - 122));
 
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30, 29));
     fSwitchRemoveDC->setCallback(this);
@@ -33,6 +41,8 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
 
     fLabelRemoveDC = new NanoLabel(this, Size<uint>(50, 29));
     fLabelRemoveDC->setText("CENTER");
+
+    fLabelRemoveDC->setFontId(chivoBoldId);
     fLabelRemoveDC->setFontSize(14.0f);
     fLabelRemoveDC->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelRemoveDC->setMargin(Margin(3, 0, fSwitchRemoveDC->getWidth() / 2.0f, 0));
@@ -83,10 +93,9 @@ WaveShaperUI::WaveShaperUI() : UI(616, 651)
 
     fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
-    fHandleResize->setAbsolutePos(getWidth() - fHandleResize->getWidth(), getHeight() - fHandleResize->getHeight());
     fHandleResize->setMinSize(minWidth, minHeight);
 
-    positionWidgets();
+    positionWidgets(width, height);
 }
 
 WaveShaperUI::~WaveShaperUI()
@@ -122,39 +131,46 @@ void WaveShaperUI::tryRememberSize()
     fclose(file);
 }
 
-void WaveShaperUI::positionWidgets()
+void WaveShaperUI::positionWidgets(uint width, uint height)
 {
     //TODO: Clean that up
+    const float graphMargin = 8;
+    const float bottomBarSize = 102;
+
+    fGraphWidget->setSize(width - graphMargin * 2, height - graphMargin * 2 - bottomBarSize);
+    fGraphWidget->setAbsolutePos(graphMargin, graphMargin);
 
     const float knobLabelMarginBottom = 12;
 
-    fSwitchRemoveDC->setAbsolutePos(24, getHeight() - 38);
-    fLabelRemoveDC->setAbsolutePos(24 + fSwitchRemoveDC->getWidth(), getHeight() - 38);
+    fSwitchRemoveDC->setAbsolutePos(24, height - 38);
+    fLabelRemoveDC->setAbsolutePos(24 + fSwitchRemoveDC->getWidth(), height - 38);
 
-    fSwitchBipolarMode->setAbsolutePos(31, getHeight() - 86);
-    fLabelsBoxBipolarMode->setAbsolutePos(53, getHeight() - 90);
+    fSwitchBipolarMode->setAbsolutePos(31, height - 86);
+    fLabelsBoxBipolarMode->setAbsolutePos(53, height - 90);
 
-    fButtonResetGraph->setAbsolutePos(200, getHeight() - 33);
+    fButtonResetGraph->setAbsolutePos(200, height - 33);
 
     float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
 
-    fWheelOversample->setAbsolutePos(160, getHeight() - 82);
-    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, getHeight() - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
+    fWheelOversample->setAbsolutePos(160, height - 82);
+    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
-    fKnobPreGain->setAbsolutePos(getWidth() - 280, getHeight() - 90);
-    fLabelPreGain->setAbsolutePos(getWidth() - 280 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPreGain->setAbsolutePos(width - 280, height - 90);
+    fLabelPreGain->setAbsolutePos(width - 280 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelWet->getWidth() - fKnobWet->getWidth()) / 2.0f;
 
-    fKnobWet->setAbsolutePos(getWidth() - 200, getHeight() - 90);
-    fLabelWet->setAbsolutePos(getWidth() - 200 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobWet->setAbsolutePos(width - 200, height - 90);
+    fLabelWet->setAbsolutePos(width - 200 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelPostGain->getWidth() - fKnobPostGain->getWidth()) / 2.0f;
 
-    fKnobPostGain->setAbsolutePos(getWidth() - 120, getHeight() - 90);
-    fLabelPostGain->setAbsolutePos(getWidth() - 120 - centerAlignDifference, getHeight() - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPostGain->setAbsolutePos(width - 120, height - 90);
+    fLabelPostGain->setAbsolutePos(width - 120 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+
+    fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
 }
 
 void WaveShaperUI::parameterChanged(uint32_t index, float value)
@@ -171,39 +187,80 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         fKnobPostGain->setValue(value);
         break;
     case paramRemoveDC:
-        fSwitchRemoveDC->setDown(value > 0.50f);
+        fSwitchRemoveDC->setDown(value >= 0.50f);
         break;
     case paramOversample:
         fWheelOversample->setValue(value);
         break;
     case paramBipolarMode:
+    {
+        const bool down = value >= 0.50f;
+
+        fSwitchBipolarMode->setDown(down);
+        fLabelsBoxBipolarMode->setSelectedIndex(down ? 1 : 0);
+        break;
+    }
+    case paramOut:
+        fGraphWidget->updateInput(value);
         break;
     default:
         break;
     }
 
-    parameters[index] = value;
+    repaint();
 }
 
 void WaveShaperUI::stateChanged(const char *key, const char *value)
 {
     if (std::strcmp(key, "graph") == 0)
-        fGraphWidgetSocket->graphWidget.rebuildFromString(value);
+        fGraphWidget->rebuildFromString(value);
 
     repaint();
 }
 
 void WaveShaperUI::onNanoDisplay()
 {
+    const float width = getWidth();
+    const float height = getHeight();
+
+    //background
+    beginPath();
+
+    rect(0.f, 0.f, width, height);
+    fillColor(WaveShaperConfig::plugin_background);
+
+    fill();
+
+    closePath();
+
+    //graph shadow at the bottom
+    beginPath();
+
+    const int shadowHeight = 8;
+    const int shadowMargin = 2;
+
+    const float graphBottom = fGraphWidget->getAbsoluteY() + fGraphWidget->getHeight();
+    const float shadowTop = graphBottom + shadowMargin;
+    const float shadowBottom = shadowTop + shadowHeight;
+
+    rect(0.0f, shadowTop, getWidth(), shadowHeight);
+
+    Paint gradient = linearGradient(0, shadowTop, 0, shadowBottom, Color(21, 22, 30, 0), Color(21, 22, 30, 180));
+    fillPaint(gradient);
+
+    fill();
+
+    closePath();
 }
 
 void WaveShaperUI::uiIdle()
 {
 }
 
-void WaveShaperUI::uiReshape(uint, uint)
+void WaveShaperUI::uiReshape(uint width, uint height)
 {
-    positionWidgets();
+    //setSize(width, height);
+    positionWidgets(width, height);
 }
 
 bool WaveShaperUI::onKeyboard(const KeyboardEvent &ev)
@@ -219,14 +276,14 @@ bool WaveShaperUI::onKeyboard(const KeyboardEvent &ev)
 
 void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
 {
-    uint switchId = nanoSwitch->getId();
+    const uint switchId = nanoSwitch->getId();
+    const int value = nanoSwitch->isDown() ? 1 : 0;
 
-    parameters[switchId] = parameters[switchId] > 0.50f ? 0.0f : 1.0f;
-    setParameterValue(switchId, parameters[switchId]);
+    setParameterValue(switchId, value);
 
     if (switchId == paramBipolarMode)
     {
-        fLabelsBoxBipolarMode->setSelectedIndex((int)parameters[switchId]);
+        fLabelsBoxBipolarMode->setSelectedIndex(value);
     }
 }
 
@@ -235,7 +292,7 @@ void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     if (nanoButton != fButtonResetGraph)
         return;
 
-    fGraphWidgetSocket->graphWidget.reset();
+    fGraphWidget->reset();
 }
 
 void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
@@ -243,29 +300,19 @@ void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
     if (nanoWheel != fWheelOversample)
         return;
 
-    //parameters[paramOversample] = value;
     setParameterValue(paramOversample, value);
 }
 
 void WaveShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
 {
-    const int id = nanoKnob->getId();
+    const uint id = nanoKnob->getId();
 
-    parameters[id] = value;
     setParameterValue(id, value);
 }
 
 void WaveShaperUI::resizeHandleMoved(int width, int height)
 {
-    fGraphWidgetSocket->setSize(width, height);
     setSize(width, height);
-
-    getParentWindow().saveSizeAtExit(true);
-}
-
-float WaveShaperUI::getParameterValue(uint32_t index) const
-{
-    return parameters[index];
 }
 
 UI *createUI()

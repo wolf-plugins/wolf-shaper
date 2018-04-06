@@ -3,6 +3,8 @@
 # ---------------------------- #
 # Created by falkTX
 #
+# Modified by Patrick Desaulniers
+#
 
 include Makefile.mk
 

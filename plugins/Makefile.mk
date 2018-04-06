@@ -84,6 +84,7 @@ clean:
 	rm -f Common/Structures/test/*.d Common/Structures/test/*.o
 	rm -f Common/Widgets/src/*.d Common/Widgets/src/*.o
 	rm -f Common/Utils/Fonts/getchunk
+	rm -f Common/Utils/src/*.d Common/Utils/src/*.o
 	rm -f Resources/Fonts/*.d Resources/Fonts/*.o
 	rm -f Config/src/*.d Config/src/*.o
 	rm -f Libs/inih/*.d Libs/inih/*.o

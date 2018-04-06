@@ -17,17 +17,17 @@ NAME = $(PLUGIN_NAME)
 # Files to build
 
 OBJS_DSP = \
+	Common/Utils/src/Mathf.cpp.o \
 	Common/Structures/src/Graph.cpp.o \
 	WaveShaperPlugin.cpp.o
 
 OBJS_UI  = \
+	Common/Utils/src/Mathf.cpp.o \
 	Common/Structures/src/Graph.cpp.o \
 	Common/Structures/src/Layout.cpp.o \
 	Common/Structures/src/Animation.cpp.o \
 	Common/Widgets/src/GraphNode.cpp.o \
 	Common/Widgets/src/GraphWidget.cpp.o \
-	Common/Widgets/src/GraphWidgetSocket.cpp.o \
-	Common/Widgets/src/GraphNodesLayer.cpp.o \
 	Common/Widgets/src/NanoSwitch.cpp.o \
 	Common/Widgets/src/RemoveDCSwitch.cpp.o \
 	Common/Widgets/src/NanoButton.cpp.o \
