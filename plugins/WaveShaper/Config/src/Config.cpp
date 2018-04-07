@@ -44,13 +44,14 @@ Color alignment_lines = Color(255, 255, 255, 180);
 Color input_volume_indicator = Color(255, 255, 255, 180);
 
 Color graph_edges_background_normal = Color(169, 29, 239, 100);
-Color graph_edges_background_focused = Color(255, 255, 0, 100);
+Color graph_edges_background_focused = Color(255,221,76, 100);
 
 Color graph_edges_foreground_normal = Color(245, 112, 188, 255);
-Color graph_edges_foreground_focused = Color(255, 255, 0, 255);
+Color graph_edges_foreground_focused = Color(255,221,76, 255);
 
 Color vertex_fill_normal = Color(255, 255, 255, 255);
-Color vertex_fill_focused = Color(0, 0, 0, 255);
+Color vertex_fill_focused = Color(255,221,76, 255);
+
 Color vertex_halo = Color(0, 0, 0, 255);
 
 Color vertex_stroke_normal = Color(0, 0, 0, 255);

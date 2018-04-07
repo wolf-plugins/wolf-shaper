@@ -12,6 +12,7 @@
 #include "BipolarModeSwitch.hpp"
 #include "GlowingLabelsBox.hpp"
 #include "NanoLabel.hpp"
+#include "WidgetBar.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -61,16 +62,23 @@ protected:
 private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<NanoLabel> fLabelRemoveDC;
+
   ScopedPointer<BipolarModeSwitch> fSwitchBipolarMode;
   ScopedPointer<GlowingLabelsBox> fLabelsBoxBipolarMode;
-  ScopedPointer<ResetGraphButton> fButtonResetGraph;
+
   ScopedPointer<OversampleWheel> fWheelOversample;
   ScopedPointer<LabelBox> fLabelWheelOversample;
+
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
-  ScopedPointer<ResizeHandle> fHandleResize;
-  ScopedPointer<GraphWidget> fGraphWidget;
 
+  ScopedPointer<ResizeHandle> fHandleResize;
+
+  ScopedPointer<GraphWidget> fGraphWidget;
+  ScopedPointer<WidgetBar> fGraphBar;
+  ScopedPointer<ResetGraphButton> fButtonResetGraph;
+  ScopedPointer<NanoLabel> fLabelButtonResetGraph;
+  
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
 };
 
