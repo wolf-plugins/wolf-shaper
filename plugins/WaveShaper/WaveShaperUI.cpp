@@ -16,8 +16,8 @@ START_NAMESPACE_DISTRHO
 
 WaveShaperUI::WaveShaperUI() : UI(580, 615)
 {
-    const uint minWidth = 580;
-    const uint minHeight = 615;
+    const uint minWidth = 400;
+    const uint minHeight = 453;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
@@ -54,15 +54,15 @@ WaveShaperUI::WaveShaperUI() : UI(580, 615)
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
 
-    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
-    fButtonResetGraph->setCallback(this);
+    //fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
+    //fButtonResetGraph->setCallback(this);
 
-    fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
+    /*fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
     fLabelWheelOversample->setText("OVERSAMPLE");
 
     fWheelOversample = new OversampleWheel(this, Size<uint>(58, 34));
     fWheelOversample->setCallback(this);
-    fWheelOversample->setRange(0, 4);
+    fWheelOversample->setRange(0, 4);*/
 
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
@@ -148,27 +148,27 @@ void WaveShaperUI::positionWidgets(uint width, uint height)
     fSwitchBipolarMode->setAbsolutePos(31, height - 86);
     fLabelsBoxBipolarMode->setAbsolutePos(53, height - 90);
 
-    fButtonResetGraph->setAbsolutePos(200, height - 33);
+    //fButtonResetGraph->setAbsolutePos(200, height - 33);
 
-    float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
+    //float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
 
-    fWheelOversample->setAbsolutePos(160, height - 82);
-    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
+    /*fWheelOversample->setAbsolutePos(160, height - 82);
+    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);*/
 
-    centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
+    float centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
-    fKnobPreGain->setAbsolutePos(width - 280, height - 90);
-    fLabelPreGain->setAbsolutePos(width - 280 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPreGain->setAbsolutePos(width - 255, height - 90);
+    fLabelPreGain->setAbsolutePos(width - 255 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelWet->getWidth() - fKnobWet->getWidth()) / 2.0f;
 
-    fKnobWet->setAbsolutePos(width - 200, height - 90);
-    fLabelWet->setAbsolutePos(width - 200 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobWet->setAbsolutePos(width - 175, height - 90);
+    fLabelWet->setAbsolutePos(width - 175 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelPostGain->getWidth() - fKnobPostGain->getWidth()) / 2.0f;
 
-    fKnobPostGain->setAbsolutePos(width - 120, height - 90);
-    fLabelPostGain->setAbsolutePos(width - 120 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPostGain->setAbsolutePos(width - 95, height - 90);
+    fLabelPostGain->setAbsolutePos(width - 95 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
 }
@@ -190,7 +190,7 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         fSwitchRemoveDC->setDown(value >= 0.50f);
         break;
     case paramOversample:
-        fWheelOversample->setValue(value);
+        /*fWheelOversample->setValue(value);*/
         break;
     case paramBipolarMode:
     {
@@ -233,7 +233,7 @@ void WaveShaperUI::onNanoDisplay()
 
     closePath();
 
-    //graph shadow at the bottom
+    //shadow at the bottom of the graph
     beginPath();
 
     const int shadowHeight = 8;
