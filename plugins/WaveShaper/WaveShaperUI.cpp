@@ -17,17 +17,17 @@ START_NAMESPACE_DISTRHO
 WaveShaperUI::WaveShaperUI() : UI(580, 615)
 {
     const uint minWidth = 400;
-    const uint minHeight = 453;
+    const uint minHeight = 528;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
 
     loadSharedResources();
-    
+
     using namespace SPOONIE_FONTS;
     NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
     NanoVG::FontId dejaVuSansId = findFont(NANOVG_DEJAVU_SANS_TTF);
-    
+
     WaveShaperConfig::load();
 
     tryRememberSize();
@@ -41,8 +41,8 @@ WaveShaperUI::WaveShaperUI() : UI(580, 615)
     const float graphBarHeight = 42;
 
     fGraphBar = new WidgetBar(this, Size<uint>(width, graphBarHeight));
-    fGraphBar->setStrokePaint(linearGradient(0, 0, 0, graphBarHeight, Color(43,43,43,255), Color(34,34,34,255)));
-    fGraphBar->setStrokeWidth(3.0f);
+    fGraphBar->setStrokePaint(linearGradient(0, 0, 0, graphBarHeight, Color(43, 43, 43, 255), Color(34, 34, 34, 255)));
+    fGraphBar->setStrokeWidth(4.0f);
 
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30, 29));
     fSwitchRemoveDC->setCallback(this);
@@ -61,16 +61,6 @@ WaveShaperUI::WaveShaperUI() : UI(580, 615)
 
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
-
-    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(16, 16));
-    fButtonResetGraph->setCallback(this);
-
-    fLabelButtonResetGraph = new NanoLabel(this, Size<uint>(50, fButtonResetGraph->getHeight()));
-    fLabelButtonResetGraph->setText("RESET");
-    fLabelButtonResetGraph->setFontId(dejaVuSansId);
-    fLabelButtonResetGraph->setFontSize(15.0f);
-    fLabelButtonResetGraph->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
-    fLabelButtonResetGraph->setMargin(Margin(6, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1, 0));
 
     /*fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
     fLabelWheelOversample->setText("OVERSAMPLE");
@@ -109,6 +99,16 @@ WaveShaperUI::WaveShaperUI() : UI(580, 615)
     fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
     fHandleResize->setMinSize(minWidth, minHeight);
+
+    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32, 32));
+    fButtonResetGraph->setCallback(this);
+
+    fLabelButtonResetGraph = new NanoLabel(this, Size<uint>(50, fButtonResetGraph->getHeight()));
+    fLabelButtonResetGraph->setText("RESET");
+    fLabelButtonResetGraph->setFontId(dejaVuSansId);
+    fLabelButtonResetGraph->setFontSize(15.0f);
+    fLabelButtonResetGraph->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+    fLabelButtonResetGraph->setMargin(Margin(6, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1, 0));
 
     positionWidgets(width, height);
 }
@@ -161,7 +161,7 @@ void WaveShaperUI::positionWidgets(uint width, uint height)
 
     fGraphBar->setWidth(width);
     fGraphBar->setAbsolutePos(0, graphBottom + graphBarMargin);
-    fGraphBar->setFillPaint(radialGradient(width / 2.0f, graphBarHeight / 2.0f, graphBarHeight * 3.0f, width, Color(71,74,80,255), Color(28,30,33,255)));
+    fGraphBar->setFillPaint(radialGradient(width / 2.0f, graphBarHeight / 2.0f, graphBarHeight, width / 2.0f, Color(71, 74, 80, 255), Color(40, 42, 46, 255)));
 
     const float knobLabelMarginBottom = 12;
 
@@ -280,6 +280,11 @@ void WaveShaperUI::onNanoDisplay()
 
 void WaveShaperUI::uiIdle()
 {
+}
+
+bool WaveShaperUI::onMouse(const MouseEvent &ev)
+{
+
 }
 
 void WaveShaperUI::uiReshape(uint width, uint height)

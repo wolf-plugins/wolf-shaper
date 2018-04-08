@@ -57,7 +57,8 @@ protected:
   void onNanoDisplay() override;
   void uiIdle() override;
   void uiReshape(uint width, uint height) override;
-  bool onKeyboard(const KeyboardEvent &ev);
+  bool onKeyboard(const KeyboardEvent &ev) override;
+  bool onMouse(const MouseEvent &ev) override;
 
 private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
@@ -78,7 +79,7 @@ private:
   ScopedPointer<WidgetBar> fGraphBar;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<NanoLabel> fLabelButtonResetGraph;
-  
+
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
 };
 
