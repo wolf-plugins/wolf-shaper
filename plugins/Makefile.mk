@@ -36,7 +36,7 @@ endif
 # Set plugin binary file targets
 
 jack       = $(TARGET_DIR)/$(NAME)$(APP_EXT)
-ladspa_dsp = $(TARGET_DIR)/$(NAME)-ladspa$(LIB_EXT)
+# ladspa_dsp = $(TARGET_DIR)/$(NAME)-ladspa$(LIB_EXT)
 dssi_dsp   = $(TARGET_DIR)/$(NAME)-dssi$(LIB_EXT)
 dssi_ui    = $(TARGET_DIR)/$(NAME)-dssi/$(NAME)_ui$(APP_EXT)
 lv2        = $(TARGET_DIR)/$(NAME).lv2/$(NAME)$(LIB_EXT)
@@ -101,13 +101,13 @@ $(jack): $(OBJS_DSP) $(OBJS_UI) $(DISTRHO_PLUGIN_FILES) $(DISTRHO_UI_FILES)
 
 # --------------------------------------------------------------
 # LADSPA
-
-ladspa: $(ladspa_dsp)
-
-$(ladspa_dsp): $(OBJS_DSP) $(DISTRHO_PLUGIN_FILES)
-	mkdir -p $(shell dirname $@)
-	$(CXX) $^ $(BUILD_CXX_FLAGS) $(LINK_FLAGS) $(SHARED) -DDISTRHO_PLUGIN_TARGET_LADSPA -o $@
-
+#
+#ladspa: $(ladspa_dsp)
+#
+#$(ladspa_dsp): $(OBJS_DSP) $(DISTRHO_PLUGIN_FILES)
+#	mkdir -p $(shell dirname $@)
+#	$(CXX) $^ $(BUILD_CXX_FLAGS) $(LINK_FLAGS) $(SHARED) -DDISTRHO_PLUGIN_TARGET_LADSPA -o $@
+#
 # --------------------------------------------------------------
 # DSSI
 
