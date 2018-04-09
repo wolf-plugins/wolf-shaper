@@ -62,10 +62,10 @@ endif
 install:
 	install -d $(DESTDIR)$(PREFIX)/lib/dssi/
 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/
-	install -d $(DESTDIR)$(PREFIX)/lib/vst/
+	install -d $(DESTDIR)$(PREFIX)/lib/lxvst/
 
 	cp bin/*-dssi.*   $(DESTDIR)$(PREFIX)/lib/dssi/
-	cp bin/*-vst.*    $(DESTDIR)$(PREFIX)/lib/vst/
+	cp bin/*-vst.*    $(DESTDIR)$(PREFIX)/lib/lxvst/
 
 ifeq ($(HAVE_DGL),true)
 	cp -r bin/*-dssi  $(DESTDIR)$(PREFIX)/lib/dssi/
