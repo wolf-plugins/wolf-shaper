@@ -1,6 +1,8 @@
-# Wolf Shaper [![Build Status](https://travis-ci.org/pdesaulniers/wolf-shaper.svg?branch=master)](https://travis-ci.org/pdesaulniers/wolf-shaper)
+# Wolf Shaper 
+[![Build Status](https://travis-ci.org/pdesaulniers/wolf-shaper.svg?branch=master)](https://travis-ci.org/pdesaulniers/wolf-shaper)
+[![Chat on Matrix](https://matrix.to/img/matrix-badge.svg)](https://riot.im/app/#/user/@pdesaulniers:matrix.org?action=chat)
 
-![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
+![Wolf Shaper](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
 Free, cross-platform distortion plugin with a spline-based graph. Can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
