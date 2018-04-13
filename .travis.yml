@@ -1,0 +1,6 @@
+sudo: false
+
+language: cpp
+
+script:
+  - BUILD_DSSI=true BUILD_VST2=true BUILD_LV2=true BUILD_JACK=true make
