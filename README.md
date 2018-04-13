@@ -1,4 +1,4 @@
-# Wolf Shaper
+# Wolf Shaper [![Build Status](https://travis-ci.org/pdesaulniers/wolf-shaper.svg?branch=master)](https://travis-ci.org/pdesaulniers/wolf-shaper)
 
 ![alt text](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
