@@ -4,7 +4,7 @@
 
 Free, cross-platform distortion plugin with a spline-based graph. Can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
-While kind of usable, it is not done yet. You might want to check the issues on GitHub before using the plugin :)
+You might want to check the issues on GitHub before using the plugin :)
 
 ## Build and install
 
