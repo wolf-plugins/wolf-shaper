@@ -18,7 +18,7 @@ endif
 TARGET_DIR = ../../bin
 
 BUILD_C_FLAGS   += -I.
-BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih
+BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih -I ./Libs/DSPFilters/include
 
 ifeq ($(HAVE_DGL),true)
 BASE_FLAGS += -DHAVE_DGL
@@ -88,6 +88,7 @@ clean:
 	rm -f Resources/Fonts/*.d Resources/Fonts/*.o
 	rm -f Config/src/*.d Config/src/*.o
 	rm -f Libs/inih/*.d Libs/inih/*.o
+	rm -f Libs/DSPFilters/source/*.d Libs/DSPFilters/source/*.o
 	rm -rf $(TARGET_DIR)/$(NAME) $(TARGET_DIR)/$(NAME)-* $(TARGET_DIR)/$(NAME).lv2/
 
 # --------------------------------------------------------------

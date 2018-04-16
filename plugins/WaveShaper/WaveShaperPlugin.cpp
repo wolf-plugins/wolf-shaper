@@ -18,12 +18,112 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <sstream>
+#include <iostream>
+#include <iomanip>
 
 #include "Graph.hpp"
+
+#include "DspFilters/Dsp.h"
 
 START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
+
+class Oversampler
+{
+  public:
+	Oversampler() : fRatio(1),
+					fSampleRate(44100),
+					fNumSamples(512),
+					fLowPass(1024),
+					fCurrentCapacity(fNumSamples),
+					fRequiredCapacity(fNumSamples)
+	{
+		fBuffer = (float **)malloc(sizeof(float *) * 2);
+		fBuffer[0] = (float *)malloc(fNumSamples * sizeof(float));
+		fBuffer[1] = (float *)malloc(fNumSamples * sizeof(float));
+	}
+
+	~Oversampler()
+	{
+		free(fBuffer[1]);
+		free(fBuffer[0]);
+		free(fBuffer);
+	}
+
+	float **upsample(int ratio, uint32_t numSamples, double sampleRate, const float **audio)
+	{
+		fRatio = ratio;
+		fNumSamples = numSamples;
+		fSampleRate = sampleRate * ratio;
+
+		fRequiredCapacity = numSamples * ratio;
+
+		if (fCurrentCapacity < fRequiredCapacity)
+		{
+			fBuffer[0] = (float *)realloc(fBuffer[0], fRequiredCapacity * sizeof(float));
+			fBuffer[1] = (float *)realloc(fBuffer[1], fRequiredCapacity * sizeof(float));
+
+			fCurrentCapacity = fRequiredCapacity;
+		}
+
+		for (uint32_t i = 0; i < numSamples; ++i)
+		{
+			const int index = i * fRatio; //TODO: find a better name for this variable
+
+			fBuffer[0][index] = audio[0][i];
+			fBuffer[1][index] = audio[1][i];
+
+			for (int j = 1; j < fRatio; ++j)
+			{
+				fBuffer[0][index + j] = 0.0f;
+				fBuffer[1][index + j] = 0.0f;
+			}
+		}
+
+		lowPass();
+
+		fSampleRate = sampleRate;
+
+		return fBuffer;
+	}
+
+	void downsample(float **targetBuffer)
+	{
+		lowPass();
+
+		for (uint32_t i = 0; i < fNumSamples; ++i)
+		{
+			targetBuffer[0][i] = fBuffer[0][i * fRatio];
+			targetBuffer[1][i] = fBuffer[1][i * fRatio];
+		}
+	}
+
+  protected:
+	void lowPass()
+	{
+		Dsp::Params params;
+		params[0] = fSampleRate; // sample rate
+		params[1] = 8;			 // order
+		params[2] = 20000;		 // center frequency
+
+		fLowPass.setParams(params);
+		fLowPass.process(fRequiredCapacity, fBuffer);
+	}
+
+  private:
+	int fRatio;
+	double fSampleRate;
+	uint32_t fNumSamples;
+	Dsp::SmoothedFilterDesign<Dsp::Butterworth::Design::LowPass<8>, 2, Dsp::DirectFormII> fLowPass;
+
+	uint32_t fCurrentCapacity;
+	uint32_t fRequiredCapacity;
+	float **fBuffer;
+
+	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Oversampler)
+};
 
 class WaveShaper : public Plugin
 {
@@ -40,8 +140,8 @@ class WaveShaper : public Plugin
 		paramCount
 	};
 
-	WaveShaper()
-		: Plugin(paramCount, 0, 1)
+	WaveShaper() : Plugin(paramCount, 0, 1),
+				   oversampler()
 	{
 		parameters[paramPreGain] = 1.0f;
 		parameters[paramWet] = 1.0f;
@@ -202,10 +302,22 @@ class WaveShaper : public Plugin
 	{
 		float max = 0.0f;
 
-		for (uint32_t i = 0; i < frames; i++)
+		const int oversamplingRatio = /*std::pow(2, std::round(parameters[paramOversample]))*/ 1;
+		const bool mustOversample = /*oversamplingRatio > 1*/ false;
+
+		float **buffer;
+
+		if (!mustOversample)
+			buffer = outputs;
+		else
+			buffer = oversampler.upsample(oversamplingRatio, frames, getSampleRate(), inputs);
+
+		for (uint32_t i = 0; i < frames; ++i)
 		{
-			const float inputL = parameters[paramPreGain] * inputs[0][i];
-			const float inputR = parameters[paramPreGain] * inputs[1][i];
+			const int index = i * oversamplingRatio;
+
+			const float inputL = parameters[paramPreGain] * (mustOversample ? buffer[0][index] : inputs[0][i]);
+			const float inputR = parameters[paramPreGain] * (mustOversample ? buffer[1][index] : inputs[1][i]);
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
@@ -215,7 +327,7 @@ class WaveShaper : public Plugin
 
 			float graphL, graphR;
 
-			if(bipolarMode)
+			if (bipolarMode)
 			{
 				const float xl = (1.0f + inputL) * 0.5f;
 				const float xr = (1.0f + inputR) * 0.5f;
@@ -234,21 +346,26 @@ class WaveShaper : public Plugin
 			const float postGain = parameters[paramPostGain];
 			const bool mustRemoveDC = parameters[paramRemoveDC] > 0.50f;
 
-			outputs[0][i] = (dry * inputL + wet * graphL) * postGain;
-			outputs[1][i] = (dry * inputR + wet * graphR) * postGain;
+			buffer[0][index] = (dry * inputL + wet * graphL) * postGain;
+			buffer[1][index] = (dry * inputR + wet * graphR) * postGain;
 
 			if (mustRemoveDC)
 			{
-				outputs[0][i] = removeDCOffset(outputs[0][i]);
-				outputs[1][i] = removeDCOffset(outputs[1][i]);
+				buffer[0][index] = removeDCOffset(buffer[0][index]);
+				buffer[1][index] = removeDCOffset(buffer[1][index]);
 			}
 		}
+
+		if (mustOversample)
+			oversampler.downsample(outputs);
 
 		setParameterValue(paramOut, max);
 	}
 
   private:
 	float parameters[paramCount];
+	Oversampler oversampler;
+
 	spoonie::Graph lineEditor;
 
 	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaper)
