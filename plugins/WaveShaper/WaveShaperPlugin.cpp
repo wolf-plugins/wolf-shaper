@@ -36,7 +36,8 @@ class Oversampler
 	Oversampler() : fRatio(1),
 					fSampleRate(44100),
 					fNumSamples(512),
-					fLowPass(1024),
+					fLowPass1(),
+					fLowPass2(),
 					fCurrentCapacity(fNumSamples),
 					fRequiredCapacity(fNumSamples)
 	{
@@ -55,8 +56,21 @@ class Oversampler
 	float **upsample(int ratio, uint32_t numSamples, double sampleRate, const float **audio)
 	{
 		fRatio = ratio;
+
+		if (fSampleRate != sampleRate * ratio)
+		{
+			fSampleRate = sampleRate * ratio;
+
+			fFilterCenter = sampleRate / 2.0f - 4000; //FIXME
+
+			fLowPass1.reset();
+			fLowPass1.setup(4, fSampleRate, fFilterCenter);
+
+			fLowPass2.reset();
+			fLowPass2.setup(4, fSampleRate, fFilterCenter);
+		}
+
 		fNumSamples = numSamples;
-		fSampleRate = sampleRate * ratio;
 
 		fRequiredCapacity = numSamples * ratio;
 
@@ -82,16 +96,19 @@ class Oversampler
 			}
 		}
 
-		lowPass();
-
-		fSampleRate = sampleRate;
+		if (fRatio > 1)
+		{
+			lowPass1();
+			gainBoost();
+		}
 
 		return fBuffer;
 	}
 
 	void downsample(float **targetBuffer)
 	{
-		lowPass();
+		if (fRatio > 1)
+			lowPass2();
 
 		for (uint32_t i = 0; i < fNumSamples; ++i)
 		{
@@ -101,26 +118,37 @@ class Oversampler
 	}
 
   protected:
-	void lowPass()
+	void lowPass1()
 	{
-		Dsp::Params params;
-		params[0] = fSampleRate; // sample rate
-		params[1] = 8;			 // order
-		params[2] = 20000;		 // center frequency
+		fLowPass1.process(fRequiredCapacity, fBuffer);
+	}
 
-		fLowPass.setParams(params);
-		fLowPass.process(fRequiredCapacity, fBuffer);
+	void lowPass2()
+	{
+		fLowPass2.process(fRequiredCapacity, fBuffer);
+	}
+
+	void gainBoost()
+	{
+		for (uint32_t i = 0; i < fRequiredCapacity; ++i)
+		{
+			fBuffer[0][i] *= fRatio;
+			fBuffer[1][i] *= fRatio;
+		}
 	}
 
   private:
 	int fRatio;
 	double fSampleRate;
 	uint32_t fNumSamples;
-	Dsp::SmoothedFilterDesign<Dsp::Butterworth::Design::LowPass<8>, 2, Dsp::DirectFormII> fLowPass;
+	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<4>, 2> fLowPass1;
+	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<4>, 2> fLowPass2;
 
 	uint32_t fCurrentCapacity;
 	uint32_t fRequiredCapacity;
 	float **fBuffer;
+
+	float fFilterCenter;
 
 	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Oversampler)
 };
@@ -302,22 +330,18 @@ class WaveShaper : public Plugin
 	{
 		float max = 0.0f;
 
-		const int oversamplingRatio = /*std::pow(2, std::round(parameters[paramOversample]))*/ 1;
-		const bool mustOversample = /*oversamplingRatio > 1*/ false;
+		const int oversamplingRatio = std::pow(2, std::round(parameters[paramOversample]));
+		const bool mustOversample = oversamplingRatio > 1;
+		const uint32_t numSamples = frames * oversamplingRatio;
 
-		float **buffer;
+		float **buffer = oversampler.upsample(oversamplingRatio, frames, getSampleRate(), inputs);
 
-		if (!mustOversample)
-			buffer = outputs;
-		else
-			buffer = oversampler.upsample(oversamplingRatio, frames, getSampleRate(), inputs);
-
-		for (uint32_t i = 0; i < frames; ++i)
+		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			const int index = i * oversamplingRatio;
+			const int index = i;
 
-			const float inputL = parameters[paramPreGain] * (mustOversample ? buffer[0][index] : inputs[0][i]);
-			const float inputR = parameters[paramPreGain] * (mustOversample ? buffer[1][index] : inputs[1][i]);
+			const float inputL = parameters[paramPreGain] * buffer[0][index];
+			const float inputR = parameters[paramPreGain] * buffer[1][index];
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
@@ -356,8 +380,7 @@ class WaveShaper : public Plugin
 			}
 		}
 
-		if (mustOversample)
-			oversampler.downsample(outputs);
+		oversampler.downsample(outputs);
 
 		setParameterValue(paramOut, max);
 	}

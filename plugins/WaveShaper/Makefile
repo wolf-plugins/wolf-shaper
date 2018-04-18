@@ -27,6 +27,8 @@ OBJS_DSP = \
 	Libs/DSPFilters/source/Butterworth.cpp.o \
 	Libs/DSPFilters/source/PoleFilter.cpp.o \
 	Libs/DSPFilters/source/RBJ.cpp.o \
+	Libs/DSPFilters/source/Bessel.cpp.o \
+	Libs/DSPFilters/source/RootFinder.cpp.o \
 	WaveShaperPlugin.cpp.o
 
 OBJS_UI  = \
