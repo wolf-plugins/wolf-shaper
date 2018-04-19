@@ -55,21 +55,20 @@ class Oversampler
 
 	float **upsample(int ratio, uint32_t numSamples, double sampleRate, const float **audio)
 	{
-		fRatio = ratio;
-
-		if (fSampleRate != sampleRate * ratio)
+		if (fSampleRate != sampleRate * ratio || fRatio != ratio)
 		{
 			fSampleRate = sampleRate * ratio;
 
 			fFilterCenter = sampleRate / 2.0f - 4000; //FIXME
 
 			fLowPass1.reset();
-			fLowPass1.setup(4, fSampleRate, fFilterCenter);
+			fLowPass1.setup(8, fSampleRate, fFilterCenter);
 
 			fLowPass2.reset();
-			fLowPass2.setup(4, fSampleRate, fFilterCenter);
+			fLowPass2.setup(8, fSampleRate, fFilterCenter);
 		}
 
+		fRatio = ratio;
 		fNumSamples = numSamples;
 
 		fRequiredCapacity = numSamples * ratio;
@@ -141,8 +140,8 @@ class Oversampler
 	int fRatio;
 	double fSampleRate;
 	uint32_t fNumSamples;
-	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<4>, 2> fLowPass1;
-	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<4>, 2> fLowPass2;
+	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<8>, 2> fLowPass1;
+	Dsp::SimpleFilter<Dsp::Butterworth::LowPass<8>, 2> fLowPass2;
 
 	uint32_t fCurrentCapacity;
 	uint32_t fRequiredCapacity;

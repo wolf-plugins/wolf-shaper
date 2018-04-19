@@ -14,10 +14,10 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(580, 615)
+WaveShaperUI::WaveShaperUI() : UI(620, 655)
 {
-    const uint minWidth = 400;
-    const uint minHeight = 528;
+    const uint minWidth = 526;
+    const uint minHeight = 634;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
@@ -62,12 +62,12 @@ WaveShaperUI::WaveShaperUI() : UI(580, 615)
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
 
-    /*fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
+    fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
     fLabelWheelOversample->setText("OVERSAMPLE");
 
     fWheelOversample = new OversampleWheel(this, Size<uint>(58, 34));
     fWheelOversample->setCallback(this);
-    fWheelOversample->setRange(0, 4);*/
+    fWheelOversample->setRange(0, 4);
 
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
@@ -175,12 +175,13 @@ void WaveShaperUI::positionWidgets(uint width, uint height)
 
     fButtonResetGraph->setAbsolutePos(20, graphBarMiddleY - fButtonResetGraph->getHeight() / 2.0f);
     fLabelButtonResetGraph->setAbsolutePos(fButtonResetGraph->getAbsoluteX() + fButtonResetGraph->getWidth(), fButtonResetGraph->getAbsoluteY());
-    //float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
+    
+    float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
 
-    /*fWheelOversample->setAbsolutePos(160, height - 82);
-    fLabelWheelOversample->setAbsolutePos(160 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);*/
+    fWheelOversample->setAbsolutePos(155, height - 82);
+    fLabelWheelOversample->setAbsolutePos(155 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
 
-    float centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
+    centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
     fKnobPreGain->setAbsolutePos(width - 255, height - 90);
     fLabelPreGain->setAbsolutePos(width - 255 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
@@ -215,7 +216,7 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
         fSwitchRemoveDC->setDown(value >= 0.50f);
         break;
     case paramOversample:
-        /*fWheelOversample->setValue(value);*/
+        fWheelOversample->setValue(value);
         break;
     case paramBipolarMode:
     {
