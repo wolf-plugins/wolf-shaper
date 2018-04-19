@@ -115,8 +115,10 @@ endif
 ifeq ($(HAVE_DGL),true)
 
 ifeq ($(LINUX),true)
-DGL_FLAGS = $(shell pkg-config --cflags gl x11 xcursor) -static-libgcc -static-libstdc++ -lpthread
-DGL_LIBS  = $(shell pkg-config --libs gl x11 xcursor) -static-libgcc -static-libstdc++ -lpthread
+#DGL_FLAGS = $(shell pkg-config --cflags gl x11 xcursor) -static-libgcc -static-libstdc++ -static -Wl,--whole-archive -lpthread -Wl,--no-whole-archive -shared
+#DGL_LIBS  = $(shell pkg-config --libs gl x11 xcursor) -static-libgcc -static-libstdc++ -static -Wl,--whole-archive -fPIC -lpthread -Wl,--no-whole-archive -shared
+DGL_FLAGS = $(shell pkg-config --cflags gl x11 xcursor) -lpthread
+DGL_LIBS  = $(shell pkg-config --libs gl x11 xcursor) -lpthread
 endif
 
 ifeq ($(MACOS),true)

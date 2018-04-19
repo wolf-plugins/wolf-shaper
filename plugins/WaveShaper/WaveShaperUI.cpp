@@ -295,11 +295,11 @@ void WaveShaperUI::uiReshape(uint width, uint height)
 
 bool WaveShaperUI::onKeyboard(const KeyboardEvent &ev)
 {
-    if (ev.press)
+    /* if (ev.press)
     {
         WaveShaperConfig::load();
         repaint();
-    }
+    } */
 
     return true;
 }
