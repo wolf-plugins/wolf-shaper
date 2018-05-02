@@ -232,8 +232,6 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
     default:
         break;
     }
-
-    repaint();
 }
 
 void WaveShaperUI::stateChanged(const char *key, const char *value)
