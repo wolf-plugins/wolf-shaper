@@ -4,7 +4,7 @@
 
 ![Wolf Shaper](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
-Free, cross-platform distortion plugin with a spline-based graph. Can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
+Wolf Shaper is a waveshaping distortion plugin with a spline-based graph. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
 You might want to check the issues on GitHub before using the plugin :)
 
@@ -34,23 +34,3 @@ Right-click in the graph to add a vertex.
 Left-click and drag a vertex to move it.
 
 Double left-click a vertex to remove it.
-
-## Customization
-
-The UI can be customized using a configuration file.
-Copy the [default configuration](https://github.com/pdesaulniers/spoonie-waveshaper/blob/master/plugins/WaveShaper/Config/Themes/default.conf) to its appropriate location:
-
-Linux:
-```
-~/.config/wolf-shaper.conf
-```
-Mac:
-```
-~/Library/Application Support/wolf-shaper.conf
-```
-Windows:
-```
-<My Documents>\wolf-shaper.conf
-```
-
-You can then edit the plugin's colors to your liking.
