@@ -46,13 +46,14 @@ class WaveShaper : public Plugin
 	};
 
 	WaveShaper() : Plugin(paramCount, 0, 1),
-				   oversampler()
+				   oversampler(),
+				   removeDCPrev(0.0f)
 	{
 		parameters[paramPreGain] = 1.0f;
 		parameters[paramWet] = 1.0f;
 		parameters[paramPostGain] = 1.0f;
 		parameters[paramRemoveDC] = 0.0f;
-		parameters[paramOversample] = 1.0f;
+		parameters[paramOversample] = 0.0f;
 		parameters[paramBipolarMode] = 0.0f;
 		parameters[paramOut] = 0.0f;
 	}
@@ -85,7 +86,7 @@ class WaveShaper : public Plugin
 
 	uint32_t getVersion() const noexcept override
 	{
-		return d_version(0, 0, 1);
+		return d_version(0, 1, 0);
 	}
 
 	int64_t getUniqueId() const noexcept override
@@ -188,17 +189,13 @@ class WaveShaper : public Plugin
 	float removeDCOffset(float input)
 	{
 		//Steep IIR filter at the DC frequency
-		//Should probably be a FIR filter
-
-		//Previous calculated value
-		static float prev = 0.0f;
 
 		const float scaleFactor = 0.9999f; //Closer to 1 means steeper stop band
 
-		const float value = input + scaleFactor * prev;
-		const float result = value - prev;
+		const float value = input + scaleFactor * removeDCPrev;
+		const float result = value - removeDCPrev;
 
-		prev = value;
+		removeDCPrev = value;
 
 		return result;
 	}
@@ -207,7 +204,9 @@ class WaveShaper : public Plugin
 	{
 		float max = 0.0f;
 
-		const int oversamplingRatio = std::pow(2, std::round(parameters[paramOversample]));
+		//const int oversamplingRatio = std::pow(2, std::round(parameters[paramOversample]));
+		const int oversamplingRatio = 1; //disabled for now
+
 		const bool mustOversample = oversamplingRatio > 1;
 		const uint32_t numSamples = frames * oversamplingRatio;
 
@@ -215,10 +214,8 @@ class WaveShaper : public Plugin
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			const int index = i;
-
-			const float inputL = parameters[paramPreGain] * buffer[0][index];
-			const float inputR = parameters[paramPreGain] * buffer[1][index];
+			const float inputL = parameters[paramPreGain] * buffer[0][i];
+			const float inputR = parameters[paramPreGain] * buffer[1][i];
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
@@ -247,13 +244,13 @@ class WaveShaper : public Plugin
 			const float postGain = parameters[paramPostGain];
 			const bool mustRemoveDC = parameters[paramRemoveDC] > 0.50f;
 
-			buffer[0][index] = (dry * inputL + wet * graphL) * postGain;
-			buffer[1][index] = (dry * inputR + wet * graphR) * postGain;
+			buffer[0][i] = (dry * inputL + wet * graphL) * postGain;
+			buffer[1][i] = (dry * inputR + wet * graphR) * postGain;
 
 			if (mustRemoveDC)
 			{
-				buffer[0][index] = removeDCOffset(buffer[0][index]);
-				buffer[1][index] = removeDCOffset(buffer[1][index]);
+				buffer[0][i] = removeDCOffset(buffer[0][i]);
+				buffer[1][i] = removeDCOffset(buffer[1][i]);
 			}
 		}
 
@@ -267,6 +264,8 @@ class WaveShaper : public Plugin
 	Oversampler oversampler;
 
 	spoonie::Graph lineEditor;
+
+	float removeDCPrev;
 
 	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaper)
 };
