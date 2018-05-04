@@ -4,7 +4,7 @@
 
 ![Wolf Shaper](https://raw.githubusercontent.com/pdesaulniers/spoonie-waveshaper/master/plugins/WaveShaper/Screenshot.png)
 
-Wolf Shaper is a waveshaping distortion plugin with a spline-based graph. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
+Wolf Shaper is a waveshaper plugin with a graph editor. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
 You might want to check the issues on GitHub before using the plugin :)
 
