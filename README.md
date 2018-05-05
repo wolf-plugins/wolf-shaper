@@ -8,6 +8,12 @@ Wolf Shaper is a waveshaper plugin with a graph editor. It can be built as an LV
 
 You might want to check the issues on GitHub before using the plugin :)
 
+#### Features:
+
+* Add up to 100 nodes in the graph
+* Symmetrical and asymmetrical waveshaping
+* Resizable vector-based UI
+
 ## Build and install
 
 First, clone the repo (note the "--recursive" argument):
