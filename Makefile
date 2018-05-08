@@ -39,9 +39,9 @@ plugins: libs
 	$(MAKE) all -C plugins/WaveShaper
 
 gen: plugins dpf/utils/lv2_ttl_generator
-	@$(CURDIR)/dpf/utils/generate-ttl.sh
+	"$(CURDIR)/dpf/utils/generate-ttl.sh"
 ifeq ($(MACOS),true)
-	@$(CURDIR)/dpf/utils/generate-vst-bundles.sh
+	"$(CURDIR)/dpf/utils/generate-vst-bundles.sh"
 endif
 
 dpf/utils/lv2_ttl_generator:
