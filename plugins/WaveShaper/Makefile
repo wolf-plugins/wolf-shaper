@@ -20,6 +20,7 @@ OBJS_DSP = \
 	Common/Utils/src/Mathf.cpp.o \
 	Common/Structures/src/Graph.cpp.o \
 	Common/Structures/src/Oversampler.cpp.o \
+	Common/Structures/src/ParamSmooth.cpp.o \
 	Libs/DSPFilters/source/Butterworth.cpp.o \
 	Libs/DSPFilters/source/Biquad.cpp.o \
 	Libs/DSPFilters/source/Cascade.cpp.o \

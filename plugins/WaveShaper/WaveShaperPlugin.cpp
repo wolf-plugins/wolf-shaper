@@ -24,6 +24,8 @@
 
 #include "Graph.hpp"
 #include "Oversampler.hpp"
+#include "ParamSmooth.hpp"
+
 #include "DspFilters/Dsp.h"
 
 START_NAMESPACE_DISTRHO
@@ -49,12 +51,13 @@ class WaveShaper : public Plugin
 				   oversampler(),
 				   removeDCPrev(0.0f)
 	{
-		parameters[paramPreGain] = 1.0f;
-		parameters[paramWet] = 1.0f;
-		parameters[paramPostGain] = 1.0f;
-		parameters[paramRemoveDC] = 0.0f;
-		parameters[paramOversample] = 0.0f;
-		parameters[paramBipolarMode] = 0.0f;
+		parameters[paramPreGain] = ParamSmooth(1.0f);
+		parameters[paramWet] = ParamSmooth(1.0f);
+		parameters[paramPostGain] = ParamSmooth(1.0f);
+		parameters[paramRemoveDC] = ParamSmooth(0.0f);
+		parameters[paramOversample] = ParamSmooth(0.0f);
+		parameters[paramBipolarMode] = ParamSmooth(0.0f);
+
 		parameters[paramOut] = 0.0f;
 	}
 
@@ -157,12 +160,12 @@ class WaveShaper : public Plugin
 
 	float getParameterValue(uint32_t index) const override
 	{
-		return parameters[index];
+		return parameters[index].getRawValue();
 	}
 
 	void setParameterValue(uint32_t index, float value) override
 	{
-		parameters[index] = value;
+		parameters[index].setValue(value);
 	}
 
 	void initState(uint32_t index, String &stateKey, String &defaultStateValue) override
@@ -210,17 +213,21 @@ class WaveShaper : public Plugin
 		const bool mustOversample = oversamplingRatio > 1;
 		const uint32_t numSamples = frames * oversamplingRatio;
 
-		float **buffer = oversampler.upsample(oversamplingRatio, frames, getSampleRate(), inputs);
+		const double sampleRate = getSampleRate();
+
+		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
+
+		const float smoothFreq = 20.0f;
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			const float inputL = parameters[paramPreGain] * buffer[0][i];
-			const float inputR = parameters[paramPreGain] * buffer[1][i];
+			const float inputL = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[0][i];
+			const float inputR = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[1][i];
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
 
-			const bool bipolarMode = parameters[paramBipolarMode] > 0.50f;
+			const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
 			lineEditor.setBipolarMode(bipolarMode);
 
 			float graphL, graphR;
@@ -239,10 +246,10 @@ class WaveShaper : public Plugin
 				graphR = lineEditor.getValueAt(inputR);
 			}
 
-			const float wet = parameters[paramWet];
+			const float wet = parameters[paramWet].getSmoothedValue(smoothFreq, sampleRate);
 			const float dry = 1.0f - wet;
-			const float postGain = parameters[paramPostGain];
-			const bool mustRemoveDC = parameters[paramRemoveDC] > 0.50f;
+			const float postGain = parameters[paramPostGain].getSmoothedValue(smoothFreq, sampleRate);
+			const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
 
 			buffer[0][i] = (dry * inputL + wet * graphL) * postGain;
 			buffer[1][i] = (dry * inputR + wet * graphR) * postGain;
@@ -260,7 +267,7 @@ class WaveShaper : public Plugin
 	}
 
   private:
-	float parameters[paramCount];
+	ParamSmooth parameters[paramCount];
 	Oversampler oversampler;
 
 	spoonie::Graph lineEditor;
