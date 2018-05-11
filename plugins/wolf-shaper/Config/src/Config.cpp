@@ -44,13 +44,13 @@ Color alignment_lines = Color(255, 255, 255, 180);
 Color input_volume_indicator = Color(255, 255, 255, 180);
 
 Color graph_edges_background_normal = Color(169, 29, 239, 100);
-Color graph_edges_background_focused = Color(255,221,76, 100);
+Color graph_edges_background_focused = Color(255, 221, 76, 100);
 
 Color graph_edges_foreground_normal = Color(245, 112, 188, 255);
-Color graph_edges_foreground_focused = Color(255,221,76, 255);
+Color graph_edges_foreground_focused = Color(255, 221, 76, 255);
 
 Color vertex_fill_normal = Color(255, 255, 255, 255);
-Color vertex_fill_focused = Color(255,221,76, 255);
+Color vertex_fill_focused = Color(255, 221, 76, 255);
 
 Color vertex_halo = Color(0, 0, 0, 255);
 
@@ -65,7 +65,16 @@ Color graph_margin = Color(33, 32, 39, 255);
 Color top_border = Color(0, 0, 0, 255);
 Color side_borders = Color(100, 100, 100, 255);
 
-static std::string getConfigPath()
+static std::string getSystemWideConfigPath()
+{
+#if defined(DISTRHO_OS_WINDOWS)
+    return getLocalConfigPath(); //pretty sure Windows users don't care about this
+#else
+    return "/etc/wolf-shaper.conf";
+#endif
+}
+
+static std::string getLocalConfigPath()
 {
     const std::string configName = "wolf-shaper.conf";
 
@@ -161,12 +170,17 @@ static void colorFromString(std::string colorStr, Color *targetColor)
 
 void load()
 {
-    INIReader reader(getConfigPath());
+    INIReader reader(getLocalConfigPath());
 
     if (reader.ParseError() < 0)
     {
-        std::cout << "Can't load 'wolf-shaper.conf', using defaults\n";
-        return;
+        reader = INIReader(getSystemWideConfigPath());
+
+        if (reader.ParseError() < 0)
+        {
+            std::cout << "Can't load 'wolf-shaper.conf', using defaults\n";
+            return;
+        }
     }
 
     colorFromString(reader.Get("colors", "grid_foreground", ""), &grid_foreground);
@@ -195,6 +209,6 @@ void load()
     isLoaded = true;
     std::cout << "Config loaded from 'wolf-shaper.conf'\n";
 }
-}
+} // namespace WolfShaperConfig
 
 END_NAMESPACE_DISTRHO
