@@ -110,7 +110,7 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     const char *str = colorStr.c_str();
     char const *rest;
 
-    std::string colorTypeString = spoonie::takeUntil(str, '(');
+    std::string colorTypeString = wolf::takeUntil(str, '(');
     ColorType colorType;
 
     unsigned char x = 255, y = 255, z = 255, a = 255;

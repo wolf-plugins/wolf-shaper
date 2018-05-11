@@ -177,7 +177,7 @@ class WolfShaper : public Plugin
 			break;
 		}
 
-		//generated with fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, spoonie::CurveType::Exponential, 1.0f, 1.0f, 0.0f, spoonie::CurveType::Exponential);
+		//generated with fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
 		defaultStateValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
 	}
 
@@ -270,7 +270,7 @@ class WolfShaper : public Plugin
 	ParamSmooth parameters[paramCount];
 	Oversampler oversampler;
 
-	spoonie::Graph lineEditor;
+	wolf::Graph lineEditor;
 
 	float removeDCPrev;
 

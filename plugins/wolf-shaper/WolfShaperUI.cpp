@@ -24,7 +24,7 @@ WolfShaperUI::WolfShaperUI() : UI(620, 655)
 
     loadSharedResources();
 
-    using namespace SPOONIE_FONTS;
+    using namespace WOLF_FONTS;
     NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
     NanoVG::FontId dejaVuSansId = findFont(NANOVG_DEJAVU_SANS_TTF);
 
