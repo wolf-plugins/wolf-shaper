@@ -3,8 +3,8 @@
 	url = https://github.com/pdesaulniers/DPF.git
 	branch = waveshaper
 [submodule "plugins/WaveShaper/Libs/inih"]
-	path = plugins/WaveShaper/Libs/inih
+	path = plugins/wolf-shaper/Libs/inih
 	url = https://github.com/pdesaulniers/inih.git
 [submodule "plugins/WaveShaper/Common"]
-	path = plugins/WaveShaper/Common
+	path = plugins/wolf-shaper/Common
 	url = https://github.com/pdesaulniers/wolf-common.git

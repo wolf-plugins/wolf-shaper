@@ -1,6 +1,6 @@
 #include "DistrhoUI.hpp"
 
-#include "WaveShaperUI.hpp"
+#include "WolfShaperUI.hpp"
 #include "Window.hpp"
 #include "Config.hpp"
 #include "Layout.hpp"
@@ -14,7 +14,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WaveShaperUI::WaveShaperUI() : UI(620, 655)
+WolfShaperUI::WolfShaperUI() : UI(620, 655)
 {
     const uint minWidth = 526;
     const uint minHeight = 634;
@@ -28,7 +28,7 @@ WaveShaperUI::WaveShaperUI() : UI(620, 655)
     NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
     NanoVG::FontId dejaVuSansId = findFont(NANOVG_DEJAVU_SANS_TTF);
 
-    WaveShaperConfig::load();
+    WolfShaperConfig::load();
 
     tryRememberSize();
     getParentWindow().saveSizeAtExit(true);
@@ -113,11 +113,11 @@ WaveShaperUI::WaveShaperUI() : UI(620, 655)
     positionWidgets(width, height);
 }
 
-WaveShaperUI::~WaveShaperUI()
+WolfShaperUI::~WolfShaperUI()
 {
 }
 
-void WaveShaperUI::tryRememberSize()
+void WolfShaperUI::tryRememberSize()
 {
     int width, height;
     FILE *file;
@@ -146,7 +146,7 @@ void WaveShaperUI::tryRememberSize()
     fclose(file);
 }
 
-void WaveShaperUI::positionWidgets(uint width, uint height)
+void WolfShaperUI::positionWidgets(uint width, uint height)
 {
     //TODO: Clean that up
     const float graphMargin = 8;
@@ -199,7 +199,7 @@ void WaveShaperUI::positionWidgets(uint width, uint height)
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
 }
 
-void WaveShaperUI::parameterChanged(uint32_t index, float value)
+void WolfShaperUI::parameterChanged(uint32_t index, float value)
 {
     switch (index)
     {
@@ -234,7 +234,7 @@ void WaveShaperUI::parameterChanged(uint32_t index, float value)
     }
 }
 
-void WaveShaperUI::stateChanged(const char *key, const char *value)
+void WolfShaperUI::stateChanged(const char *key, const char *value)
 {
     if (std::strcmp(key, "graph") == 0)
         fGraphWidget->rebuildFromString(value);
@@ -242,7 +242,7 @@ void WaveShaperUI::stateChanged(const char *key, const char *value)
     repaint();
 }
 
-void WaveShaperUI::onNanoDisplay()
+void WolfShaperUI::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
@@ -251,7 +251,7 @@ void WaveShaperUI::onNanoDisplay()
     beginPath();
 
     rect(0.f, 0.f, width, height);
-    fillColor(WaveShaperConfig::plugin_background);
+    fillColor(WolfShaperConfig::plugin_background);
 
     fill();
 
@@ -277,33 +277,33 @@ void WaveShaperUI::onNanoDisplay()
     closePath();
 }
 
-void WaveShaperUI::uiIdle()
+void WolfShaperUI::uiIdle()
 {
 }
 
-bool WaveShaperUI::onMouse(const MouseEvent &ev)
+bool WolfShaperUI::onMouse(const MouseEvent &ev)
 {
 
 }
 
-void WaveShaperUI::uiReshape(uint width, uint height)
+void WolfShaperUI::uiReshape(uint width, uint height)
 {
     //setSize(width, height);
     positionWidgets(width, height);
 }
 
-bool WaveShaperUI::onKeyboard(const KeyboardEvent &ev)
+bool WolfShaperUI::onKeyboard(const KeyboardEvent &ev)
 {
     /* if (ev.press)
     {
-        WaveShaperConfig::load();
+        WolfShaperConfig::load();
         repaint();
     } */
 
     return true;
 }
 
-void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
+void WolfShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
 {
     const uint switchId = nanoSwitch->getId();
     const int value = nanoSwitch->isDown() ? 1 : 0;
@@ -316,7 +316,7 @@ void WaveShaperUI::nanoSwitchClicked(NanoSwitch *nanoSwitch)
     }
 }
 
-void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
+void WolfShaperUI::nanoButtonClicked(NanoButton *nanoButton)
 {
     if (nanoButton != fButtonResetGraph)
         return;
@@ -324,7 +324,7 @@ void WaveShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     fGraphWidget->reset();
 }
 
-void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
+void WolfShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
 {
     if (nanoWheel != fWheelOversample)
         return;
@@ -332,21 +332,21 @@ void WaveShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
     setParameterValue(paramOversample, value);
 }
 
-void WaveShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
+void WolfShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
 {
     const uint id = nanoKnob->getId();
 
     setParameterValue(id, value);
 }
 
-void WaveShaperUI::resizeHandleMoved(int width, int height)
+void WolfShaperUI::resizeHandleMoved(int width, int height)
 {
     setSize(width, height);
 }
 
 UI *createUI()
 {
-    return new WaveShaperUI();
+    return new WolfShaperUI();
 }
 
 END_NAMESPACE_DISTRHO

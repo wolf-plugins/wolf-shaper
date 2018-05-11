@@ -21,7 +21,7 @@
 
 START_NAMESPACE_DISTRHO
 
-namespace WaveShaperConfig
+namespace WolfShaperConfig
 {
 
 enum ColorType

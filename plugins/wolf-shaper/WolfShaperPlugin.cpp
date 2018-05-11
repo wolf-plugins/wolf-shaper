@@ -1,5 +1,5 @@
 /*
- * wolf shaper
+ * Wolf Shaper
  * Copyright (C) 2018 Patrick Desaulniers
  *
  * Permission to use, copy, modify, and/or distribute this software for any purpose with
@@ -32,7 +32,7 @@ START_NAMESPACE_DISTRHO
 
 // -----------------------------------------------------------------------------------------------------------
 
-class WaveShaper : public Plugin
+class WolfShaper : public Plugin
 {
   public:
 	enum Parameters
@@ -47,7 +47,7 @@ class WaveShaper : public Plugin
 		paramCount
 	};
 
-	WaveShaper() : Plugin(paramCount, 0, 1),
+	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
 				   removeDCPrev(0.0f)
 	{
@@ -274,12 +274,12 @@ class WaveShaper : public Plugin
 
 	float removeDCPrev;
 
-	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaper)
+	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WolfShaper)
 };
 
 Plugin *createPlugin()
 {
-	return new WaveShaper();
+	return new WolfShaper();
 }
 
 // -----------------------------------------------------------------------------------------------------------

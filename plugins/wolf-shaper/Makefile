@@ -31,7 +31,7 @@ OBJS_DSP = \
 	Libs/DSPFilters/source/RBJ.cpp.o \
 	Libs/DSPFilters/source/Bessel.cpp.o \
 	Libs/DSPFilters/source/RootFinder.cpp.o \
-	WaveShaperPlugin.cpp.o
+	WolfShaperPlugin.cpp.o
 
 OBJS_UI  = \
 	Common/Utils/src/Mathf.cpp.o \
@@ -60,7 +60,7 @@ OBJS_UI  = \
 	Resources/Fonts/roboto_light.cpp.o \
 	Resources/Fonts/chivo_bold.cpp.o \
 	Resources/Fonts/chivo_italic.cpp.o \
-	WaveShaperUI.cpp.o 
+	WolfShaperUI.cpp.o 
 
 # --------------------------------------------------------------
 # Do some magic

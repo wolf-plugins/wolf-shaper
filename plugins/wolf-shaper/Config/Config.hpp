@@ -1,6 +1,9 @@
+#ifndef WOLF_SHAPER_CONFIG_H_INCLUDED
+#define WOLF_SHAPER_CONFIG_H_INCLUDED
+
 START_NAMESPACE_DISTRHO
 
-namespace WaveShaperConfig
+namespace WolfShaperConfig
 {
 extern bool isLoaded;
 
@@ -31,3 +34,5 @@ void load();
 }
 
 END_NAMESPACE_DISTRHO
+
+#endif

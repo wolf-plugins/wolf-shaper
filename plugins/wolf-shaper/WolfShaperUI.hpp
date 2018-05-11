@@ -1,5 +1,5 @@
-#ifndef WAVESHAPER_UI_HPP_INCLUDED
-#define WAVESHAPER_UI_HPP_INCLUDED
+#ifndef WOLF_SHAPER_UI_HPP_INCLUDED
+#define WOLF_SHAPER_UI_HPP_INCLUDED
 
 #include "DistrhoUI.hpp"
 #include "GraphWidget.hpp"
@@ -28,7 +28,7 @@ enum Parameters
   paramCount
 };
 
-class WaveShaperUI : public UI,
+class WolfShaperUI : public UI,
                      public NanoSwitch::Callback,
                      public NanoButton::Callback,
                      public NanoWheel::Callback,
@@ -36,8 +36,8 @@ class WaveShaperUI : public UI,
                      public ResizeHandle::Callback
 {
 public:
-  WaveShaperUI();
-  ~WaveShaperUI();
+  WolfShaperUI();
+  ~WolfShaperUI();
 
   float getParameterValue(uint32_t index) const;
 
@@ -80,7 +80,7 @@ private:
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<NanoLabel> fLabelButtonResetGraph;
 
-  DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WaveShaperUI)
+  DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WolfShaperUI)
 };
 
 END_NAMESPACE_DISTRHO
