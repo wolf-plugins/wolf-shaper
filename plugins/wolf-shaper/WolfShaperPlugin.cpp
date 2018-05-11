@@ -84,7 +84,7 @@ class WolfShaper : public Plugin
 
 	const char *getLicense() const noexcept override
 	{
-		return "ISC";
+		return "GPL v3+";
 	}
 
 	uint32_t getVersion() const noexcept override
