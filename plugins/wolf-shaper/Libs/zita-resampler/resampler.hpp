@@ -23,7 +23,9 @@
 
 
 #include "../zita-resampler/resampler-table.hpp"
+#include "src/DistrhoDefines.h"
 
+START_NAMESPACE_DISTRHO
 
 class Resampler
 {
@@ -71,5 +73,7 @@ private:
     float               *_buff;
     void                *_dummy [8];
 };
+
+END_NAMESPACE_DISTRHO
 
 #endif

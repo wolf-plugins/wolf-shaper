@@ -31,6 +31,8 @@ OBJS_DSP = \
 	Libs/DSPFilters/source/RBJ.cpp.o \
 	Libs/DSPFilters/source/Bessel.cpp.o \
 	Libs/DSPFilters/source/RootFinder.cpp.o \
+	Libs/zita-resampler/resampler.cpp.o \
+	Libs/zita-resampler/resampler-table.cpp.o \
 	WolfShaperPlugin.cpp.o
 
 OBJS_UI  = \

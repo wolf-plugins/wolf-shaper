@@ -23,7 +23,9 @@
 
 
 #include <pthread.h>
+#include "src/DistrhoDefines.h"
 
+START_NAMESPACE_DISTRHO
 
 class Resampler_mutex
 {
@@ -67,5 +69,7 @@ private:
     static Resampler_table  *_list;
     static Resampler_mutex   _mutex;
 };
+
+END_NAMESPACE_DISTRHO
 
 #endif

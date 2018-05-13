@@ -24,6 +24,8 @@
 #include <math.h>
 #include "../zita-resampler/resampler-table.hpp"
 
+START_NAMESPACE_DISTRHO
+
 static double sinc (double x)
 {
     x = fabs (x);
@@ -145,3 +147,5 @@ void Resampler_table::print_list (void)
     }
     printf ("----\n\n");
 }
+
+END_NAMESPACE_DISTRHO
