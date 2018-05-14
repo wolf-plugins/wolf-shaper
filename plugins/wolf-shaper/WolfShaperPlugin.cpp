@@ -221,9 +221,10 @@ class WolfShaper : public Plugin
 	{
 		float max = 0.0f;
 
-		const bool silence = isSilence(inputs, frames);
+		const int oversamplingParameter = std::round(parameters[paramOversample].getRawValue());
+		const bool mustOversample = oversamplingParameter > 0 && !isSilence(inputs, frames);
 
-		const int oversamplingRatio = silence ? 1 : std::pow(2, std::round(parameters[paramOversample].getRawValue()));
+		const int oversamplingRatio = mustOversample ? std::pow(2, oversamplingParameter) : 1;
 		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
@@ -233,8 +234,10 @@ class WolfShaper : public Plugin
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			float inputL = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[0][i];
-			float inputR = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[1][i];
+			const float preGain = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate);
+
+			float inputL = preGain * buffer[0][i];
+			float inputR = preGain * buffer[1][i];
 
 			//this hack makes sure that dc offset in the graph doesn't oscillate... hopefully
 			if (inputL < 0.0f && inputL > -0.00001f)
