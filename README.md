@@ -32,8 +32,4 @@ All plugin builds will then be placed in the bin folder. Copy them to their appr
 
 ## How to use
 
-Right-click in the graph to add a vertex. 
-
-Left-click and drag a vertex to move it.
-
-Double left-click a vertex to remove it.
+Online documentation is available at https://pdesaulniers.github.io/wolf-shaper/.
