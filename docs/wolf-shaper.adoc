@@ -1,4 +1,4 @@
-== Wolf Shaper
+= Wolf Shaper
 
 image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png[Wolf Shaper]
 
