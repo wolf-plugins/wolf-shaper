@@ -2,6 +2,7 @@
 #define DISTRHO_PLUGIN_INFO_H_INCLUDED
 
 #define DISTRHO_PLUGIN_NAME  "Wolf Shaper"
+#define DISTRHO_PLUGIN_BRAND "Wolf Plugins"
 #define DISTRHO_PLUGIN_URI   "https://github.com/pdesaulniers/wolf-shaper"
 
 #define DISTRHO_PLUGIN_HAS_UI          1
