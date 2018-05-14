@@ -1,0 +1,26 @@
+== Wolf Shaper
+
+image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png[Wolf Shaper]
+
+*Wolf Shaper* is a waveshaper plugin with a graph editor. It passes the input signal through a function, which you can design using curves. This processing results in a more harmonically rich signal.
+
+== Master parameters
+- *Pre* – Controls the input volume, before any processing has taken place. This parameter can be automated for interesting modulation effects.
+- *Wet* – Determines the mix between the original and the processed signal in the output. Set this parameter at maximum value to only hear the processed signal.
+- *Post* – Controls the output volume, after all processing has been done.
+- *Center* – Removes DC offset from the output. This ensures that the resulting waveform is vertically-centerd at zero.
+- *Oversample* – Sets the multiple of the sample rate at which the processing will be done. This allows the plugin to filter out some harmonics that would otherwise cause aliasing artifacts.
+
+== Graph controls
+- *Uni/Bi switch* – Allows switching between symmetrical and asymmetrical waveshaping. More info coming soon.
+- *Reset button* – Puts the graph back at its default state, which is a straight diagonal line. 
+
+== Graph editing
+- *Add a vertex* – Right-click in the graph to add a vertex. Keep holding the right mouse button to position the vertex.
+- *Move a vertex* – Left-click and drag the vertex.
+- *Remove a vertex* – Double left-click on the vertex.
+- *Tweak the tension of an edge* – Left-click and drag vertically the tension handle located at the center of the edge.
+
+== User interface
+- *Resizing the window* – Left-click and drag the resize handle located at the bottom-right to resize the window. 
+- *Config file* – The UI can be customized using a configuration file. More info coming soon.
