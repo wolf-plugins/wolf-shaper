@@ -21,6 +21,7 @@
 #include <sstream>
 #include <iostream>
 #include <iomanip>
+#include <cmath>
 
 #include "Graph.hpp"
 #include "Oversampler.hpp"
@@ -203,26 +204,47 @@ class WolfShaper : public Plugin
 		return result;
 	}
 
+	bool isSilence(const float **buffer, uint32_t frames)
+	{
+		for (uint32_t i = 0; i < frames; ++i)
+		{
+			if (buffer[0][i] != 0.0f || buffer[1][i] != 0.0f)
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
 		float max = 0.0f;
 
-		//const int oversamplingRatio = std::pow(2, std::round(parameters[paramOversample]));
-		const int oversamplingRatio = 1; //disabled for now
+		const bool silence = isSilence(inputs, frames);
 
-		const bool mustOversample = oversamplingRatio > 1;
-		const uint32_t numSamples = frames * oversamplingRatio;
+		const int oversamplingRatio = silence ? 1 : std::pow(2, std::round(parameters[paramOversample].getRawValue()));
+		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
+		const float smoothFreq = 20.0f;
 
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
-		const float smoothFreq = 20.0f;
-
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			const float inputL = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[0][i];
-			const float inputR = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[1][i];
+			float inputL = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[0][i];
+			float inputR = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate) * buffer[1][i];
+
+			//this hack makes sure that dc offset in the graph doesn't oscillate... hopefully
+			if (inputL < 0.0f && inputL > -0.00001f)
+			{
+				inputL = 0.0f;
+			}
+			if (inputR < 0.0f && inputR > -0.00001f)
+			{
+				inputR = 0.0f;
+			}
 
 			max = std::max(max, std::abs(inputL));
 			max = std::max(max, std::abs(inputR));
