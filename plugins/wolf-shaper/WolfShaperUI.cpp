@@ -283,7 +283,7 @@ void WolfShaperUI::uiIdle()
 
 bool WolfShaperUI::onMouse(const MouseEvent &ev)
 {
-
+    return false;
 }
 
 void WolfShaperUI::uiReshape(uint width, uint height)
