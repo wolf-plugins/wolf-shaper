@@ -44,6 +44,8 @@ class WolfShaper : public Plugin
 		paramRemoveDC,
 		paramOversample,
 		paramBipolarMode,
+		paramWarpType,
+		paramWarpAmount,
 		paramOut,
 		paramCount
 	};
@@ -58,7 +60,8 @@ class WolfShaper : public Plugin
 		parameters[paramRemoveDC] = ParamSmooth(0.0f);
 		parameters[paramOversample] = ParamSmooth(0.0f);
 		parameters[paramBipolarMode] = ParamSmooth(0.0f);
-
+		parameters[paramWarpType] = ParamSmooth(0.0f);
+		parameters[paramWarpAmount] = ParamSmooth(0.0f);
 		parameters[paramOut] = 0.0f;
 	}
 
@@ -151,6 +154,23 @@ class WolfShaper : public Plugin
 			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
 			break;
+		case paramWarpType:
+			//None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
+			parameter.name = "Warp Type";
+			parameter.symbol = "warptype";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 6.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			break;
+		case paramWarpAmount:
+			parameter.name = "Warp Amount";
+			parameter.symbol = "warpamount";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 1.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable;
+			break;
 		case paramOut:
 			parameter.name = "Out";
 			parameter.symbol = "out";
@@ -232,8 +252,12 @@ class WolfShaper : public Plugin
 
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
+		lineEditor.setWarpType((wolf::WarpType)std::round(parameters[paramWarpType].getRawValue()));
+
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
+			lineEditor.setWarpAmount(parameters[paramWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
+
 			const float preGain = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate);
 
 			float inputL = preGain * buffer[0][i];

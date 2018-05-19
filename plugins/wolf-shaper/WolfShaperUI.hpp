@@ -13,6 +13,8 @@
 #include "GlowingLabelsBox.hpp"
 #include "NanoLabel.hpp"
 #include "WidgetBar.hpp"
+#include "ArrowButton.hpp"
+#include "LabelBoxList.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -24,6 +26,8 @@ enum Parameters
   paramRemoveDC,
   paramOversample,
   paramBipolarMode,
+  paramWarpType,
+  paramWarpAmount,
   paramOut,
   paramCount
 };
@@ -72,6 +76,10 @@ private:
 
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
+
+  ScopedPointer<VolumeKnob> fKnobWarp;
+  ScopedPointer<LabelBoxList> fLabelListWarpType;
+  ScopedPointer<ArrowButton> fButtonLeftArrow, fButtonRightArrow;
 
   ScopedPointer<ResizeHandle> fHandleResize;
 
