@@ -16,8 +16,8 @@ START_NAMESPACE_DISTRHO
 
 WolfShaperUI::WolfShaperUI() : UI(620, 655)
 {
-    const uint minWidth = 526;
-    const uint minHeight = 634;
+    const uint minWidth = 665;
+    const uint minHeight = 665;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
