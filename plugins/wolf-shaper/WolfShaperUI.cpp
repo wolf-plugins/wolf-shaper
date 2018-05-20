@@ -14,7 +14,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(620, 655)
+WolfShaperUI::WolfShaperUI() : UI(665, 665)
 {
     const uint minWidth = 665;
     const uint minHeight = 665;
