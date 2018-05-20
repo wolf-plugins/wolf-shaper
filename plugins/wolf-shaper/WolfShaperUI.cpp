@@ -103,7 +103,7 @@ WolfShaperUI::WolfShaperUI() : UI(620, 655)
     fKnobWarp->setColor(Color(255, 225, 169, 255));
 
     fLabelListWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
-    fLabelListWarpType->setLabels({"NONE", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
+    fLabelListWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
 
     fButtonLeftArrow = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
     fButtonLeftArrow->setCallback(this);
@@ -222,7 +222,6 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     fLabelListWarpType->setAbsolutePos(300 - centerAlignDifference, height - fLabelListWarpType->getHeight() - knobLabelMarginBottom);
 
     fButtonLeftArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() - fButtonLeftArrow->getWidth(), fLabelListWarpType->getAbsoluteY());
-
     fButtonRightArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() + fLabelListWarpType->getWidth(), fLabelListWarpType->getAbsoluteY());
 
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
