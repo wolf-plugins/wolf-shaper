@@ -38,7 +38,7 @@ endif
 jack       = $(TARGET_DIR)/$(NAME)$(APP_EXT)
 # ladspa_dsp = $(TARGET_DIR)/$(NAME)-ladspa$(LIB_EXT)
 dssi_dsp   = $(TARGET_DIR)/$(NAME)-dssi$(LIB_EXT)
-dssi_ui    = $(TARGET_DIR)/$(NAME)-dssi/$(NAME)_ui$(APP_EXT)
+dssi_ui    = $(TARGET_DIR)/$(NAME)-dssi/$(NAME)-dssi_ui$(APP_EXT)
 lv2        = $(TARGET_DIR)/$(NAME).lv2/$(NAME)$(LIB_EXT)
 lv2_dsp    = $(TARGET_DIR)/$(NAME).lv2/$(NAME)_dsp$(LIB_EXT)
 lv2_ui     = $(TARGET_DIR)/$(NAME).lv2/$(NAME)_ui$(LIB_EXT)
