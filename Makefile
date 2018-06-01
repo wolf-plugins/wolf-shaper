@@ -14,6 +14,7 @@ all: libs plugins gen
 
 PREFIX  ?= /usr/local
 DESTDIR ?=
+VST_INSTALL_PATH ?= $(DESTDIR)$(PREFIX)/lib/lxvst/
 
 define MISSING_SUBMODULES_ERROR
 
@@ -62,10 +63,10 @@ endif
 install:
 	install -d $(DESTDIR)$(PREFIX)/lib/dssi/
 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/
-	install -d $(DESTDIR)$(PREFIX)/lib/lxvst/
+	install -d "$(VST_INSTALL_PATH)"
 
 	cp bin/*-dssi.*   $(DESTDIR)$(PREFIX)/lib/dssi/
-	cp bin/*-vst.*    $(DESTDIR)$(PREFIX)/lib/lxvst/
+	cp bin/*-vst.*    "$(VST_INSTALL_PATH)"
 
 ifeq ($(HAVE_DGL),true)
 	cp -r bin/*-dssi  $(DESTDIR)$(PREFIX)/lib/dssi/

@@ -1,7 +1,7 @@
 # Maintainer: Patrick Desaulniers
 
 pkgname=wolf-shaper-git
-pkgver=0.1.0.r16.g990a2fc
+pkgver=0.1.2.r1.ged2acbe
 pkgrel=1
 pkgdesc="Waveshaper plugin w/ graph editor"
 arch=('i686' 'x86_64')
@@ -31,5 +31,5 @@ build() {
 
 package() {
     cd "${pkgname%-*}"
-	make DESTDIR="$pkgdir/" PREFIX="/usr" install
+    make DESTDIR="$pkgdir/" PREFIX="/usr" VST_INSTALL_PATH=/usr/lib/vst/ install
 }
