@@ -13,7 +13,11 @@ Right now, it works on GNU/Linux and Windows. MacOS support is coming soon.
 * Symmetrical and asymmetrical waveshaping
 * Resizable vector-based UI
 
-## Build and install
+## Install
+
+Wolf Shaper is available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). If you do not use Arch Linux, see the section below.
+
+## Build manually
 
 First, clone the repo (note the "--recursive" argument):
 
