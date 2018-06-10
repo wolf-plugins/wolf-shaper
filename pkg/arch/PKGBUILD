@@ -1,7 +1,7 @@
-# Maintainer: Patrick Desaulniers
+# Maintainer: Patrick Desaulniers <desaulniers dot patrick at carrefour dot cegepvicto dot ca>
 
 pkgname=wolf-shaper-git
-pkgver=0.1.2.r2.gae7d5b9
+pkgver=0.1.2.r3.g7dec897
 pkgrel=1
 pkgdesc="Waveshaper plugin w/ graph editor"
 arch=('i686' 'x86_64')

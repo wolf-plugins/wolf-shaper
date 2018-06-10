@@ -63,7 +63,7 @@ protected:
   void uiReshape(uint width, uint height) override;
   bool onKeyboard(const KeyboardEvent &ev) override;
   bool onMouse(const MouseEvent &ev) override;
-
+  
 private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<NanoLabel> fLabelRemoveDC;

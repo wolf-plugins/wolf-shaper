@@ -85,7 +85,7 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665)
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
-    fKnobWet->setColor(Color(136,228,255));
+    fKnobWet->setColor(Color(136, 228, 255));
 
     fLabelPostGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPostGain->setText("POST");
@@ -370,7 +370,7 @@ void WolfShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     {
         fLabelListWarpType->goPrevious();
     }
-    else 
+    else
     {
         fLabelListWarpType->goNext();
     }
