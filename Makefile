@@ -14,7 +14,7 @@ all: libs plugins gen
 
 PREFIX  ?= /usr/local
 DESTDIR ?=
-VST_FOLDER_NAME ?= lxvst
+VST_FOLDER_NAME ?= vst
 
 define MISSING_SUBMODULES_ERROR
 
