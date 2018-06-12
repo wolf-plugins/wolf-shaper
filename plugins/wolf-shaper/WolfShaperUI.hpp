@@ -63,8 +63,10 @@ protected:
   void uiReshape(uint width, uint height) override;
   bool onKeyboard(const KeyboardEvent &ev) override;
   bool onMouse(const MouseEvent &ev) override;
-  
+
 private:
+  void toggleBottomBarVisibility();
+
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<NanoLabel> fLabelRemoveDC;
 
@@ -87,6 +89,8 @@ private:
   ScopedPointer<WidgetBar> fGraphBar;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<NanoLabel> fLabelButtonResetGraph;
+
+  bool fBottomBarVisible;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WolfShaperUI)
 };

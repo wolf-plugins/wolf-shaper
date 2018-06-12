@@ -14,7 +14,8 @@
 
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(665, 665)
+WolfShaperUI::WolfShaperUI() : UI(665, 665),
+                               fBottomBarVisible(true)
 {
     const uint minWidth = 470;
     const uint minHeight = 438;
@@ -72,7 +73,7 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665)
     fLabelWheelOversample->setFontSize(14.0f);
     fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
-    
+
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
 
@@ -174,7 +175,7 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     //TODO: Clean that up
 
     const float graphMargin = 8;
-    const float bottomBarSize = 102;
+    const float bottomBarSize = fBottomBarVisible ? 102 : 0;
     const float graphBarHeight = fGraphBar->getHeight();
     const float graphBarMargin = 6;
 
@@ -336,13 +337,37 @@ void WolfShaperUI::uiReshape(uint width, uint height)
     positionWidgets(width, height);
 }
 
+void WolfShaperUI::toggleBottomBarVisibility()
+{
+    fBottomBarVisible = !fBottomBarVisible;
+
+    fLabelListWarpType->setVisible(fBottomBarVisible);
+    fButtonLeftArrow->setVisible(fBottomBarVisible);
+    fButtonRightArrow->setVisible(fBottomBarVisible);
+    fLabelsBoxBipolarMode->setVisible(fBottomBarVisible);
+    fSwitchBipolarMode->setVisible(fBottomBarVisible);
+    fSwitchRemoveDC->setVisible(fBottomBarVisible);
+    fKnobPostGain->setVisible(fBottomBarVisible);
+    fKnobPreGain->setVisible(fBottomBarVisible);
+    fKnobWarp->setVisible(fBottomBarVisible);
+    fKnobWet->setVisible(fBottomBarVisible);
+    fLabelPostGain->setVisible(fBottomBarVisible);
+    fLabelPreGain->setVisible(fBottomBarVisible);
+    fLabelWet->setVisible(fBottomBarVisible);
+    fLabelRemoveDC->setVisible(fBottomBarVisible);
+
+    positionWidgets(getWidth(), getHeight());
+}
+
 bool WolfShaperUI::onKeyboard(const KeyboardEvent &ev)
 {
-    /* if (ev.press)
+    if (ev.press)
     {
-        WolfShaperConfig::load();
-        repaint();
-    } */
+        if (ev.key == 95) //F11
+        {
+            toggleBottomBarVisibility();
+        }
+    }
 
     return true;
 }
