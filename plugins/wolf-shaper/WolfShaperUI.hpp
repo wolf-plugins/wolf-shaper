@@ -72,7 +72,7 @@ private:
   ScopedPointer<GlowingLabelsBox> fLabelsBoxBipolarMode;
 
   ScopedPointer<OversampleWheel> fWheelOversample;
-  ScopedPointer<LabelBox> fLabelWheelOversample;
+  ScopedPointer<NanoLabel> fLabelWheelOversample;
 
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;

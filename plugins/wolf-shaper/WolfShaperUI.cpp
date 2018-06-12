@@ -16,8 +16,8 @@ START_NAMESPACE_DISTRHO
 
 WolfShaperUI::WolfShaperUI() : UI(665, 665)
 {
-    const uint minWidth = 665;
-    const uint minHeight = 665;
+    const uint minWidth = 470;
+    const uint minHeight = 438;
 
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
@@ -48,7 +48,7 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665)
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
 
-    fLabelRemoveDC = new NanoLabel(this, Size<uint>(50, 29));
+    fLabelRemoveDC = new NanoLabel(this, Size<uint>(100, 29));
     fLabelRemoveDC->setText("CENTER");
     fLabelRemoveDC->setFontId(chivoBoldId);
     fLabelRemoveDC->setFontSize(14.0f);
@@ -62,13 +62,17 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665)
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
 
-    fLabelWheelOversample = new LabelBox(this, Size<uint>(118, knobsLabelBoxHeight));
-    fLabelWheelOversample->setText("OVERSAMPLE");
-
-    fWheelOversample = new OversampleWheel(this, Size<uint>(58, 34));
+    fWheelOversample = new OversampleWheel(this, Size<uint>(47, 26));
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
+    fLabelWheelOversample = new NanoLabel(this, Size<uint>(85, 26));
+    fLabelWheelOversample->setText("OVERSAMPLE");
+    fLabelWheelOversample->setFontId(chivoBoldId);
+    fLabelWheelOversample->setFontSize(14.0f);
+    fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+    fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
+    
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
 
@@ -102,7 +106,7 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665)
     fKnobWarp->setId(paramWarpAmount);
     fKnobWarp->setColor(Color(255, 225, 169, 255));
 
-    fLabelListWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
+    fLabelListWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
     fLabelListWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
 
     fButtonLeftArrow = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
@@ -196,30 +200,28 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     fButtonResetGraph->setAbsolutePos(20, graphBarMiddleY - fButtonResetGraph->getHeight() / 2.0f);
     fLabelButtonResetGraph->setAbsolutePos(fButtonResetGraph->getAbsoluteX() + fButtonResetGraph->getWidth(), fButtonResetGraph->getAbsoluteY());
 
-    float centerAlignDifference = (fLabelWheelOversample->getWidth() - fWheelOversample->getWidth()) / 2.0f;
+    fWheelOversample->setAbsolutePos(width - fWheelOversample->getWidth() - 35, graphBarMiddleY - fWheelOversample->getHeight() / 2.0f);
+    fLabelWheelOversample->setAbsolutePos(fWheelOversample->getAbsoluteX() - fLabelWheelOversample->getWidth(), fWheelOversample->getAbsoluteY());
 
-    fWheelOversample->setAbsolutePos(155, height - 82);
-    fLabelWheelOversample->setAbsolutePos(155 - centerAlignDifference, height - fLabelWheelOversample->getHeight() - knobLabelMarginBottom);
+    float centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
-    centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
-
-    fKnobPreGain->setAbsolutePos(width - 255, height - 90);
-    fLabelPreGain->setAbsolutePos(width - 255 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPreGain->setAbsolutePos(width - 225, height - 90);
+    fLabelPreGain->setAbsolutePos(width - 225 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelWet->getWidth() - fKnobWet->getWidth()) / 2.0f;
 
-    fKnobWet->setAbsolutePos(width - 175, height - 90);
-    fLabelWet->setAbsolutePos(width - 175 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobWet->setAbsolutePos(width - 155, height - 90);
+    fLabelWet->setAbsolutePos(width - 155 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelPostGain->getWidth() - fKnobPostGain->getWidth()) / 2.0f;
 
-    fKnobPostGain->setAbsolutePos(width - 95, height - 90);
-    fLabelPostGain->setAbsolutePos(width - 95 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPostGain->setAbsolutePos(width - 85, height - 90);
+    fLabelPostGain->setAbsolutePos(width - 85 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelListWarpType->getWidth() - fKnobWarp->getWidth()) / 2.0f;
 
-    fKnobWarp->setAbsolutePos(300, height - 90);
-    fLabelListWarpType->setAbsolutePos(300 - centerAlignDifference, height - fLabelListWarpType->getHeight() - knobLabelMarginBottom);
+    fKnobWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 100, height - 90);
+    fLabelListWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 100 - centerAlignDifference, height - fLabelListWarpType->getHeight() - knobLabelMarginBottom);
 
     fButtonLeftArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() - fButtonLeftArrow->getWidth(), fLabelListWarpType->getAbsoluteY());
     fButtonRightArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() + fLabelListWarpType->getWidth(), fLabelListWarpType->getAbsoluteY());
