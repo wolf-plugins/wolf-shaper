@@ -29,6 +29,7 @@ cd wolf-shaper
 Then:
 
 ```
+apt install libxcursor-dev
 BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
 ```
 
