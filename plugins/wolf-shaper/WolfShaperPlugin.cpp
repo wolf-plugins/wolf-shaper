@@ -237,6 +237,46 @@ class WolfShaper : public Plugin
 		return true;
 	}
 
+	float calculateValueOutsideGraph(float value)
+	{
+		const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
+
+		if (bipolarMode)
+		{
+			const bool positiveInput = value >= 0.0f;
+			const float vertexY = lineEditor.getVertexAtIndex(positiveInput ? lineEditor.getVertexCount() - 1 : 0)->getY();
+			const float absValue = std::abs(value);
+
+			return absValue * (-1.0f + vertexY * 2.0f);
+		}
+		else
+		{
+			return value * lineEditor.getVertexAtIndex(lineEditor.getVertexCount() - 1)->getY();
+		}
+	}
+
+	float getGraphValue(float input)
+	{
+		const float absInput = std::abs(input);
+
+		if (absInput > 1.0f)
+		{
+			return calculateValueOutsideGraph(input);
+		}
+
+		const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
+
+		if (bipolarMode)
+		{
+			const float x = (1.0f + input) * 0.5f;
+			return -1.0f + lineEditor.getValueAt(x) * 2.0f;
+		}
+		else
+		{
+			return lineEditor.getValueAt(input);
+		}
+	}
+
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
 		float max = 0.0f;
@@ -279,27 +319,19 @@ class WolfShaper : public Plugin
 				inputR = 0.0f;
 			}
 
-			max = std::max(max, std::abs(inputL));
-			max = std::max(max, std::abs(inputR));
+			const float absL = std::abs(inputL);
+			const float absR = std::abs(inputR);
+
+			max = std::max(max, absL);
+			max = std::max(max, absR);
 
 			const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
 			lineEditor.setBipolarMode(bipolarMode);
 
 			float graphL, graphR;
 
-			if (bipolarMode)
-			{
-				const float xl = (1.0f + inputL) * 0.5f;
-				const float xr = (1.0f + inputR) * 0.5f;
-
-				graphL = -1.0f + lineEditor.getValueAt(xl) * 2.0f;
-				graphR = -1.0f + lineEditor.getValueAt(xr) * 2.0f;
-			}
-			else
-			{
-				graphL = lineEditor.getValueAt(inputL);
-				graphR = lineEditor.getValueAt(inputR);
-			}
+			graphL = getGraphValue(inputL);
+			graphR = getGraphValue(inputR);
 
 			const float wet = parameters[paramWet].getSmoothedValue(smoothFreq, sampleRate);
 			const float dry = 1.0f - wet;
