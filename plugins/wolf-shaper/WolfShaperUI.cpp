@@ -17,7 +17,7 @@ START_NAMESPACE_DISTRHO
 WolfShaperUI::WolfShaperUI() : UI(665, 665),
                                fBottomBarVisible(true)
 {
-    const uint minWidth = 470;
+    const uint minWidth = 611;
     const uint minHeight = 438;
 
     const uint knobsLabelBoxWidth = 66;
@@ -101,24 +101,43 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665),
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(143, 255, 147, 255));
 
-    fKnobWarp = new VolumeKnob(this, Size<uint>(54, 54));
-    fKnobWarp->setCallback(this);
-    fKnobWarp->setRange(0.0f, 1.0f);
-    fKnobWarp->setId(paramWarpAmount);
-    fKnobWarp->setColor(Color(255, 225, 169, 255));
+    fKnobHorizontalWarp = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobHorizontalWarp->setCallback(this);
+    fKnobHorizontalWarp->setRange(0.0f, 1.0f);
+    fKnobHorizontalWarp->setId(paramHorizontalWarpAmount);
+    fKnobHorizontalWarp->setColor(Color(255, 225, 169, 255));
 
-    fLabelListWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
-    fLabelListWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
+    fLabelListHorizontalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
+    fLabelListHorizontalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
 
-    fButtonLeftArrow = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
-    fButtonLeftArrow->setCallback(this);
-    fButtonLeftArrow->setId(paramWarpType);
-    fButtonLeftArrow->setArrowDirection(ArrowButton::Left);
+    fKnobVerticalWarp = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobVerticalWarp->setCallback(this);
+    fKnobVerticalWarp->setRange(0.0f, 1.0f);
+    fKnobVerticalWarp->setId(paramVerticalWarpAmount);
+    fKnobVerticalWarp->setColor(Color(255, 225, 169, 255));
 
-    fButtonRightArrow = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
-    fButtonRightArrow->setCallback(this);
-    fButtonRightArrow->setId(paramWarpType);
-    fButtonRightArrow->setArrowDirection(ArrowButton::Right);
+    fLabelListVerticalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
+    fLabelListVerticalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
+
+    fButtonLeftArrowHorizontalWarp = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
+    fButtonLeftArrowHorizontalWarp->setCallback(this);
+    fButtonLeftArrowHorizontalWarp->setId(paramHorizontalWarpType);
+    fButtonLeftArrowHorizontalWarp->setArrowDirection(ArrowButton::Left);
+
+    fButtonRightArrowHorizontalWarp = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
+    fButtonRightArrowHorizontalWarp->setCallback(this);
+    fButtonRightArrowHorizontalWarp->setId(paramHorizontalWarpType);
+    fButtonRightArrowHorizontalWarp->setArrowDirection(ArrowButton::Right);
+
+    fButtonLeftArrowVerticalWarp = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
+    fButtonLeftArrowVerticalWarp->setCallback(this);
+    fButtonLeftArrowVerticalWarp->setId(paramVerticalWarpType);
+    fButtonLeftArrowVerticalWarp->setArrowDirection(ArrowButton::Left);
+
+    fButtonRightArrowVerticalWarp = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
+    fButtonRightArrowVerticalWarp->setCallback(this);
+    fButtonRightArrowVerticalWarp->setId(paramVerticalWarpType);
+    fButtonRightArrowVerticalWarp->setArrowDirection(ArrowButton::Right);
 
     fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
@@ -219,13 +238,21 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     fKnobPostGain->setAbsolutePos(width - 85, height - 90);
     fLabelPostGain->setAbsolutePos(width - 85 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
-    centerAlignDifference = (fLabelListWarpType->getWidth() - fKnobWarp->getWidth()) / 2.0f;
+    centerAlignDifference = (fLabelListHorizontalWarpType->getWidth() - fKnobHorizontalWarp->getWidth()) / 2.0f;
 
-    fKnobWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 100, height - 90);
-    fLabelListWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 100 - centerAlignDifference, height - fLabelListWarpType->getHeight() - knobLabelMarginBottom);
+    fKnobHorizontalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230, height - 90);
+    fLabelListHorizontalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230 - centerAlignDifference, height - fLabelListHorizontalWarpType->getHeight() - knobLabelMarginBottom);
 
-    fButtonLeftArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() - fButtonLeftArrow->getWidth(), fLabelListWarpType->getAbsoluteY());
-    fButtonRightArrow->setAbsolutePos(fLabelListWarpType->getAbsoluteX() + fLabelListWarpType->getWidth(), fLabelListWarpType->getAbsoluteY());
+    fButtonLeftArrowHorizontalWarp->setAbsolutePos(fLabelListHorizontalWarpType->getAbsoluteX() - fButtonLeftArrowHorizontalWarp->getWidth(), fLabelListHorizontalWarpType->getAbsoluteY());
+    fButtonRightArrowHorizontalWarp->setAbsolutePos(fLabelListHorizontalWarpType->getAbsoluteX() + fLabelListHorizontalWarpType->getWidth(), fLabelListHorizontalWarpType->getAbsoluteY());
+
+    centerAlignDifference = (fLabelListVerticalWarpType->getWidth() - fKnobVerticalWarp->getWidth()) / 2.0f;
+
+    fKnobVerticalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110, height - 90);
+    fLabelListVerticalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110 - centerAlignDifference, height - fLabelListVerticalWarpType->getHeight() - knobLabelMarginBottom);
+
+    fButtonLeftArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() - fButtonLeftArrowVerticalWarp->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
+    fButtonRightArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() + fLabelListVerticalWarpType->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
 
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
 }
@@ -257,19 +284,31 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
         fLabelsBoxBipolarMode->setSelectedIndex(down ? 1 : 0);
         break;
     }
-    case paramWarpType:
+    case paramHorizontalWarpType:
     {
         const int warpType = std::round(value);
 
-        fGraphWidget->setWarpType((wolf::WarpType)warpType);
-        fLabelListWarpType->setSelectedIndex(warpType);
+        fGraphWidget->setHorizontalWarpType((wolf::WarpType)warpType);
+        fLabelListHorizontalWarpType->setSelectedIndex(warpType);
 
         break;
     }
+    case paramHorizontalWarpAmount:
+        fKnobHorizontalWarp->setValue(value);
+        fGraphWidget->setHorizontalWarpAmount(value);
+        break;
+    case paramVerticalWarpType:
+    {
+        const int warpType = std::round(value);
 
-    case paramWarpAmount:
-        fKnobWarp->setValue(value);
-        fGraphWidget->setWarpAmount(value);
+        fGraphWidget->setVerticalWarpType((wolf::WarpType)warpType);
+        fLabelListVerticalWarpType->setSelectedIndex(warpType);
+
+        break;
+    }
+    case paramVerticalWarpAmount:
+        fKnobVerticalWarp->setValue(value);
+        fGraphWidget->setVerticalWarpAmount(value);
         break;
     case paramOut:
         fGraphWidget->updateInput(value);
@@ -341,15 +380,22 @@ void WolfShaperUI::toggleBottomBarVisibility()
 {
     fBottomBarVisible = !fBottomBarVisible;
 
-    fLabelListWarpType->setVisible(fBottomBarVisible);
-    fButtonLeftArrow->setVisible(fBottomBarVisible);
-    fButtonRightArrow->setVisible(fBottomBarVisible);
     fLabelsBoxBipolarMode->setVisible(fBottomBarVisible);
     fSwitchBipolarMode->setVisible(fBottomBarVisible);
     fSwitchRemoveDC->setVisible(fBottomBarVisible);
     fKnobPostGain->setVisible(fBottomBarVisible);
     fKnobPreGain->setVisible(fBottomBarVisible);
-    fKnobWarp->setVisible(fBottomBarVisible);
+
+    fKnobHorizontalWarp->setVisible(fBottomBarVisible);
+    fLabelListHorizontalWarpType->setVisible(fBottomBarVisible);
+    fButtonLeftArrowHorizontalWarp->setVisible(fBottomBarVisible);
+    fButtonRightArrowHorizontalWarp->setVisible(fBottomBarVisible);
+
+    fKnobVerticalWarp->setVisible(fBottomBarVisible);
+    fLabelListVerticalWarpType->setVisible(fBottomBarVisible);
+    fButtonLeftArrowVerticalWarp->setVisible(fBottomBarVisible);
+    fButtonRightArrowVerticalWarp->setVisible(fBottomBarVisible);
+
     fKnobWet->setVisible(fBottomBarVisible);
     fLabelPostGain->setVisible(fBottomBarVisible);
     fLabelPreGain->setVisible(fBottomBarVisible);
@@ -393,19 +439,41 @@ void WolfShaperUI::nanoButtonClicked(NanoButton *nanoButton)
         return;
     }
 
-    if (nanoButton == fButtonLeftArrow)
+    bool horizontal = false;
+
+    if (nanoButton == fButtonLeftArrowHorizontalWarp)
     {
-        fLabelListWarpType->goPrevious();
+        fLabelListHorizontalWarpType->goPrevious();
+        horizontal = true;
+    }
+    else if (nanoButton == fButtonRightArrowHorizontalWarp)
+    {
+        fLabelListHorizontalWarpType->goNext();
+        horizontal = true;
+    }
+    else if (nanoButton == fButtonLeftArrowVerticalWarp)
+    {
+        fLabelListVerticalWarpType->goPrevious();
+    }
+    else if (nanoButton == fButtonRightArrowVerticalWarp)
+    {
+        fLabelListVerticalWarpType->goNext();
+    }
+
+    if (horizontal)
+    {
+        const int index = fLabelListHorizontalWarpType->getSelectedIndex();
+
+        setParameterValue(paramHorizontalWarpType, index);
+        fGraphWidget->setHorizontalWarpType((wolf::WarpType)index);
     }
     else
     {
-        fLabelListWarpType->goNext();
+        const int index = fLabelListVerticalWarpType->getSelectedIndex();
+
+        setParameterValue(paramVerticalWarpType, index);
+        fGraphWidget->setVerticalWarpType((wolf::WarpType)index);
     }
-
-    const int index = fLabelListWarpType->getSelectedIndex();
-
-    setParameterValue(paramWarpType, index);
-    fGraphWidget->setWarpType((wolf::WarpType)index);
 }
 
 void WolfShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
@@ -414,9 +482,13 @@ void WolfShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
 
     setParameterValue(paramOversample, value);
 
-    if (id == paramWarpType)
+    if (id == paramHorizontalWarpType)
     {
-        fGraphWidget->setWarpType((wolf::WarpType)std::round(value));
+        fGraphWidget->setHorizontalWarpType((wolf::WarpType)std::round(value));
+    }
+    else if (id == paramVerticalWarpType)
+    {
+        fGraphWidget->setVerticalWarpType((wolf::WarpType)std::round(value));
     }
 }
 
@@ -426,9 +498,13 @@ void WolfShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
 
     setParameterValue(id, value);
 
-    if (id == paramWarpAmount)
+    if (id == paramHorizontalWarpAmount)
     {
-        fGraphWidget->setWarpAmount(value);
+        fGraphWidget->setHorizontalWarpAmount(value);
+    }
+    else if (id == paramVerticalWarpAmount)
+    {
+        fGraphWidget->setVerticalWarpAmount(value);
     }
 }
 

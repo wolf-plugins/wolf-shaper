@@ -1,6 +1,7 @@
 #ifndef WOLF_SHAPER_UI_HPP_INCLUDED
 #define WOLF_SHAPER_UI_HPP_INCLUDED
 
+#include "WolfShaperParameters.hpp"
 #include "DistrhoUI.hpp"
 #include "GraphWidget.hpp"
 #include "RemoveDCSwitch.hpp"
@@ -17,20 +18,6 @@
 #include "LabelBoxList.hpp"
 
 START_NAMESPACE_DISTRHO
-
-enum Parameters
-{
-  paramPreGain = 0,
-  paramWet,
-  paramPostGain,
-  paramRemoveDC,
-  paramOversample,
-  paramBipolarMode,
-  paramWarpType,
-  paramWarpAmount,
-  paramOut,
-  paramCount
-};
 
 class WolfShaperUI : public UI,
                      public NanoSwitch::Callback,
@@ -79,9 +66,14 @@ private:
   ScopedPointer<VolumeKnob> fKnobPreGain, fKnobWet, fKnobPostGain;
   ScopedPointer<LabelBox> fLabelPreGain, fLabelWet, fLabelPostGain;
 
-  ScopedPointer<VolumeKnob> fKnobWarp;
-  ScopedPointer<LabelBoxList> fLabelListWarpType;
-  ScopedPointer<ArrowButton> fButtonLeftArrow, fButtonRightArrow;
+  ScopedPointer<VolumeKnob> fKnobHorizontalWarp;
+  ScopedPointer<LabelBoxList> fLabelListHorizontalWarpType;
+
+  ScopedPointer<VolumeKnob> fKnobVerticalWarp;
+  ScopedPointer<LabelBoxList> fLabelListVerticalWarpType;
+
+  ScopedPointer<ArrowButton> fButtonLeftArrowHorizontalWarp, fButtonRightArrowHorizontalWarp;
+  ScopedPointer<ArrowButton> fButtonLeftArrowVerticalWarp, fButtonRightArrowVerticalWarp;
 
   ScopedPointer<ResizeHandle> fHandleResize;
 
