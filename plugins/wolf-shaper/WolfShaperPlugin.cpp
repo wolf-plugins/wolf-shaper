@@ -224,7 +224,7 @@ class WolfShaper : public Plugin
 		return result;
 	}
 
-	bool isSilence(const float **buffer, uint32_t frames)
+	/* bool isSilence(const float **buffer, uint32_t frames)
 	{
 		for (uint32_t i = 0; i < frames; ++i)
 		{
@@ -235,7 +235,7 @@ class WolfShaper : public Plugin
 		}
 
 		return true;
-	}
+	} */
 
 	float calculateValueOutsideGraph(float value)
 	{
@@ -281,12 +281,9 @@ class WolfShaper : public Plugin
 	{
 		float max = 0.0f;
 
-		const bool silence = isSilence(inputs, frames);
-
 		const int oversamplingParameter = std::round(parameters[paramOversample].getRawValue());
-		const bool mustOversample = oversamplingParameter > 0 && !silence;
 
-		const int oversamplingRatio = mustOversample ? std::pow(2, oversamplingParameter) : 1;
+		const int oversamplingRatio = std::pow(2, oversamplingParameter);
 		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
@@ -294,15 +291,11 @@ class WolfShaper : public Plugin
 
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
-		if (!silence)
-			lineEditor.setWarpType((wolf::WarpType)std::round(parameters[paramWarpType].getRawValue()));
-		else
-			lineEditor.setWarpType(wolf::None);
+		lineEditor.setWarpType((wolf::WarpType)std::round(parameters[paramWarpType].getRawValue()));
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			if (!silence)
-				lineEditor.setWarpAmount(parameters[paramWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
+			lineEditor.setWarpAmount(parameters[paramWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
 
 			const float preGain = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate);
 
