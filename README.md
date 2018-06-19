@@ -29,6 +29,7 @@ cd wolf-shaper
 Then:
 
 ```
+apt install libxcursor-dev
 BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
 ```
 
@@ -39,3 +40,12 @@ All plugin builds will then be placed in the bin folder. Copy them to their appr
 ## How to use
 
 Online documentation is available at https://pdesaulniers.github.io/wolf-shaper/.
+
+## Updating
+
+This project uses git submodules. Thus, to update your local copy of the repo, you need to run the following commands:
+```
+git pull
+git submodule update
+```
+You should then be able to build the plugin with the most recent changes.
