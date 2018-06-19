@@ -23,6 +23,7 @@
 #include <iomanip>
 #include <cmath>
 
+#include "WolfShaperParameters.hpp"
 #include "Graph.hpp"
 #include "Oversampler.hpp"
 #include "ParamSmooth.hpp"
@@ -36,19 +37,7 @@ START_NAMESPACE_DISTRHO
 class WolfShaper : public Plugin
 {
   public:
-	enum Parameters
-	{
-		paramPreGain = 0,
-		paramWet,
-		paramPostGain,
-		paramRemoveDC,
-		paramOversample,
-		paramBipolarMode,
-		paramWarpType,
-		paramWarpAmount,
-		paramOut,
-		paramCount
-	};
+
 
 	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
@@ -60,8 +49,10 @@ class WolfShaper : public Plugin
 		parameters[paramRemoveDC] = ParamSmooth(0.0f);
 		parameters[paramOversample] = ParamSmooth(0.0f);
 		parameters[paramBipolarMode] = ParamSmooth(0.0f);
-		parameters[paramWarpType] = ParamSmooth(0.0f);
-		parameters[paramWarpAmount] = ParamSmooth(0.0f);
+		parameters[paramHorizontalWarpType] = ParamSmooth(0.0f);
+		parameters[paramHorizontalWarpAmount] = ParamSmooth(0.0f);
+		parameters[paramVerticalWarpType] = ParamSmooth(0.0f);
+		parameters[paramVerticalWarpAmount] = ParamSmooth(0.0f);
 		parameters[paramOut] = 0.0f;
 	}
 
@@ -154,18 +145,35 @@ class WolfShaper : public Plugin
 			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
 			break;
-		case paramWarpType:
+		case paramHorizontalWarpType:
 			//None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
-			parameter.name = "Warp Type";
+			parameter.name = "H Warp Type";
 			parameter.symbol = "warptype";
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 6.0f;
 			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
 			break;
-		case paramWarpAmount:
-			parameter.name = "Warp Amount";
+		case paramHorizontalWarpAmount:
+			parameter.name = "H Warp Amount";
 			parameter.symbol = "warpamount";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 1.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable;
+			break;
+		case paramVerticalWarpType:
+			//None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
+			parameter.name = "V Warp Type";
+			parameter.symbol = "vwarptype";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 6.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			break;
+		case paramVerticalWarpAmount:
+			parameter.name = "V Warp Amount";
+			parameter.symbol = "vwarpamount";
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
 			parameter.ranges.def = 0.0f;
@@ -291,11 +299,16 @@ class WolfShaper : public Plugin
 
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
-		lineEditor.setWarpType((wolf::WarpType)std::round(parameters[paramWarpType].getRawValue()));
+		wolf::WarpType horizontalWarpType = (wolf::WarpType)std::round(parameters[paramHorizontalWarpType].getRawValue());
+		lineEditor.setHorizontalWarpType(horizontalWarpType);
+
+		wolf::WarpType verticalWarpType = (wolf::WarpType)std::round(parameters[paramVerticalWarpType].getRawValue());
+		lineEditor.setVerticalWarpType(verticalWarpType);
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			lineEditor.setWarpAmount(parameters[paramWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
+			lineEditor.setHorizontalWarpAmount(parameters[paramHorizontalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
+			lineEditor.setVerticalWarpAmount(parameters[paramVerticalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
 
 			const float preGain = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate);
 
