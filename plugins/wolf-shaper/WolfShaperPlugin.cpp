@@ -46,7 +46,7 @@ class WolfShaper : public Plugin
 		parameters[paramPreGain] = ParamSmooth(1.0f);
 		parameters[paramWet] = ParamSmooth(1.0f);
 		parameters[paramPostGain] = ParamSmooth(1.0f);
-		parameters[paramRemoveDC] = ParamSmooth(0.0f);
+		parameters[paramRemoveDC] = ParamSmooth(1.0f);
 		parameters[paramOversample] = ParamSmooth(0.0f);
 		parameters[paramBipolarMode] = ParamSmooth(0.0f);
 		parameters[paramHorizontalWarpType] = ParamSmooth(0.0f);
@@ -125,7 +125,7 @@ class WolfShaper : public Plugin
 			parameter.symbol = "removedc";
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 1.0f;
-			parameter.ranges.def = 0.0f;
+			parameter.ranges.def = 1.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
 			break;
 		case paramOversample:
@@ -134,7 +134,7 @@ class WolfShaper : public Plugin
 			parameter.symbol = "oversample";
 			parameter.ranges.min = 0.0f;
 			parameter.ranges.max = 4.0f;
-			parameter.ranges.def = 1.0f;
+			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
 			break;
 		case paramBipolarMode:
