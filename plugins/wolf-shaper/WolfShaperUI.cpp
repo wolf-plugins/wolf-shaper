@@ -63,17 +63,6 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665),
     fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
 
-    fWheelOversample = new OversampleWheel(this, Size<uint>(47, 26));
-    fWheelOversample->setCallback(this);
-    fWheelOversample->setRange(0, 4);
-
-    fLabelWheelOversample = new NanoLabel(this, Size<uint>(85, 26));
-    fLabelWheelOversample->setText("OVERSAMPLE");
-    fLabelWheelOversample->setFontId(chivoBoldId);
-    fLabelWheelOversample->setFontSize(14.0f);
-    fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
-    fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
-
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
 
@@ -153,6 +142,17 @@ WolfShaperUI::WolfShaperUI() : UI(665, 665),
     fLabelButtonResetGraph->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelButtonResetGraph->setMargin(Margin(6, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1, 0));
 
+    fWheelOversample = new OversampleWheel(this, Size<uint>(47, 26));
+    fWheelOversample->setCallback(this);
+    fWheelOversample->setRange(0, 4);
+
+    fLabelWheelOversample = new NanoLabel(this, Size<uint>(85, 26));
+    fLabelWheelOversample->setText("OVERSAMPLE");
+    fLabelWheelOversample->setFontId(chivoBoldId);
+    fLabelWheelOversample->setFontSize(14.0f);
+    fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
+    fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
+    
     positionWidgets(width, height);
 }
 
