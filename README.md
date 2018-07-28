@@ -15,7 +15,7 @@ Right now, it works on GNU/Linux and Windows. MacOS support is coming soon.
 
 ## Install
 
-You can find some precompiled plugin binaries in the Releases tab. Wolf Shaper is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
+You can find some precompiled plugin binaries in the [Releases](https://github.com/pdesaulniers/wolf-shaper/releases) tab. Wolf Shaper is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
 
 For building the plugin manually, see the section below.
 
