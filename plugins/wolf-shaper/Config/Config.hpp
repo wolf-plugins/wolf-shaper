@@ -11,6 +11,8 @@ extern Color grid_foreground;
 extern Color grid_background;
 extern Color sub_grid;
 extern Color graph_background;
+extern Color grid_middle_line_horizontal;
+extern Color grid_middle_line_vertical;
 extern Color in_out_labels;
 extern Color alignment_lines;
 extern Color input_volume_indicator;

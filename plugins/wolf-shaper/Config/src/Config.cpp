@@ -38,6 +38,8 @@ Color grid_foreground = Color(103, 98, 102, 255);
 Color grid_background = Color(25, 24, 26, 255);
 Color sub_grid = Color(27, 27, 27, 255);
 Color graph_background = Color(40, 40, 47, 255);
+Color grid_middle_line_horizontal = Color(103,98,102,255);
+Color grid_middle_line_vertical = Color(103,98,102,255);
 Color in_out_labels = Color(255, 255, 255, 125);
 
 Color alignment_lines = Color(255, 255, 255, 180);
