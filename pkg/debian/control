@@ -5,7 +5,7 @@ Maintainer: Équipe LibraZiK <librazik@tuxfamily.org>
 Uploaders:
  Olivier Humbert <trebmuh@tuxfamily.org>
 Build-Depends:
- debhelper (>= 10),
+ debhelper (>= 9),
  dssi-dev,
  ladspa-sdk,
  libgl1-mesa-dev | libgl-dev,

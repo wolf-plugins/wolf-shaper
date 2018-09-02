@@ -8,3 +8,6 @@ include /usr/share/dpkg/default.mk
 
 override_dh_auto_build:
 	BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
+
+override_dh_auto_install:
+	dh_auto_install -- PREFIX=/usr
