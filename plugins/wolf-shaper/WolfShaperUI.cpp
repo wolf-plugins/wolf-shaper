@@ -14,7 +14,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(665, 665),
+WolfShaperUI::WolfShaperUI() : UI(611, 662),
                                fBottomBarVisible(true)
 {
     const uint minWidth = 611;
