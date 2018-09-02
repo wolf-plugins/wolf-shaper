@@ -93,10 +93,23 @@ endif
 CXXFLAGS += -DPLUGIN_NAME=\"$(PLUGIN_NAME)\" -DDISTRHO_NAMESPACE=$(DISTRHO_NAMESPACE) -DDGL_NAMESPACE=$(DGL_NAMESPACE)
 
 # --------------------------------------------------------------
-# Check for optional libs
+# Check for libs
 
 ifeq ($(LINUX),true)
-HAVE_DGL   = $(shell pkg-config --exists gl x11 && echo true)
+
+HAVE_X11   = $(shell pkg-config --exists x11 && echo true)
+
+ifneq ($(HAVE_X11),true)
+$(error "Could not find the x11 package! Please install it (libx11-dev on a Debian-based system) and retry building the plugin.")
+endif
+
+HAVE_GL    = $(shell pkg-config --exists gl && echo true)
+
+ifneq ($(HAVE_GL), true)
+$(error "Could not find the gl package! Please install it (libgl1-mesa-dev on a Debian-based system) and retry building the plugin.")
+endif
+
+HAVE_DGL   = true
 HAVE_JACK  = $(shell pkg-config --exists jack   && echo true)
 HAVE_LIBLO = $(shell pkg-config --exists liblo  && echo true)
 endif
