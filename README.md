@@ -13,11 +13,19 @@ Right now, it works on GNU/Linux and Windows. MacOS support is coming soon.
 * Symmetrical and asymmetrical waveshaping
 * Resizable vector-based UI
 
-## Download
+## Install
 
-You can find some precompiled plugin binaries in the [Releases](https://github.com/pdesaulniers/wolf-shaper/releases) tab. Wolf Shaper is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
+You can find some precompiled plugin binaries in the [Releases](https://github.com/pdesaulniers/wolf-shaper/releases) tab. Some packages are also available for Ubuntu and Arch Linux:
 
-For building the plugin manually, see the section below.
+### Ubuntu
+Download the plugin from the [pdesaulniers/wolf PPA](https://launchpad.net/~pdesaulniers/+archive/ubuntu/wolf):
+```
+sudo apt-add-repository -y ppa:pdesaulniers/wolf
+sudo apt-get update
+sudo apt-get install wolf-shaper
+```
+### Arch Linux
+Wolf Shaper is available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
 
 ## Build manually
 
