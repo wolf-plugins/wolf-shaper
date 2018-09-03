@@ -90,6 +90,7 @@ clean:
 	rm -f Libs/inih/*.d Libs/inih/*.o
 	rm -f Libs/DSPFilters/source/*.d Libs/DSPFilters/source/*.o
 	rm -rf $(TARGET_DIR)/$(NAME) $(TARGET_DIR)/$(NAME)-* $(TARGET_DIR)/$(NAME).lv2/
+	rm -rf $(TARGET_DIR)/releases
 
 # --------------------------------------------------------------
 # JACK
