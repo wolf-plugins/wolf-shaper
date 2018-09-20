@@ -15,6 +15,8 @@
  */
 
 #include "DistrhoPlugin.hpp"
+#include "extra/Mutex.hpp"
+#include "extra/ScopedPointer.hpp"
 
 #include <cstdio>
 #include <cstdlib>
@@ -212,6 +214,8 @@ class WolfShaper : public Plugin
 
 	void setState(const char *key, const char *value) override
 	{
+		const MutexLocker cml(mutex);
+
 		if (std::strcmp(key, "graph") == 0)
 		{
 			lineEditor.rebuildFromString(value);
@@ -247,7 +251,7 @@ class WolfShaper : public Plugin
 
 	float calculateValueOutsideGraph(float value)
 	{
-		const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
+		const bool bipolarMode = lineEditor.getBipolarMode();
 
 		if (bipolarMode)
 		{
@@ -272,7 +276,7 @@ class WolfShaper : public Plugin
 			return calculateValueOutsideGraph(input);
 		}
 
-		const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
+		const bool bipolarMode = lineEditor.getBipolarMode();
 
 		if (bipolarMode)
 		{
@@ -287,6 +291,17 @@ class WolfShaper : public Plugin
 
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
+		if (!mutex.tryLock())
+		{
+			if (outputs[0] != inputs[0])
+				std::memcpy(outputs[0], inputs[0], sizeof(float) * frames);
+
+			if (outputs[1] != inputs[1])
+				std::memcpy(outputs[1], inputs[1], sizeof(float) * frames);
+
+			return;
+		}
+
 		float max = 0.0f;
 
 		const int oversamplingParameter = std::round(parameters[paramOversample].getRawValue());
@@ -357,6 +372,8 @@ class WolfShaper : public Plugin
 		oversampler.downsample(outputs);
 
 		setParameterValue(paramOut, max);
+
+		mutex.unlock();
 	}
 
   private:
@@ -364,6 +381,7 @@ class WolfShaper : public Plugin
 	Oversampler oversampler;
 
 	wolf::Graph lineEditor;
+	Mutex mutex;
 
 	float removeDCPrev;
 

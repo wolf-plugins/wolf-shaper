@@ -15,7 +15,7 @@ export DISTRHO_NAMESPACE ?= WOLF_SHAPER_DISTRHO
 export DGL_NAMESPACE ?= WOLF_SHAPER_DGL
 
 EXTRA_INCLUDES ?=
-EXTRA_LIBS ?=
+EXTRA_LIBS ?= -pthread
 
 # --------------------------------------------------------------
 # Fallback to Linux if no other OS defined
@@ -128,8 +128,8 @@ endif
 ifeq ($(HAVE_DGL),true)
 
 ifeq ($(LINUX),true)
-DGL_FLAGS = $(shell pkg-config --cflags gl x11) -lpthread
-DGL_LIBS  = $(shell pkg-config --libs gl x11) -lpthread
+DGL_FLAGS = $(shell pkg-config --cflags gl x11)
+DGL_LIBS  = $(shell pkg-config --libs gl x11)
 endif
 
 ifeq ($(MACOS),true)
