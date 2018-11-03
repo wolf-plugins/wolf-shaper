@@ -43,7 +43,8 @@ class WolfShaper : public Plugin
 
 	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
-				   removeDCPrev({0.f, 0.f})
+				   removeDCPrev({0.f, 0.f}),
+				   mustCopyLineEditor(false)
 	{
 		parameters[paramPreGain] = ParamSmooth(1.0f);
 		parameters[paramWet] = ParamSmooth(1.0f);
@@ -218,7 +219,8 @@ class WolfShaper : public Plugin
 
 		if (std::strcmp(key, "graph") == 0)
 		{
-			lineEditor.rebuildFromString(value);
+			tempLineEditor.rebuildFromString(value);
+			mustCopyLineEditor = true;
 		}
 	}
 
@@ -291,15 +293,19 @@ class WolfShaper : public Plugin
 
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
-		if (!mutex.tryLock())
+		if (mutex.tryLock())
 		{
-			if (outputs[0] != inputs[0])
-				std::memcpy(outputs[0], inputs[0], sizeof(float) * frames);
+			if (mustCopyLineEditor)
+			{
+				lineEditor = tempLineEditor;
 
-			if (outputs[1] != inputs[1])
-				std::memcpy(outputs[1], inputs[1], sizeof(float) * frames);
-
-			return;
+				for (int i = 0; i < lineEditor.getVertexCount(); ++i)
+				{
+					lineEditor.getVertexAtIndex(i)->setGraphPtr(&lineEditor);
+				}
+				
+				mustCopyLineEditor = false;
+			}
 		}
 
 		float max = 0.0f;
@@ -387,6 +393,9 @@ class WolfShaper : public Plugin
 	Oversampler oversampler;
 
 	wolf::Graph lineEditor;
+	wolf::Graph tempLineEditor;
+	bool mustCopyLineEditor;
+
 	Mutex mutex;
 
 	float removeDCPrev[2];
