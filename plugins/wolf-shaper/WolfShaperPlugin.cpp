@@ -46,17 +46,7 @@ class WolfShaper : public Plugin
 				   removeDCPrev({0.f, 0.f}),
 				   mustCopyLineEditor(false)
 	{
-		parameters[paramPreGain] = ParamSmooth(1.0f);
-		parameters[paramWet] = ParamSmooth(1.0f);
-		parameters[paramPostGain] = ParamSmooth(1.0f);
-		parameters[paramRemoveDC] = ParamSmooth(1.0f);
-		parameters[paramOversample] = ParamSmooth(0.0f);
-		parameters[paramBipolarMode] = ParamSmooth(0.0f);
-		parameters[paramHorizontalWarpType] = ParamSmooth(0.0f);
-		parameters[paramHorizontalWarpAmount] = ParamSmooth(0.0f);
-		parameters[paramVerticalWarpType] = ParamSmooth(0.0f);
-		parameters[paramVerticalWarpAmount] = ParamSmooth(0.0f);
-		parameters[paramOut] = 0.0f;
+
 	}
 
   protected:
@@ -97,6 +87,9 @@ class WolfShaper : public Plugin
 
 	void initParameter(uint32_t index, Parameter &parameter) override
 	{
+		if (index >= paramCount)
+			return;
+		
 		switch (index)
 		{
 		case paramPreGain:
@@ -186,8 +179,11 @@ class WolfShaper : public Plugin
 			parameter.name = "Out";
 			parameter.symbol = "out";
 			parameter.hints = kParameterIsOutput;
+			parameter.ranges.def = 0.0f;
 			break;
 		}
+
+		parameters[index] = ParamSmooth(parameter.ranges.def);
 	}
 
 	float getParameterValue(uint32_t index) const override
