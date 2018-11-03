@@ -184,6 +184,7 @@ class WolfShaper : public Plugin
 		}
 
 		parameters[index] = ParamSmooth(parameter.ranges.def);
+		parameters[index].calculateCoeff(20.f, getSampleRate());
 	}
 
 	float getParameterValue(uint32_t index) const override
@@ -191,9 +192,22 @@ class WolfShaper : public Plugin
 		return parameters[index].getRawValue();
 	}
 
+	int getOversamplingRatio()
+	{
+		return std::pow(2, std::round(parameters[paramOversample].getRawValue()));
+	}
+
 	void setParameterValue(uint32_t index, float value) override
 	{
 		parameters[index].setValue(value);
+
+		if (index == paramOversample)
+		{
+			for (int i = 0; i < paramCount; ++i)
+			{
+				parameters[i].calculateCoeff(20.f, getSampleRate() * getOversamplingRatio());
+			}
+		}
 	}
 
 	void initState(uint32_t index, String &stateKey, String &defaultStateValue) override
@@ -306,14 +320,11 @@ class WolfShaper : public Plugin
 
 		float max = 0.0f;
 
-		const int oversamplingParameter = std::round(parameters[paramOversample].getRawValue());
-
-		const int oversamplingRatio = std::pow(2, oversamplingParameter);
+		const int oversamplingRatio = getOversamplingRatio();
 		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
-		const float smoothFreq = 20.0f;
-
+		
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
 		wolf::WarpType horizontalWarpType = (wolf::WarpType)std::round(parameters[paramHorizontalWarpType].getRawValue());
@@ -331,10 +342,10 @@ class WolfShaper : public Plugin
 
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
-			lineEditor.setHorizontalWarpAmount(parameters[paramHorizontalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
-			lineEditor.setVerticalWarpAmount(parameters[paramVerticalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
+			lineEditor.setHorizontalWarpAmount(parameters[paramHorizontalWarpAmount].getSmoothedValue());
+			lineEditor.setVerticalWarpAmount(parameters[paramVerticalWarpAmount].getSmoothedValue());
 
-			const float preGain = parameters[paramPreGain].getSmoothedValue(smoothFreq, sampleRate);
+			const float preGain = parameters[paramPreGain].getSmoothedValue();
 
 			float inputL = preGain * buffer[0][i];
 			float inputR = preGain * buffer[1][i];
@@ -363,9 +374,9 @@ class WolfShaper : public Plugin
 			graphL = getGraphValue(inputL);
 			graphR = getGraphValue(inputR);
 
-			const float wet = parameters[paramWet].getSmoothedValue(smoothFreq, sampleRate);
+			const float wet = parameters[paramWet].getSmoothedValue();
 			const float dry = 1.0f - wet;
-			const float postGain = parameters[paramPostGain].getSmoothedValue(smoothFreq, sampleRate);
+			const float postGain = parameters[paramPostGain].getSmoothedValue();
 
 			buffer[0][i] = (dry * inputL + wet * graphL) * postGain;
 			buffer[1][i] = (dry * inputR + wet * graphR) * postGain;
