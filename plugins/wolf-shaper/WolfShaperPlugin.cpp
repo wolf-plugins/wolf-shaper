@@ -320,6 +320,13 @@ class WolfShaper : public Plugin
 		wolf::WarpType verticalWarpType = (wolf::WarpType)std::round(parameters[paramVerticalWarpType].getRawValue());
 		lineEditor.setVerticalWarpType(verticalWarpType);
 
+		const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
+
+		if (!mustRemoveDC) {
+			removeDCPrev[0] = 0.f;
+			removeDCPrev[1] = 0.f;
+		}
+
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
 			lineEditor.setHorizontalWarpAmount(parameters[paramHorizontalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
@@ -357,7 +364,6 @@ class WolfShaper : public Plugin
 			const float wet = parameters[paramWet].getSmoothedValue(smoothFreq, sampleRate);
 			const float dry = 1.0f - wet;
 			const float postGain = parameters[paramPostGain].getSmoothedValue(smoothFreq, sampleRate);
-			const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
 
 			buffer[0][i] = (dry * inputL + wet * graphL) * postGain;
 			buffer[1][i] = (dry * inputR + wet * graphR) * postGain;
