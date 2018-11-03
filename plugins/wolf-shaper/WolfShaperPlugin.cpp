@@ -43,7 +43,7 @@ class WolfShaper : public Plugin
 
 	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
-				   removeDCPrev(0.0f)
+				   removeDCPrev({0.f, 0.f})
 	{
 		parameters[paramPreGain] = ParamSmooth(1.0f);
 		parameters[paramWet] = ParamSmooth(1.0f);
@@ -222,16 +222,16 @@ class WolfShaper : public Plugin
 		}
 	}
 
-	float removeDCOffset(float input)
+	float removeDCOffset(float input, int chn)
 	{
 		//Steep IIR filter at the DC frequency
 
 		const float scaleFactor = 0.9999f; //Closer to 1 means steeper stop band
 
-		const float value = input + scaleFactor * removeDCPrev;
-		const float result = value - removeDCPrev;
+		const float value = input + scaleFactor * removeDCPrev[chn];
+		const float result = value - removeDCPrev[chn];
 
-		removeDCPrev = value;
+		removeDCPrev[chn] = value;
 
 		return result;
 	}
@@ -320,6 +320,13 @@ class WolfShaper : public Plugin
 		wolf::WarpType verticalWarpType = (wolf::WarpType)std::round(parameters[paramVerticalWarpType].getRawValue());
 		lineEditor.setVerticalWarpType(verticalWarpType);
 
+		const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
+
+		if (!mustRemoveDC) {
+			removeDCPrev[0] = 0.f;
+			removeDCPrev[1] = 0.f;
+		}
+
 		for (uint32_t i = 0; i < numSamples; ++i)
 		{
 			lineEditor.setHorizontalWarpAmount(parameters[paramHorizontalWarpAmount].getSmoothedValue(smoothFreq, sampleRate));
@@ -357,15 +364,14 @@ class WolfShaper : public Plugin
 			const float wet = parameters[paramWet].getSmoothedValue(smoothFreq, sampleRate);
 			const float dry = 1.0f - wet;
 			const float postGain = parameters[paramPostGain].getSmoothedValue(smoothFreq, sampleRate);
-			const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
 
 			buffer[0][i] = (dry * inputL + wet * graphL) * postGain;
 			buffer[1][i] = (dry * inputR + wet * graphR) * postGain;
 
 			if (mustRemoveDC)
 			{
-				buffer[0][i] = removeDCOffset(buffer[0][i]);
-				buffer[1][i] = removeDCOffset(buffer[1][i]);
+				buffer[0][i] = removeDCOffset(buffer[0][i], 0);
+				buffer[1][i] = removeDCOffset(buffer[1][i], 1);
 			}
 		}
 
@@ -383,7 +389,7 @@ class WolfShaper : public Plugin
 	wolf::Graph lineEditor;
 	Mutex mutex;
 
-	float removeDCPrev;
+	float removeDCPrev[2];
 
 	DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WolfShaper)
 };
