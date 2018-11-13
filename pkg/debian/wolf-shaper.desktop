@@ -1,9 +1,0 @@
-[Desktop Entry]
-Name=Wolf Shaper
-Comment=Wave shaper
-Comment[fr]=Formeur d'onde
-Type=Application
-Categories=AudioVideo;Audio;AudioVideoEditing;
-Terminal=false
-Exec=wolf-shaper
-Icon=wolf-shaper
