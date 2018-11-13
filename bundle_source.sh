@@ -1,7 +1,8 @@
 PLUGIN_NAME=wolf-shaper
 PLUGIN_VERSION=0.1.6
 
-git clone --recursive "https://github.com/pdesaulniers/$PLUGIN_NAME.git"
+rm -rf "$PLUGIN_NAME"
+git clone --recursive "https://github.com/pdesaulniers/$PLUGIN_NAME.git" --branch "v$PLUGIN_VERSION" --single-branch
 cd "$PLUGIN_NAME"
 find . -name ".git" -type f -delete
 rm -rf .git
