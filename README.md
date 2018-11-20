@@ -25,7 +25,11 @@ sudo apt-get update
 sudo apt-get install wolf-shaper
 ```
 ### Arch Linux
-Wolf Shaper is available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
+For installing the latest release:
+```
+sudo pacman -S wolf-shaper
+```
+A git package is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
 
 ## Build manually
 
