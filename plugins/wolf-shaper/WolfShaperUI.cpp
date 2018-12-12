@@ -3,7 +3,7 @@
 #include "WolfShaperUI.hpp"
 #include "Window.hpp"
 #include "Config.hpp"
-#include "Layout.hpp"
+#include "Margin.hpp"
 #include "Fonts/chivo_bold.hpp"
 
 #include <string>

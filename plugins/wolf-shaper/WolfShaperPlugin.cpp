@@ -248,19 +248,6 @@ class WolfShaper : public Plugin
 		return result;
 	}
 
-	/* bool isSilence(const float **buffer, uint32_t frames)
-	{
-		for (uint32_t i = 0; i < frames; ++i)
-		{
-			if (buffer[0][i] != 0.0f || buffer[1][i] != 0.0f)
-			{
-				return false;
-			}
-		}
-
-		return true;
-	} */
-
 	float calculateValueOutsideGraph(float value)
 	{
 		const bool bipolarMode = lineEditor.getBipolarMode();
