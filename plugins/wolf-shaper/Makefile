@@ -14,6 +14,15 @@
 NAME = $(PLUGIN_NAME)
 
 # --------------------------------------------------------------
+# Plugin types to build
+
+BUILD_LV2 ?= true
+BUILD_VST2 ?= true
+BUILD_JACK ?= true
+BUILD_DSSI ?= true
+BUILD_LADSPA ?= false
+
+# --------------------------------------------------------------
 # Files to build
 
 OBJS_DSP = \
