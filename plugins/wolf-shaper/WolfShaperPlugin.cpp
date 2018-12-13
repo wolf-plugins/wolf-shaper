@@ -39,14 +39,13 @@ START_NAMESPACE_DISTRHO
 class WolfShaper : public Plugin
 {
   public:
-
-
 	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
-				   removeDCPrev({0.f, 0.f}),
-				   mustCopyLineEditor(false)
+				   removeDCPrev{0.f, 0.f},
+				   mustCopyLineEditor(false),
+				   inputIndicatorPos(0.0f),
+				   inputIndicatorAcceleration(0.0f)
 	{
-
 	}
 
   protected:
@@ -89,7 +88,7 @@ class WolfShaper : public Plugin
 	{
 		if (index >= paramCount)
 			return;
-		
+
 		switch (index)
 		{
 		case paramPreGain:
@@ -288,6 +287,23 @@ class WolfShaper : public Plugin
 		}
 	}
 
+	void updateInputIndicatorPos(const float max, const uint32_t frames)
+	{
+		const float deadZone = 0.001f;
+		const float speed = 0.35f;
+
+		if (max > deadZone && max > inputIndicatorPos)
+		{
+			inputIndicatorPos = max;
+			inputIndicatorAcceleration = 0.0f;
+		}
+		else if (inputIndicatorPos > -deadZone)
+		{
+			inputIndicatorPos -= inputIndicatorAcceleration * frames;
+			inputIndicatorAcceleration += std::pow(inputIndicatorAcceleration + speed / getSampleRate(), 2) * frames;
+		}
+	}
+
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
 		if (mutex.tryLock())
@@ -300,7 +316,7 @@ class WolfShaper : public Plugin
 				{
 					lineEditor.getVertexAtIndex(i)->setGraphPtr(&lineEditor);
 				}
-				
+
 				mustCopyLineEditor = false;
 			}
 		}
@@ -311,7 +327,7 @@ class WolfShaper : public Plugin
 		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
-		
+
 		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
 
 		wolf::WarpType horizontalWarpType = (wolf::WarpType)std::round(parameters[paramHorizontalWarpType].getRawValue());
@@ -322,7 +338,8 @@ class WolfShaper : public Plugin
 
 		const bool mustRemoveDC = parameters[paramRemoveDC].getRawValue() > 0.50f;
 
-		if (!mustRemoveDC) {
+		if (!mustRemoveDC)
+		{
 			removeDCPrev[0] = 0.f;
 			removeDCPrev[1] = 0.f;
 		}
@@ -377,7 +394,8 @@ class WolfShaper : public Plugin
 
 		oversampler.downsample(outputs);
 
-		setParameterValue(paramOut, max);
+		updateInputIndicatorPos(max, frames);
+		setParameterValue(paramOut, inputIndicatorPos);
 
 		mutex.unlock();
 	}
@@ -389,6 +407,9 @@ class WolfShaper : public Plugin
 	wolf::Graph lineEditor;
 	wolf::Graph tempLineEditor;
 	bool mustCopyLineEditor;
+
+	float inputIndicatorPos;
+	float inputIndicatorAcceleration;
 
 	Mutex mutex;
 
