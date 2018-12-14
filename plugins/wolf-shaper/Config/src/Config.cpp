@@ -81,6 +81,7 @@ Color plugin_background = Color(42, 44, 47, 255);
 Color graph_margin = Color(33, 32, 39, 255);
 Color top_border = Color(0, 0, 0, 255);
 Color side_borders = Color(100, 100, 100, 255);
+Color right_click_menu_border_color = Color(10, 10, 10, 255);
 
 static std::string getLocalConfigPath()
 {
@@ -246,6 +247,7 @@ void load()
     colorFromString(reader.Get("colors", "graph_margin", ""), &graph_margin);
     colorFromString(reader.Get("colors", "top_border", ""), &top_border);
     colorFromString(reader.Get("colors", "side_borders", ""), &side_borders);
+    colorFromString(reader.Get("colors", "right_click_menu_border_color", ""), &right_click_menu_border_color);
 
     isLoaded = true;
     std::cout << "Config loaded from 'wolf-shaper.conf'\n";
