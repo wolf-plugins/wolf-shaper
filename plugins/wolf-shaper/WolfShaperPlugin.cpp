@@ -28,6 +28,7 @@
 #include "WolfShaperParameters.hpp"
 #include "Graph.hpp"
 #include "Oversampler.hpp"
+#include "Mathf.hpp"
 #include "ParamSmooth.hpp"
 
 #include "DspFilters/Dsp.h"
@@ -233,16 +234,16 @@ class WolfShaper : public Plugin
 		}
 	}
 
-	float removeDCOffset(float input, int chn)
+	float removeDCOffset(float input, int channel)
 	{
 		//Steep IIR filter at the DC frequency
 
 		const float scaleFactor = 0.9999f; //Closer to 1 means steeper stop band
 
-		const float value = input + scaleFactor * removeDCPrev[chn];
-		const float result = value - removeDCPrev[chn];
+		const float value = input + scaleFactor * removeDCPrev[channel];
+		const float result = value - removeDCPrev[channel];
 
-		removeDCPrev[chn] = value;
+		removeDCPrev[channel] = value;
 
 		return result;
 	}
@@ -287,14 +288,14 @@ class WolfShaper : public Plugin
 		}
 	}
 
-	void updateInputIndicatorPos(const float max, const uint32_t frames)
+	void updateInputIndicatorPos(const float peak, const uint32_t frames)
 	{
 		const float deadZone = 0.001f;
 		const float speed = 0.35f;
 
-		if (max > deadZone && max > inputIndicatorPos)
+		if (peak > deadZone && peak > inputIndicatorPos)
 		{
-			inputIndicatorPos = max;
+			inputIndicatorPos = peak;
 			inputIndicatorAcceleration = 0.0f;
 		}
 		else if (inputIndicatorPos > -deadZone)
@@ -302,6 +303,8 @@ class WolfShaper : public Plugin
 			inputIndicatorPos -= inputIndicatorAcceleration * frames;
 			inputIndicatorAcceleration += std::pow(inputIndicatorAcceleration + speed / getSampleRate(), 2) * frames;
 		}
+
+		inputIndicatorPos = wolf::clamp(inputIndicatorPos, -deadZone, 1.0f);
 	}
 
 	void run(const float **inputs, float **outputs, uint32_t frames) override
@@ -321,7 +324,7 @@ class WolfShaper : public Plugin
 			}
 		}
 
-		float max = 0.0f;
+		float peak = 0.0f;
 
 		const int oversamplingRatio = getOversamplingRatio();
 		uint32_t numSamples = frames * oversamplingRatio;
@@ -367,8 +370,8 @@ class WolfShaper : public Plugin
 			const float absL = std::abs(inputL);
 			const float absR = std::abs(inputR);
 
-			max = std::max(max, absL);
-			max = std::max(max, absR);
+			peak = std::max(peak, absL);
+			peak = std::max(peak, absR);
 
 			const bool bipolarMode = parameters[paramBipolarMode].getRawValue() > 0.50f;
 			lineEditor.setBipolarMode(bipolarMode);
@@ -394,7 +397,7 @@ class WolfShaper : public Plugin
 
 		oversampler.downsample(outputs);
 
-		updateInputIndicatorPos(max, frames);
+		updateInputIndicatorPos(peak, frames);
 		setParameterValue(paramOut, inputIndicatorPos);
 
 		mutex.unlock();
