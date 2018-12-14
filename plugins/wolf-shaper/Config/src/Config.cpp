@@ -44,7 +44,7 @@ Color grid_middle_line_horizontal = Color(103, 98, 102, 255);
 Color grid_middle_line_vertical = Color(103, 98, 102, 255);
 Color in_out_labels = Color(255, 255, 255, 125);
 
-Color alignment_lines = Color(255, 255, 255, 180);
+Color alignment_lines = Color(200, 200, 200, 180);
 Color input_volume_indicator = Color(255, 255, 255, 180);
 
 Color playhead_circle_fill = Color(255, 255, 255, 180);
@@ -55,24 +55,24 @@ Color graph_edges_background_normal = Color(169, 29, 239, 100);
 Color graph_edges_background_focused = Color(255, 221, 76, 100);
 
 Color graph_edges_foreground_normal = Color(239, 61, 227, 255);
-Color graph_edges_foreground_focused = Color(255, 221, 76, 255);
+Color graph_edges_foreground_focused = Color(255, 150, 255, 255);
 
 Color graph_gradient_icol = Color(60, 60, 60, 20);
 Color graph_gradient_ocol = Color(60, 60, 60, 60);
 
-Color vertex_fill_normal = Color(255, 255, 255, 255);
-Color vertex_fill_focused = Color(255, 221, 76, 255);
+Color vertex_fill_normal = Color(255, 222, 255, 255);
+Color vertex_fill_focused = Color(255, 255, 255, 255);
 
 Color vertex_halo = Color(0, 0, 0, 255);
 
 Color vertex_stroke_normal = Color(0, 0, 0, 255);
-Color vertex_stroke_focused = Color(0, 0, 0, 255);
+Color vertex_stroke_focused = Color(50, 50, 50, 255);
 
-float vertex_radius = 8.0f;
+float vertex_radius = 7.0f;
 float vertex_stroke_width = 2.0f;
 
 Color tension_handle_normal = Color(228, 104, 181, 255);
-Color tension_handle_focused = Color(228, 228, 181, 255);
+Color tension_handle_focused = Color(255, 150, 255, 255);
 
 float tension_handle_radius = 4.0f;
 float tension_handle_stroke_width = 2.0f;
