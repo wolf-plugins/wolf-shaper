@@ -460,19 +460,24 @@ class WolfShaper : public Plugin
 		float peak = 0.0f;
 
 		//pre filtering
-		preFilterHandlerL.setFiltertype(parameters[paramPreFilterType].getRawValue());
-		preFilterHandlerR.setFiltertype(parameters[paramPreFilterType].getRawValue());
+		const bool preFilterOn = std::round(parameters[paramPreFilterOn].getRawValue());
 
-		for (uint32_t i = 0; i < frames; ++i)
+		if (preFilterOn)
 		{
-			const float preCutoff = parameters[paramPreFilterCutoff].getSmoothedValue();
-			const float preResonance = parameters[paramPreFilterResonance].getSmoothedValue();
+			preFilterHandlerL.setFiltertype(parameters[paramPreFilterType].getRawValue());
+			preFilterHandlerR.setFiltertype(parameters[paramPreFilterType].getRawValue());
 
-			const float scaledCutoff = wolf::logScale(preCutoff, MIN_CUTOFF, MAX_CUTOFF);
-			const float scaledResonance = wolf::logScale(preResonance, MIN_RESONANCE, MAX_RESONANCE);
+			for (uint32_t i = 0; i < frames; ++i)
+			{
+				const float preCutoff = parameters[paramPreFilterCutoff].getSmoothedValue();
+				const float preResonance = parameters[paramPreFilterResonance].getSmoothedValue();
 
-			outputs[0][i] = preFilterHandlerL.process(inputs[0][i], scaledCutoff, scaledResonance);
-			outputs[1][i] = preFilterHandlerR.process(inputs[1][i], scaledCutoff, scaledResonance);
+				const float scaledCutoff = wolf::logScale(preCutoff, MIN_CUTOFF, MAX_CUTOFF);
+				const float scaledResonance = wolf::logScale(preResonance, MIN_RESONANCE, MAX_RESONANCE);
+
+				outputs[0][i] = preFilterHandlerL.process(inputs[0][i], scaledCutoff, scaledResonance);
+				outputs[1][i] = preFilterHandlerR.process(inputs[1][i], scaledCutoff, scaledResonance);
+			}
 		}
 
 		//distortion
@@ -481,7 +486,16 @@ class WolfShaper : public Plugin
 
 		const double sampleRate = getSampleRate();
 
-		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, outputs);
+		float **buffer;
+
+		if (preFilterOn) //the input is now in the output, so we oversample the output
+		{
+			buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, outputs);
+		}
+		else
+		{
+			buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
+		}
 
 		wolf::WarpType horizontalWarpType = (wolf::WarpType)std::round(parameters[paramHorizontalWarpType].getRawValue());
 		lineEditor.setHorizontalWarpType(horizontalWarpType);
@@ -551,19 +565,25 @@ class WolfShaper : public Plugin
 		setParameterValue(paramOut, inputIndicatorPos);
 
 		//post filtering
-		postFilterHandlerL.setFiltertype(parameters[paramPostFilterType].getRawValue());
-		postFilterHandlerR.setFiltertype(parameters[paramPostFilterType].getRawValue());
 
-		for (uint32_t i = 0; i < frames; ++i)
+		const bool postFilterOn = std::round(parameters[paramPostFilterOn].getRawValue());
+
+		if (postFilterOn)
 		{
-			const float postCutoff = parameters[paramPostFilterCutoff].getSmoothedValue();
-			const float postResonance = parameters[paramPostFilterResonance].getSmoothedValue();
+			postFilterHandlerL.setFiltertype(parameters[paramPostFilterType].getRawValue());
+			postFilterHandlerR.setFiltertype(parameters[paramPostFilterType].getRawValue());
 
-			const float scaledCutoff = wolf::logScale(postCutoff, MIN_CUTOFF, MAX_CUTOFF);
-			const float scaledResonance = wolf::logScale(postResonance, MIN_RESONANCE, MAX_RESONANCE);
+			for (uint32_t i = 0; i < frames; ++i)
+			{
+				const float postCutoff = parameters[paramPostFilterCutoff].getSmoothedValue();
+				const float postResonance = parameters[paramPostFilterResonance].getSmoothedValue();
 
-			outputs[0][i] = postFilterHandlerL.process(outputs[0][i], scaledCutoff, scaledResonance);
-			outputs[1][i] = postFilterHandlerR.process(outputs[1][i], scaledCutoff, scaledResonance);
+				const float scaledCutoff = wolf::logScale(postCutoff, MIN_CUTOFF, MAX_CUTOFF);
+				const float scaledResonance = wolf::logScale(postResonance, MIN_RESONANCE, MAX_RESONANCE);
+
+				outputs[0][i] = postFilterHandlerL.process(outputs[0][i], scaledCutoff, scaledResonance);
+				outputs[1][i] = postFilterHandlerR.process(outputs[1][i], scaledCutoff, scaledResonance);
+			}
 		}
 
 		mutex.unlock();
