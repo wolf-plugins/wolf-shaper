@@ -32,6 +32,7 @@
 #include "ParamSmooth.hpp"
 
 #include "DspFilters/Dsp.h"
+#include "Libs/TAL-Filter-2/FilterHandler.h"
 
 START_NAMESPACE_DISTRHO
 
@@ -40,8 +41,17 @@ START_NAMESPACE_DISTRHO
 class WolfShaper : public Plugin
 {
   public:
+	constexpr static float MIN_CUTOFF = 0.001f;
+	constexpr static float MAX_CUTOFF = 1.0f;
+	constexpr static float MIN_RESONANCE = 0.001f;
+	constexpr static float MAX_RESONANCE = 0.95f;
+
 	WolfShaper() : Plugin(paramCount, 0, 1),
 				   oversampler(),
+				   preFilterHandlerL(getSampleRate()),
+				   preFilterHandlerR(getSampleRate()),
+				   postFilterHandlerL(getSampleRate()),
+				   postFilterHandlerR(getSampleRate()),
 				   removeDCPrev{0.f, 0.f},
 				   mustCopyLineEditor(false),
 				   inputIndicatorPos(0.0f),
@@ -57,7 +67,7 @@ class WolfShaper : public Plugin
 
 	const char *getDescription() const noexcept override
 	{
-		return "Waveshaping distortion plugin with spline-based graph.";
+		return "Waveshaping distortion plugin with a spline-based graph.";
 	}
 
 	const char *getMaker() const noexcept override
@@ -175,6 +185,125 @@ class WolfShaper : public Plugin
 			parameter.ranges.def = 0.0f;
 			parameter.hints = kParameterIsAutomable;
 			break;
+		case paramPreFilterOn:
+			parameter.name = "Pre Filter On";
+			parameter.symbol = "prefilteron";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 1.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
+			break;
+		case paramPreFilterType:
+			parameter.ranges.min = 0;
+			parameter.ranges.max = 6;
+			parameter.ranges.def = 0;
+			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			parameter.name = "Pre Filter Type";
+			parameter.symbol = "prefiltertype";
+			parameter.enumValues.count = parameter.ranges.max + 1;
+			parameter.enumValues.restrictedMode = true;
+			{
+				ParameterEnumerationValue *const values = new ParameterEnumerationValue[parameter.enumValues.count];
+				parameter.enumValues.values = values;
+				values[0].label = "Lp24db";
+				values[0].value = (float)FilterType::Lp24db;
+				values[1].label = "Lp18db";
+				values[1].value = (float)FilterType::Lp18db;
+				values[2].label = "Lp12db";
+				values[2].value = (float)FilterType::Lp12db;
+				values[3].label = "Lp06db";
+				values[3].value = (float)FilterType::Lp06db;
+				values[4].label = "Hp24db";
+				values[4].value = (float)FilterType::Hp24db;
+				values[5].label = "Bp24db";
+				values[5].value = (float)FilterType::Bp24db;
+				values[6].label = "N24db";
+				values[6].value = (float)FilterType::N24db;
+			}
+			break;
+		case paramPreFilterCutoff:
+			parameter.name = "Pre Filter Cutoff";
+			parameter.symbol = "prefiltercutoff";
+			parameter.ranges.min = MIN_CUTOFF;
+			parameter.ranges.max = MAX_CUTOFF;
+			parameter.ranges.def = MAX_CUTOFF;
+			parameter.hints = kParameterIsAutomable;
+			break;
+		case paramPreFilterResonance:
+			parameter.name = "Pre Filter Resonance";
+			parameter.symbol = "prefilterresonance";
+			parameter.ranges.min = MIN_RESONANCE;
+			parameter.ranges.max = MAX_RESONANCE;
+			parameter.ranges.def = MIN_RESONANCE;
+			parameter.hints = kParameterIsAutomable;
+			break;
+		case paramPreFilterPreGain:
+			//TODO
+			break;
+		case paramPreFilterWet:
+			//TODO
+			break;
+		case paramPreFilterPostGain:
+			//TODO
+			break;
+		case paramPostFilterOn:
+			parameter.name = "Post Filter On";
+			parameter.symbol = "postfilteron";
+			parameter.ranges.min = 0.0f;
+			parameter.ranges.max = 1.0f;
+			parameter.ranges.def = 0.0f;
+			parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
+			break;
+		case paramPostFilterType:
+			parameter.ranges.min = 0;
+			parameter.ranges.max = 6;
+			parameter.ranges.def = 0;
+			parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+			parameter.name = "Post Filter Type";
+			parameter.symbol = "postfiltertype";
+			parameter.enumValues.count = parameter.ranges.max + 1;
+			parameter.enumValues.restrictedMode = true;
+			{
+				ParameterEnumerationValue *const values = new ParameterEnumerationValue[parameter.enumValues.count];
+				parameter.enumValues.values = values;
+				values[0].label = "Lp24db";
+				values[0].value = (float)FilterType::Lp24db;
+				values[1].label = "Lp18db";
+				values[1].value = (float)FilterType::Lp18db;
+				values[2].label = "Lp12db";
+				values[2].value = (float)FilterType::Lp12db;
+				values[3].label = "Lp06db";
+				values[3].value = (float)FilterType::Lp06db;
+				values[4].label = "Hp24db";
+				values[4].value = (float)FilterType::Hp24db;
+				values[5].label = "Bp24db";
+				values[5].value = (float)FilterType::Bp24db;
+				values[6].label = "N24db";
+				values[6].value = (float)FilterType::N24db;
+			}
+			break;
+		case paramPostFilterCutoff:
+			parameter.name = "Post Filter Cutoff";
+			parameter.symbol = "postfiltercutoff";
+			parameter.ranges.min = MIN_CUTOFF;
+			parameter.ranges.max = MAX_CUTOFF;
+			parameter.ranges.def = MAX_CUTOFF;
+			parameter.hints = kParameterIsAutomable;
+			break;
+		case paramPostFilterResonance:
+			parameter.name = "Post Filter Resonance";
+			parameter.symbol = "postfilterresonance";
+			parameter.ranges.min = MIN_RESONANCE;
+			parameter.ranges.max = MAX_RESONANCE;
+			parameter.ranges.def = MIN_RESONANCE;
+			parameter.hints = kParameterIsAutomable;
+			break;
+		case paramPostFilterPreGain:
+			break;
+		case paramPostFilterWet:
+			break;
+		case paramPostFilterPostGain:
+			break;
 		case paramOut:
 			parameter.name = "Out";
 			parameter.symbol = "out";
@@ -205,6 +334,10 @@ class WolfShaper : public Plugin
 		{
 			for (int i = 0; i < paramCount; ++i)
 			{
+				//these parameters are used out of the oversampled DSP, so we skip them
+				if (i == paramPreFilterCutoff || i == paramPreFilterResonance || i == paramPostFilterCutoff || i == paramPostFilterResonance)
+					continue;
+
 				parameters[i].calculateCoeff(20.f, getSampleRate() * getOversamplingRatio());
 			}
 		}
@@ -326,12 +459,29 @@ class WolfShaper : public Plugin
 
 		float peak = 0.0f;
 
+		//pre filtering
+		preFilterHandlerL.setFiltertype(parameters[paramPreFilterType].getRawValue());
+		preFilterHandlerR.setFiltertype(parameters[paramPreFilterType].getRawValue());
+
+		for (uint32_t i = 0; i < frames; ++i)
+		{
+			const float preCutoff = parameters[paramPreFilterCutoff].getSmoothedValue();
+			const float preResonance = parameters[paramPreFilterResonance].getSmoothedValue();
+
+			const float scaledCutoff = wolf::logScale(preCutoff, MIN_CUTOFF, MAX_CUTOFF);
+			const float scaledResonance = wolf::logScale(preResonance, MIN_RESONANCE, MAX_RESONANCE);
+
+			outputs[0][i] = preFilterHandlerL.process(inputs[0][i], scaledCutoff, scaledResonance);
+			outputs[1][i] = preFilterHandlerR.process(inputs[1][i], scaledCutoff, scaledResonance);
+		}
+
+		//distortion
 		const int oversamplingRatio = getOversamplingRatio();
 		uint32_t numSamples = frames * oversamplingRatio;
 
 		const double sampleRate = getSampleRate();
 
-		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, inputs);
+		float **buffer = oversampler.upsample(oversamplingRatio, frames, sampleRate, outputs);
 
 		wolf::WarpType horizontalWarpType = (wolf::WarpType)std::round(parameters[paramHorizontalWarpType].getRawValue());
 		lineEditor.setHorizontalWarpType(horizontalWarpType);
@@ -400,12 +550,33 @@ class WolfShaper : public Plugin
 		updateInputIndicatorPos(peak, frames);
 		setParameterValue(paramOut, inputIndicatorPos);
 
+		//post filtering
+		postFilterHandlerL.setFiltertype(parameters[paramPostFilterType].getRawValue());
+		postFilterHandlerR.setFiltertype(parameters[paramPostFilterType].getRawValue());
+
+		for (uint32_t i = 0; i < frames; ++i)
+		{
+			const float postCutoff = parameters[paramPostFilterCutoff].getSmoothedValue();
+			const float postResonance = parameters[paramPostFilterResonance].getSmoothedValue();
+
+			const float scaledCutoff = wolf::logScale(postCutoff, MIN_CUTOFF, MAX_CUTOFF);
+			const float scaledResonance = wolf::logScale(postResonance, MIN_RESONANCE, MAX_RESONANCE);
+
+			outputs[0][i] = postFilterHandlerL.process(outputs[0][i], scaledCutoff, scaledResonance);
+			outputs[1][i] = postFilterHandlerR.process(outputs[1][i], scaledCutoff, scaledResonance);
+		}
+
 		mutex.unlock();
 	}
 
   private:
 	ParamSmooth parameters[paramCount];
 	Oversampler oversampler;
+
+	FilterHandler preFilterHandlerL;
+	FilterHandler preFilterHandlerR;
+	FilterHandler postFilterHandlerL;
+	FilterHandler postFilterHandlerR;
 
 	wolf::Graph lineEditor;
 	wolf::Graph tempLineEditor;
