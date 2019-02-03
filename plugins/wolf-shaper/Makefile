@@ -82,6 +82,13 @@ OBJS_UI  = \
 include ../Makefile.mk
 
 # --------------------------------------------------------------
+# Additional flags
+
+ifeq ($(PARANOID_MODE),true)
+BASE_FLAGS += -Wall -Wextra -Werror
+endif
+
+# --------------------------------------------------------------
 # Enable all possible plugin types
 
 ifeq ($(BUILD_JACK),true)

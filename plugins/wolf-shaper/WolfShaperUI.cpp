@@ -365,7 +365,7 @@ void WolfShaperUI::uiIdle()
 {
 }
 
-bool WolfShaperUI::onMouse(const MouseEvent &ev)
+bool WolfShaperUI::onMouse(const MouseEvent &)
 {
     return false;
 }

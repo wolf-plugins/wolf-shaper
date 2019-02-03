@@ -150,7 +150,6 @@ static void colorFromString(std::string colorStr, Color *targetColor)
     }
 
     const char *str = colorStr.c_str();
-    char const *rest;
 
     std::string colorTypeString = wolf::takeUntil(str, '(');
     ColorType colorType;

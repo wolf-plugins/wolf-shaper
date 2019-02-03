@@ -33,7 +33,7 @@ class OscNoise
 public:
     int randSeed;
 
-    OscNoise(float sampleRate) 
+    OscNoise(float) 
     {
         resetOsc();
     }

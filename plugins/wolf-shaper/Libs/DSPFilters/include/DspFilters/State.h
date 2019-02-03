@@ -262,7 +262,7 @@ public:
   {
   }
 
-  const int getNumChannels() const
+  int getNumChannels() const
   {
     return Channels;
   }
@@ -297,7 +297,7 @@ template <class StateType>
 class ChannelsState <0, StateType>
 {
 public:
-  const int getNumChannels() const
+  int getNumChannels() const
   {
     return 0;
   }

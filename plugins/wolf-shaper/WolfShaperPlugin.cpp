@@ -52,10 +52,10 @@ class WolfShaper : public Plugin
 				   preFilterHandlerR(getSampleRate()),
 				   postFilterHandlerL(getSampleRate()),
 				   postFilterHandlerR(getSampleRate()),
-				   removeDCPrev{0.f, 0.f},
 				   mustCopyLineEditor(false),
 				   inputIndicatorPos(0.0f),
-				   inputIndicatorAcceleration(0.0f)
+				   inputIndicatorAcceleration(0.0f),
+				   removeDCPrev{0.f, 0.f}
 	{
 	}
 
