@@ -60,13 +60,13 @@ Color graph_edges_foreground_focused = Color(255, 150, 255, 255);
 Color graph_gradient_icol = Color(60, 60, 60, 20);
 Color graph_gradient_ocol = Color(60, 60, 60, 60);
 
-Color vertex_fill_normal = Color(255, 222, 255, 255);
+Color vertex_fill_normal = Color(255, 255, 255, 255);
 Color vertex_fill_focused = Color(255, 255, 255, 255);
 
 Color vertex_halo = Color(0, 0, 0, 255);
 
 Color vertex_stroke_normal = Color(0, 0, 0, 255);
-Color vertex_stroke_focused = Color(50, 50, 50, 255);
+Color vertex_stroke_focused = Color(0,0,0, 255);
 
 float vertex_radius = 7.0f;
 float vertex_stroke_width = 2.0f;
@@ -74,7 +74,7 @@ float vertex_stroke_width = 2.0f;
 Color tension_handle_normal = Color(228, 104, 181, 255);
 Color tension_handle_focused = Color(255, 150, 255, 255);
 
-float tension_handle_radius = 4.0f;
+float tension_handle_radius = 4.5f;
 float tension_handle_stroke_width = 2.0f;
 
 Color plugin_background = Color(42, 44, 47, 255);
