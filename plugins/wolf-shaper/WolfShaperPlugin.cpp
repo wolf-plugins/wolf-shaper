@@ -87,7 +87,7 @@ class WolfShaper : public Plugin
 
 	uint32_t getVersion() const noexcept override
 	{
-		return d_version(0, 1, 0);
+		return d_version(0, 1, 8);
 	}
 
 	int64_t getUniqueId() const noexcept override
