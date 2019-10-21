@@ -1,10 +1,10 @@
-Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: wolf-shaper
 Upstream-Contact: Patrick Desaulniers <desaulniers.patrick@carrefour.cegepvicto.ca>
 Source: https://github.com/pdesaulniers/wolf-shaper
 
 Files: *
-Copyright: 2018 Patrick Desaulniers <desaulniers.patrick@carrefour.cegepvicto.ca>
+Copyright: 2018-2019 Patrick Desaulniers <desaulniers.patrick@carrefour.cegepvicto.ca>
 License: GPL-2.0+
 
 Files: dpf/dgl/src/sofd/libsofd.c
@@ -119,7 +119,7 @@ Copyright: 2012-2014 Filipe Coelho <falktx@falktx.com>
 License: Zlib
 
 Files: debian/*
-Copyright: 2018 Olivier Humbert <trebmuh@tuxfamily.org>
+Copyright: 2018-2019 Olivier Humbert <trebmuh@tuxfamily.org>
 License: GPL-2.0+
 
 License: GPL-2.0+
@@ -134,7 +134,7 @@ License: GPL-2.0+
  GNU General Public License for more details.
 Comment:
  You should have received a copy of the GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
+ along with this program. If not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/GPL-2".
@@ -151,7 +151,7 @@ License: LGPL-2.0+
  GNU General Public License for more details.
 Comment:
  You should have received a copy of the Lesser GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
+ along with this program. If not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the Lesser GNU General
  Public License version 2 can be found in "/usr/share/common-licenses/LGPL-2".
@@ -168,7 +168,7 @@ License: LGPL-2.1+
  GNU General Public License for more details.
 Comment:
  You should have received a copy of the Lesser GNU General Public License
- along with this program. If not, see <http://www.gnu.org/licenses/>
+ along with this program. If not, see <https://www.gnu.org/licenses/>
  .
  On Debian systems, the complete text of the Lesser GNU General
  Public License version 2.1 can be found in "/usr/share/common-licenses/LGPL-2.1".
@@ -192,4 +192,4 @@ License: expat
  Please, see https://www.debian.org/legal/licenses/mit .
 
 License: Zlib
- Please, see http://www.gzip.org/zlib/zlib_license.html .
+ Please, see https://zlib.net/zlib_license.html .
