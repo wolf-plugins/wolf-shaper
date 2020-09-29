@@ -6,12 +6,7 @@
 
 Wolf Shaper is a waveshaper plugin with a graph editor. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
-Right now, the plugin supports both GNU/Linux and Windows.
-
-#### Features:
-* Add up to 100 nodes in the graph
-* Symmetrical and asymmetrical waveshaping
-* Resizable vector-based UI
+To find out more about this plugin, check out [this video series by unfa!](https://www.youtube.com/watch?v=2NViimz9Tnw)
 
 ## Install
 
@@ -49,10 +44,6 @@ BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
 Prepend WIN32=true or MACOS=true to the command if applicable.
 
 All plugin builds will then be placed in the bin folder. Copy them to their appropriate place so that your plugin host can find them, and you're done :)
-
-## How to use
-
-Online documentation is available at https://pdesaulniers.github.io/wolf-shaper/.
 
 ## Updating
 
