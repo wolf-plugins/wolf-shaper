@@ -8,11 +8,12 @@ image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/
 - *Pre* – Controls the input volume, before any processing has taken place. This parameter can be automated for interesting modulation effects.
 - *Wet* – Determines the mix between the original and the processed signal in the output. Set this parameter at maximum value to only hear the processed signal.
 - *Post* – Controls the output volume, after all processing has been done.
-- *Center* – Removes DC offset from the output. This ensures that the resulting waveform is vertically-centerd at zero.
+- *Center* – Removes DC offset from the output. This ensures that the resulting waveform is vertically centered at zero.
 - *Oversample* – Sets the multiple of the sample rate at which the processing will be done. This allows the plugin to filter out some harmonics that would otherwise cause aliasing artifacts.
 
 == Graph controls
-- *Uni/Bi switch* – Allows switching between symmetrical and asymmetrical waveshaping. More info coming soon.
+- *Uni/Bi switch* – Allows switching between symmetrical and asymmetrical waveshaping.
+- *Warp knobs* - The two yellow knobs in the middle of the UI allow to bend the distortion curve dynamically.
 - *Reset button* – Puts the graph back at its default state, which is a straight diagonal line. 
 
 == Graph editing
@@ -23,4 +24,3 @@ image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/
 
 == User interface
 - *Resizing the window* – Left-click and drag the resize handle located at the bottom-right to resize the window. 
-- *Config file* – The UI can be customized using a configuration file. More info coming soon.
