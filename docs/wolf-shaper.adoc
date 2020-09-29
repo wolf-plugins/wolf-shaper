@@ -1,4 +1,5 @@
-= Wolf Shaper
+= Wolf Shaper (v0.1.8)
+:favicon:
 
 image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png[Wolf Shaper]
 
