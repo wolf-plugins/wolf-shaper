@@ -31,9 +31,6 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
     WolfShaperConfig::load();
 
-    tryRememberSize();
-    getParentWindow().saveSizeAtExit(true);
-
     const float width = getWidth();
     const float height = getHeight();
 
@@ -158,35 +155,6 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
 WolfShaperUI::~WolfShaperUI()
 {
-}
-
-void WolfShaperUI::tryRememberSize()
-{
-    int width, height;
-    FILE *file;
-    std::string tmpFileName = PLUGIN_NAME ".tmp";
-
-#if defined(DISTRHO_OS_WINDOWS)
-    CHAR tempPath[MAX_PATH + 1];
-
-    GetTempPath(MAX_PATH + 1, tempPath);
-    std::string path = std::string(tempPath) + tmpFileName;
-    file = fopen(path.c_str(), "r");
-#else
-    file = fopen(("/tmp/" + tmpFileName).c_str(), "r");
-#endif
-
-    if (file == NULL)
-        return;
-
-    const int numberScanned = fscanf(file, "%d %d", &width, &height);
-
-    if (numberScanned == 2 && width && height)
-    {
-        setSize(width, height);
-    }
-
-    fclose(file);
 }
 
 void WolfShaperUI::positionWidgets(uint width, uint height)
