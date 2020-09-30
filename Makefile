@@ -64,7 +64,7 @@ install:
 	install -d $(DESTDIR)$(PREFIX)/lib/dssi/
 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/
 	install -d "$(DESTDIR)$(PREFIX)/lib/$(VST_FOLDER_NAME)/"
-
+	install -Dm 755 "bin/$(PLUGIN_NAME)" -t "$(DESTDIR)$(PREFIX)/bin/"
 	cp bin/*-dssi.*   $(DESTDIR)$(PREFIX)/lib/dssi/
 	cp bin/*-vst.*    "$(DESTDIR)$(PREFIX)/lib/$(VST_FOLDER_NAME)/"
 
