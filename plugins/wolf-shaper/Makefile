@@ -20,7 +20,6 @@ BUILD_LV2 ?= true
 BUILD_VST2 ?= true
 BUILD_JACK ?= true
 BUILD_DSSI ?= true
-BUILD_LADSPA ?= false
 
 # --------------------------------------------------------------
 # Files to build
@@ -91,29 +90,21 @@ endif
 # Enable all possible plugin types
 
 ifeq ($(BUILD_JACK),true)
-ifeq ($(HAVE_JACK),true)
+ifneq ($(HAVE_JACK), true)
+$(error "Could not find jack! Make sure the Jack development files are installed on your machine (libjack-jackd2-dev on a Debian-based machine).")
+endif
 TARGETS += jack
-endif
-endif
-
-ifeq ($(BUILD_LADSPA),true)
-TARGETS += ladspa
 endif
 
 ifeq ($(BUILD_DSSI),true)
-ifeq ($(HAVE_DGL),true)
-ifeq ($(HAVE_LIBLO),true)
+ifneq ($(HAVE_LIBLO), true)
+$(error "Could not find liblo! Make sure the Liblo development files are installed on your machine (liblo-dev on a Debian-based machine).")
+endif
 TARGETS += dssi
-endif
-endif
 endif
 
 ifeq ($(BUILD_LV2),true)
-ifeq ($(HAVE_DGL),true)
 TARGETS += lv2_sep
-else
-TARGETS += lv2_dsp
-endif
 endif
 
 ifeq ($(BUILD_VST2),true)
