@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="generator" content="Asciidoctor 2.0.10">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
-<title>Wolf Shaper (v0.1.8)</title>
+<title>Wolf Shaper</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,300italic,400,400italic,600,600italic%7CNoto+Serif:400,400italic,700,700italic%7CDroid+Sans+Mono:400,700">
 <style>
 /* Asciidoctor default stylesheet | MIT License | https://asciidoctor.org */
@@ -439,7 +439,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </head>
 <body class="article">
 <div id="header">
-<h1>Wolf Shaper (v0.1.8)</h1>
+<h1>Wolf Shaper</h1>
 </div>
 <div id="content">
 <div id="preamble">
@@ -453,12 +453,31 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </div>
 </div>
 <div class="sect1">
-<h2 id="_master_parameters">Master parameters</h2>
+<h2 id="_download">Download</h2>
 <div class="sectionbody">
+<div class="sect2">
+<h3 id="_windows">Windows</h3>
+<div class="paragraph">
+<p><a href="https://github.com/pdesaulniers/wolf-shaper/releases/download/v0.1.8/wolf-shaper-v0.1.8-windows-vst2.zip">64-bit VST</a></p>
+</div>
+</div>
+<div class="sect2">
+<h3 id="_linux">Linux</h3>
+<div class="paragraph">
+<p><a href="https://github.com/pdesaulniers/wolf-shaper/tree/v0.1.8#install">See installation instructions</a></p>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_how_to_use">How to use</h2>
+<div class="sectionbody">
+<div class="sect2">
+<h3 id="_parameters_and_controls">Parameters and controls</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Pre</strong> – Controls the input volume, before any processing has taken place. This parameter can be automated for interesting modulation effects.</p>
+<p><strong>Pre</strong> – Controls the input volume, before any processing has taken place.</p>
 </li>
 <li>
 <p><strong>Wet</strong> – Determines the mix between the original and the processed signal in the output. Set this parameter at maximum value to only hear the processed signal.</p>
@@ -472,20 +491,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p><strong>Oversample</strong> – Sets the multiple of the sample rate at which the processing will be done. This allows the plugin to filter out some harmonics that would otherwise cause aliasing artifacts.</p>
 </li>
-</ul>
-</div>
-</div>
-</div>
-<div class="sect1">
-<h2 id="_graph_controls">Graph controls</h2>
-<div class="sectionbody">
-<div class="ulist">
-<ul>
 <li>
 <p><strong>Uni/Bi switch</strong> – Allows switching between symmetrical and asymmetrical waveshaping.</p>
 </li>
 <li>
-<p><strong>Warp knobs</strong> - The two yellow knobs in the middle of the UI allow to bend the distortion curve dynamically.</p>
+<p><strong>Warp knobs</strong> - The two yellow knobs in the middle of the UI allow to bend the distortion curve dynamically. These knobs can be automated by the plugin host for interesting effects.</p>
 </li>
 <li>
 <p><strong>Reset button</strong> – Puts the graph back at its default state, which is a straight diagonal line.</p>
@@ -493,10 +503,8 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 </ul>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_graph_editing">Graph editing</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_graph_editing">Graph editing</h3>
 <div class="ulist">
 <ul>
 <li>
@@ -511,27 +519,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li>
 <p><strong>Tweak the tension of an edge</strong> – Left-click and drag vertically the tension handle located at the center of the edge.</p>
 </li>
+<li>
+<p><strong>Change the curve type</strong> - Right-click on a vertex, then select the curve type in the context menu.</p>
+</li>
 </ul>
 </div>
 </div>
-</div>
-<div class="sect1">
-<h2 id="_user_interface">User interface</h2>
-<div class="sectionbody">
+<div class="sect2">
+<h3 id="_user_interface">User interface</h3>
 <div class="ulist">
 <ul>
 <li>
-<p><strong>Resizing the window</strong> – Left-click and drag the resize handle located at the bottom-right to resize the window.</p>
+<p><strong>Resize the window</strong> – Left-click and drag the resize handle located at the bottom-right to resize the window.</p>
 </li>
 </ul>
 </div>
 </div>
 </div>
 </div>
-<div id="footer">
-<div id="footer-text">
-Last updated 2020-09-29 19:03:34 -0400
 </div>
+<div id="footer">
+    <div id="footer-text">
+        This documentation has been written against Wolf Shaper v0.1.8
+    </div>
 </div>
 </body>
 </html>
