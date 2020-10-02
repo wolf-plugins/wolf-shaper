@@ -50,6 +50,13 @@ dpf/utils/lv2_ttl_generator:
 
 # --------------------------------------------------------------
 
+release:
+	LINUX=true ./plugins/$(PLUGIN_NAME)/Common/Utils/make_release.sh
+	WIN32=true ./plugins/$(PLUGIN_NAME)/Common/Utils/make_release.sh
+	./plugins/$(PLUGIN_NAME)/Common/Utils/bundle_source.sh
+
+# --------------------------------------------------------------
+
 clean:
 ifeq ($(HAVE_DGL),true)
 	$(MAKE) clean -C dpf/dgl
@@ -64,10 +71,10 @@ install:
 	install -d $(DESTDIR)$(PREFIX)/lib/dssi/
 	install -d $(DESTDIR)$(PREFIX)/lib/lv2/
 	install -d "$(DESTDIR)$(PREFIX)/lib/$(VST_FOLDER_NAME)/"
-	install -Dm 755 "bin/$(PLUGIN_NAME)" -t "$(DESTDIR)$(PREFIX)/bin/"
-	cp bin/*-dssi.*   $(DESTDIR)$(PREFIX)/lib/dssi/
-	cp bin/*-vst.*    "$(DESTDIR)$(PREFIX)/lib/$(VST_FOLDER_NAME)/"
-
+	install -d $(DESTDIR)$(PREFIX)/bin/
+	cp bin/wolf-shaper $(DESTDIR)$(PREFIX)/bin/
+	cp bin/*-dssi.* $(DESTDIR)$(PREFIX)/lib/dssi/
+	cp bin/*-vst.* "$(DESTDIR)$(PREFIX)/lib/$(VST_FOLDER_NAME)/"
 
 ifeq ($(HAVE_DGL),true)
 	cp -r bin/*-dssi  $(DESTDIR)$(PREFIX)/lib/dssi/
