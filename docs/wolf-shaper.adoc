@@ -15,7 +15,7 @@ This tool makes the input signal more harmonically rich, which can be useful for
 https://github.com/pdesaulniers/wolf-shaper/releases/download/v0.1.8/wolf-shaper-v0.1.8-windows-vst2.zip[64-bit VST]
 
 === Linux
-https://github.com/pdesaulniers/wolf-shaper/tree/v0.1.8#install[See installation instructions]
+https://github.com/pdesaulniers/wolf-shaper/tree/master#install[See installation instructions]
 
 === Source code
 https://github.com/pdesaulniers/wolf-shaper[Git repository]
