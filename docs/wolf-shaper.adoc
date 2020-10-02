@@ -1,12 +1,13 @@
 :nofooter:
-:docinfo: shared-footer
 
 = Wolf Shaper
 :favicon:
 
 image:https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png[Wolf Shaper]
 
-*Wolf Shaper* is a waveshaper plugin with a graph editor. It passes the input signal through a function, which you can design using curves. This processing results in a more harmonically rich signal.
+*Wolf Shaper* is a free, open-source distortion plugin that lets you create your own waveshaping functions using a spline-based graph editor.
+
+This tool makes the input signal more harmonically rich, which can be useful for sound design and mixing.
 
 == Download
 
@@ -15,6 +16,9 @@ https://github.com/pdesaulniers/wolf-shaper/releases/download/v0.1.8/wolf-shaper
 
 === Linux
 https://github.com/pdesaulniers/wolf-shaper/tree/v0.1.8#install[See installation instructions]
+
+=== Source code
+https://github.com/pdesaulniers/wolf-shaper[Git repository]
 
 == How to use
 
