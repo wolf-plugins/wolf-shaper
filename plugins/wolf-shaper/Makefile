@@ -91,14 +91,14 @@ endif
 
 ifeq ($(BUILD_JACK),true)
 ifneq ($(HAVE_JACK), true)
-$(error "Could not find jack! Make sure the Jack development files are installed on your machine (libjack-jackd2-dev on a Debian-based machine).")
+$(error "Could not find jack! Make sure the JACK development files are installed on your machine (libjack-jackd2-dev on a Debian-based machine).")
 endif
 TARGETS += jack
 endif
 
 ifeq ($(BUILD_DSSI),true)
 ifneq ($(HAVE_LIBLO), true)
-$(error "Could not find liblo! Make sure the Liblo development files are installed on your machine (liblo-dev on a Debian-based machine).")
+$(error "Could not find liblo! Make sure the liblo development files are installed on your machine (liblo-dev on a Debian-based machine).")
 endif
 TARGETS += dssi
 endif
