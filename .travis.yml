@@ -17,4 +17,5 @@ addons:
     - gcc-mingw-w64-x86-64
     - g++-mingw-w64-x86-64
 script:
-  - make release
+  - LINUX=true BUILD_DSSI=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
+  - WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh

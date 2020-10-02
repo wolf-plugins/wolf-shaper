@@ -91,7 +91,7 @@ endif
 
 ifeq ($(BUILD_JACK),true)
 ifneq ($(HAVE_JACK), true)
-$(error "Could not find jack! Make sure the JACK development files are installed on your machine (libjack-jackd2-dev on a Debian-based machine).")
+$(error "Could not find JACK! Make sure the JACK development files are installed on your machine (libjack-jackd2-dev on a Debian-based machine).")
 endif
 TARGETS += jack
 endif
