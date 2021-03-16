@@ -2,7 +2,7 @@ sudo: required
 
 language: cpp
 compiler: gcc
-dist: trusty
+dist: bionic
 addons:
   apt:
     sources:
@@ -10,7 +10,7 @@ addons:
     packages:
     - gcc
     - g++
-    - clang
+    - clang-10
     - libx11-dev
     - libgl1-mesa-dev
     - liblo-dev
@@ -20,5 +20,5 @@ addons:
 script:
   - LINUX=true BUILD_DSSI=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
   - make clean
-  - CC=clang CXX=clang++ make
+  - CC=clang-10 CXX=clang++-10 make
   - WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
