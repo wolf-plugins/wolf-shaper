@@ -10,6 +10,7 @@ addons:
     packages:
     - gcc
     - g++
+    - clang
     - libx11-dev
     - libgl1-mesa-dev
     - liblo-dev
@@ -18,4 +19,6 @@ addons:
     - g++-mingw-w64-x86-64
 script:
   - LINUX=true BUILD_DSSI=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
+  - make clean
+  - CC=clang CXX=clang++ make
   - WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
