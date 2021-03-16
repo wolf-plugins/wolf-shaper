@@ -1,10 +1,10 @@
 [submodule "dpf"]
 	path = dpf
-	url = https://github.com/pdesaulniers/DPF.git
+	url = https://github.com/wolf-plugins/DPF.git
 	branch = waveshaper
 [submodule "plugins/WaveShaper/Libs/inih"]
 	path = plugins/wolf-shaper/Libs/inih
-	url = https://github.com/pdesaulniers/inih.git
+	url = https://github.com/wolf-plugins/inih.git
 [submodule "plugins/WaveShaper/Common"]
 	path = plugins/wolf-shaper/Common
-	url = https://github.com/pdesaulniers/wolf-common.git
+	url = https://github.com/wolf-plugins/wolf-common.git
