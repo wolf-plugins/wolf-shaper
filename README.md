@@ -1,7 +1,7 @@
 # Wolf Shaper 
-[![Build Status](https://travis-ci.org/pdesaulniers/wolf-shaper.svg?branch=master)](https://travis-ci.org/pdesaulniers/wolf-shaper)
+[![Build Status](https://travis-ci.org/wolf-plugins/wolf-shaper.svg?branch=master)](https://travis-ci.org/wolf-plugins/wolf-shaper)
 
-![Wolf Shaper](https://raw.githubusercontent.com/pdesaulniers/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png)
+![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png)
 
 Wolf Shaper is a waveshaper plugin with a graph editor. It can be built as an LV2, DSSI or VST plugin and as a standalone Jack application.
 
@@ -9,7 +9,7 @@ To find out more about this plugin, check out [this video series by unfa!](https
 
 ## Install
 
-You can find some precompiled plugin binaries in the [Releases](https://github.com/pdesaulniers/wolf-shaper/releases) tab. Some packages are also available for Ubuntu and Arch Linux:
+You can find some precompiled plugin binaries in the [Releases](https://github.com/wolf-plugins/wolf-shaper/releases) tab. Some packages are also available for Ubuntu and Arch Linux:
 
 ### Ubuntu
 Download the plugin from the [pdesaulniers/wolf PPA](https://launchpad.net/~pdesaulniers/+archive/ubuntu/wolf):
@@ -30,7 +30,7 @@ A git package is also available [in the AUR](https://aur.archlinux.org/packages/
 First, clone the repo (note the "--recursive" argument):
 
 ```
-git clone --recursive https://github.com/pdesaulniers/wolf-shaper.git
+git clone --recursive https://github.com/wolf-plugins/wolf-shaper.git
 cd wolf-shaper
 ```
 
