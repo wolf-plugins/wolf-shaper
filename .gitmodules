@@ -8,3 +8,4 @@
 [submodule "plugins/WaveShaper/Common"]
 	path = plugins/wolf-shaper/Common
 	url = https://github.com/reidevries/wolf-common.git/
+	branch = master
