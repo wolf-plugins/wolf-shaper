@@ -7,4 +7,6 @@
 	url = https://github.com/wolf-plugins/inih.git
 [submodule "plugins/WaveShaper/Common"]
 	path = plugins/wolf-shaper/Common
-	url = https://github.com/wolf-plugins/wolf-common.git
+	url = https://github.com/reidevries/wolf-common.git/
+[submodule "./plugins/WaveShaper/Common"]
+	url = https://github.com/reidevries/wolf-common.git/
