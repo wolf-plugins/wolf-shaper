@@ -18,7 +18,6 @@ addons:
     - gcc-mingw-w64-x86-64
     - g++-mingw-w64-x86-64
 script:
-  - LINUX=true BUILD_DSSI=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
-  - make clean
-  - CC=clang-10 CXX=clang++-10 make
-  - WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
+  - LINUX=true BUILD_DSSI=true CC=gcc CXX=g++ ./plugins/wolf-shaper/Common/Utils/make_release.sh
+  - LINUX=true BUILD_DSSI=true CC=clang-10 CXX=clang++-10 ./plugins/wolf-shaper/Common/Utils/make_release.sh
+  - WIN32=true BUILD_DSSI=false ./plugins/wolf-shaper/Common/Utils/make_release.sh
