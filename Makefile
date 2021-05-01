@@ -33,7 +33,7 @@ ifeq (,$(wildcard dpf/dgl))
 endif
 
 ifeq ($(HAVE_DGL),true)
-	$(MAKE) -C dpf/dgl
+	$(MAKE) -C dpf/dgl DGL_FLAGS="$(DGL_FLAGS) -DDGL_FILE_BROWSER_DISABLED"
 endif
 
 plugins: libs
