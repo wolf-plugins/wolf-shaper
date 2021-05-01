@@ -40,7 +40,7 @@ plugins: libs
 	$(MAKE) all -C plugins/wolf-shaper
 
 gen: plugins dpf/utils/lv2_ttl_generator
-	bash "$(CURDIR)/dpf/utils/generate-ttl.sh"
+	"$(CURDIR)/dpf/utils/generate-ttl.sh"
 ifeq ($(MACOS),true)
 	"$(CURDIR)/dpf/utils/generate-vst-bundles.sh"
 endif
