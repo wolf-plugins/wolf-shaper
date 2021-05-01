@@ -21,7 +21,7 @@ addons:
 jobs:
   include:
   - name: "Linux (GCC)"
-    env: LINUX=true BUILD_DSSI=true CC=gcc CXX=g+
+    env: LINUX=true BUILD_DSSI=true CC=gcc CXX=g++
     
   - name: "Linux (Clang)"
     env: LINUX=true BUILD_DSSI=true CC=clang-10 CXX=clang++-10
