@@ -67,9 +67,6 @@ OBJS_UI  = \
 	Common/Widgets/src/WidgetBar.cpp.o \
 	Common/Widgets/src/ArrowButton.cpp.o \
 	Common/Widgets/src/RightClickMenu.cpp.o \
-	Config/src/Config.cpp.o \
-	Libs/inih/ini.c.o \
-	Libs/inih/INIReader.cpp.o \
 	Resources/Fonts/chivo_bold.cpp.o \
 	Resources/Fonts/chivo_italic.cpp.o \
 	WolfShaperUI.cpp.o 

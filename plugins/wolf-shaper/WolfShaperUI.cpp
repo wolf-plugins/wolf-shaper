@@ -29,8 +29,6 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
     NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
     NanoVG::FontId dejaVuSansId = findFont(NANOVG_DEJAVU_SANS_TTF);
 
-    WolfShaperConfig::load();
-
     const float width = getWidth();
     const float height = getHeight();
 
