@@ -33,14 +33,14 @@ ifeq (,$(wildcard dpf/dgl))
 endif
 
 ifeq ($(HAVE_DGL),true)
-	$(MAKE) -C dpf/dgl
+	$(MAKE) -C dpf/dgl DGL_FLAGS="$(DGL_FLAGS) -DDGL_FILE_BROWSER_DISABLED"
 endif
 
 plugins: libs
 	$(MAKE) all -C plugins/wolf-shaper
 
 gen: plugins dpf/utils/lv2_ttl_generator
-	"$(CURDIR)/dpf/utils/generate-ttl.sh"
+	bash "$(CURDIR)/dpf/utils/generate-ttl.sh"
 ifeq ($(MACOS),true)
 	"$(CURDIR)/dpf/utils/generate-vst-bundles.sh"
 endif
