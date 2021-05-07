@@ -18,7 +18,12 @@ endif
 TARGET_DIR = ../../bin
 
 BUILD_C_FLAGS   += -I.
-BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih -I./Libs/DSPFilters/include $(shell pkg-config --cflags gl)
+BUILD_CXX_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih -I./Libs/DSPFilters/include
+
+# Fix missing GL/gl.h include on FreeBSD
+GL_INCLUDES = $(shell pkg-config --cflags-only-I gl)
+BUILD_C_FLAGS += $(GL_INCLUDES)
+BUILD_CXX_FLAGS += $(GL_INCLUDES)
 
 ifeq ($(HAVE_DGL),true)
 BASE_FLAGS += -DHAVE_DGL -DDGL_FILE_BROWSER_DISABLED
