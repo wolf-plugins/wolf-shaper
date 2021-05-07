@@ -1,8 +1,8 @@
 sudo: required
 
 language: cpp
-compiler: gcc
 dist: bionic
+
 addons:
   apt:
     sources:
@@ -17,8 +17,21 @@ addons:
     - libjack-dev
     - gcc-mingw-w64-x86-64
     - g++-mingw-w64-x86-64
-script:
-  - LINUX=true BUILD_DSSI=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
-  - make clean
-  - CC=clang-10 CXX=clang++-10 make
-  - WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
+    
+jobs:
+  include:
+  - name: "Linux (GCC)"
+    env: LINUX=true BUILD_DSSI=true CC=gcc CXX=g++
+    
+  - name: "Linux (Clang)"
+    env: LINUX=true BUILD_DSSI=true CC=clang-10 CXX=clang++-10
+    
+  - name: "Windows (MinGW)"
+    env: WIN32=true BUILD_DSSI=false
+
+script: ./plugins/wolf-shaper/Common/Utils/make_release.sh
+
+notifications:
+  email:
+    on_success: never
+    on_failure: change
