@@ -1,3 +1,6 @@
-[submodule "plugins/WaveShaper/Common"]
+[submodule "dpf"]
+	path = dpf
+	url = https://github.com/DISTRHO/DPF
+[submodule "plugins/wolf-shaper/Common"]
 	path = plugins/wolf-shaper/Common
-	url = https://github.com/wolf-plugins/wolf-common.git
+	url = https://github.com/wolf-plugins/wolf-common

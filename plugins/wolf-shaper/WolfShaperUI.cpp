@@ -1,3 +1,11 @@
+/*
+ * Wolf Shaper audio effect based on DISTRHO Plugin Framework (DPF)
+ *
+ * SPDX-License-Identifier: GPL v3+
+ *
+ * Copyright (C) 2021 Patrick Desaulniers
+ */
+
 #include "DistrhoUI.hpp"
 
 #include "WolfShaperUI.hpp"
@@ -7,10 +15,6 @@
 #include "Fonts/chivo_bold.hpp"
 
 #include <string>
-
-#if defined(DISTRHO_OS_WINDOWS)
-#include "windows.h"
-#endif
 
 START_NAMESPACE_DISTRHO
 

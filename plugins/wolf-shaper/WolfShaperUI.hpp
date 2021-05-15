@@ -1,3 +1,11 @@
+/*
+ * Wolf Shaper audio effect based on DISTRHO Plugin Framework (DPF)
+ *
+ * SPDX-License-Identifier: GPL v3+
+ *
+ * Copyright (C) 2021 Patrick Desaulniers
+ */
+
 #ifndef WOLF_SHAPER_UI_HPP_INCLUDED
 #define WOLF_SHAPER_UI_HPP_INCLUDED
 

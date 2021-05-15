@@ -6,11 +6,12 @@ cmake_install.cmake
 install_manifest.txt
 .vscode
 compile_commands.json
-*.kdev4 
+*.kdev4
 .kdev4
 *.cpp.d
 *.cpp.o
 *.so
-/bin/
 .vagrant
 .releases
+/bin/
+build/

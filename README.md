@@ -1,4 +1,4 @@
-# Wolf Shaper 
+# Wolf Shaper
 [![Build Status](https://travis-ci.org/wolf-plugins/wolf-shaper.svg?branch=master)](https://travis-ci.org/wolf-plugins/wolf-shaper)
 
 ![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png)
@@ -23,7 +23,7 @@ For installing the latest release:
 ```
 sudo pacman -S wolf-shaper
 ```
-A git package is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/). 
+A git package is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/).
 
 ## Build manually
 
