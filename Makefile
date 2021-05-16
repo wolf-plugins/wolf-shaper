@@ -14,12 +14,12 @@ DISTRHO_NAMESPACE = WolfShaperDISTRHO
 DGL_NAMESPACE = WolfShaperDGL
 
 # FIXME
-DGL_FLAGS += -DDGL_FILE_BROWSER_DISABLED -DPUGL_NO_INCLUDE_GLU_H -DDISTRHO_NAMESPACE=$(DISTRHO_NAMESPACE) -DDGL_NAMESPACE=$(DGL_NAMESPACE)
+export CUSTOM_DEFINES = -DDGL_FILE_BROWSER_DISABLED -DPUGL_NO_INCLUDE_GLU_H -DDISTRHO_NAMESPACE=$(DISTRHO_NAMESPACE) -DDGL_NAMESPACE=$(DGL_NAMESPACE)
 
 # --------------------------------------------------------------
 
 libs:
-	$(MAKE) -C dpf/dgl ../build/libdgl-opengl.a
+	$(MAKE) -C dpf/dgl ../build/libdgl-opengl.a DGL_FLAGS="$(DGL_FLAGS) $(CUSTOM_DEFINES)"
 
 plugins: libs
 	$(MAKE) all -C plugins/wolf-shaper
