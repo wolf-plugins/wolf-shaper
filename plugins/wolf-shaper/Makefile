@@ -116,7 +116,7 @@ include ../../dpf/Makefile.plugins.mk
 BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih -I./Libs/DSPFilters/include
 
 # Fix missing GL/gl.h include on FreeBSD
-BASE_FLAGS += $(shell pkg-config --cflags-only-I gl)
+BASE_FLAGS += $(shell $(PKG_CONFIG) --cflags-only-I gl)
 
 LINK_FLAGS += -lpthread
 
