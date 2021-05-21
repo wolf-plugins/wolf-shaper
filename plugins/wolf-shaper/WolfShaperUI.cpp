@@ -18,8 +18,7 @@
 
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(611, 662),
-                               fBottomBarVisible(true)
+WolfShaperUI::WolfShaperUI() : UI(611, 662)
 {
     const uint minWidth = 611;
     const uint minHeight = 438;
@@ -164,7 +163,7 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     //TODO: Clean that up
 
     const float graphMargin = 8;
-    const float bottomBarSize = fBottomBarVisible ? 102 : 0;
+    const float bottomBarSize = 102;
     const float graphBarHeight = fGraphBar->getHeight();
     const float graphBarMargin = 6;
 
@@ -346,45 +345,8 @@ void WolfShaperUI::uiReshape(uint width, uint height)
     positionWidgets(width, height);
 }
 
-void WolfShaperUI::toggleBottomBarVisibility()
+bool WolfShaperUI::onKeyboard(const KeyboardEvent &)
 {
-    fBottomBarVisible = !fBottomBarVisible;
-
-    fLabelsBoxBipolarMode->setVisible(fBottomBarVisible);
-    fSwitchBipolarMode->setVisible(fBottomBarVisible);
-    fSwitchRemoveDC->setVisible(fBottomBarVisible);
-    fKnobPostGain->setVisible(fBottomBarVisible);
-    fKnobPreGain->setVisible(fBottomBarVisible);
-
-    fKnobHorizontalWarp->setVisible(fBottomBarVisible);
-    fLabelListHorizontalWarpType->setVisible(fBottomBarVisible);
-    fButtonLeftArrowHorizontalWarp->setVisible(fBottomBarVisible);
-    fButtonRightArrowHorizontalWarp->setVisible(fBottomBarVisible);
-
-    fKnobVerticalWarp->setVisible(fBottomBarVisible);
-    fLabelListVerticalWarpType->setVisible(fBottomBarVisible);
-    fButtonLeftArrowVerticalWarp->setVisible(fBottomBarVisible);
-    fButtonRightArrowVerticalWarp->setVisible(fBottomBarVisible);
-
-    fKnobWet->setVisible(fBottomBarVisible);
-    fLabelPostGain->setVisible(fBottomBarVisible);
-    fLabelPreGain->setVisible(fBottomBarVisible);
-    fLabelWet->setVisible(fBottomBarVisible);
-    fLabelRemoveDC->setVisible(fBottomBarVisible);
-
-    positionWidgets(getWidth(), getHeight());
-}
-
-bool WolfShaperUI::onKeyboard(const KeyboardEvent &ev)
-{
-    if (ev.press)
-    {
-        if (ev.key == 95) //F11
-        {
-            toggleBottomBarVisibility();
-        }
-    }
-
     return true;
 }
 
