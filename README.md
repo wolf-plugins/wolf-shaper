@@ -37,7 +37,6 @@ cd wolf-shaper
 Then:
 
 ```
-make patch # applies some custom tweaks to DPF (this step will be removed in a later release)
 BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
 ```
 
