@@ -166,6 +166,8 @@ private:
 
   Point<int> projectCursorPos(Point<double> pt);
 
+  bool innerGraphContains(Point<double> pt);
+
   /**
    * Initialize the left and right vertices in the graph.
    */

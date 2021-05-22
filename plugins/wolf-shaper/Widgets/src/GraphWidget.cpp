@@ -642,6 +642,14 @@ void GraphWidget::removeVertex(int index)
 
 GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
 {
+    const float width = getWidth();
+    const float height = getHeight();
+
+    const float normalizedX = wolf::normalize(pos.getX(), width);
+    const float normalizedY = wolf::normalize(pos.getY(), height);
+
+    DISTRHO_SAFE_ASSERT_RETURN(normalizedX >= 0.f && normalizedX <= 1.f && normalizedY >= 0.f && normalizedY <= 1.f, nullptr);
+
     int i = lineEditor.getVertexCount();
 
     if (i == wolf::maxVertices)
@@ -660,12 +668,6 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
     vertex->index = i;
 
     graphVertices[i] = vertex;
-
-    const float width = getWidth();
-    const float height = getHeight();
-
-    const float normalizedX = wolf::normalize(pos.getX(), width);
-    const float normalizedY = wolf::normalize(pos.getY(), height);
 
     lineEditor.insertVertex(normalizedX, normalizedY, 0, fLastCurveTypeSelected);
 
@@ -718,6 +720,19 @@ Point<int> GraphWidget::projectCursorPos(Point<double> pt)
     const float y = (flippedPos.getY() - innerGraphTop) / innerGraphHeight;
 
     return Point<int>(x * getWidth(), y * getHeight());
+}
+
+bool GraphWidget::innerGraphContains(Point<double> pt)
+{
+    const float innerGraphLeft = fMargin.left;
+    const float innerGraphRight = getWidth() - fMargin.right;
+    const float innerGraphTop = fMargin.top;
+    const float innerGraphBottom = getHeight() - fMargin.bottom;
+
+    return pt.getX() >= innerGraphLeft
+        && pt.getX() <= innerGraphRight
+        && pt.getY() >= innerGraphTop
+        && pt.getY() <= innerGraphBottom;
 }
 
 bool GraphWidget::leftClick(const MouseEvent &ev)
@@ -838,7 +853,7 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
             return true;
         }
 
-        if (ev.press && contains(ev.pos))
+        if (ev.press && innerGraphContains(ev.pos))
         {
             focusedElement = insertVertex(point);
 
