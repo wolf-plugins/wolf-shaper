@@ -300,7 +300,9 @@ class WolfShaper : public Plugin
 
 	void run(const float **inputs, float **outputs, uint32_t frames) override
 	{
-		if (mutex.tryLock())
+		const auto lockSucceeded = mutex.tryLock();
+
+		if (lockSucceeded)
 		{
 			if (mustCopyLineEditor)
 			{
@@ -391,7 +393,10 @@ class WolfShaper : public Plugin
 		updateInputIndicatorPos(peak, frames);
 		setParameterValue(paramOut, inputIndicatorPos);
 
-		mutex.unlock();
+		if (lockSucceeded)
+		{
+			mutex.unlock();
+		}
 	}
 
   private:
