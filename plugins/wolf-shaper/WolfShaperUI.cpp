@@ -316,9 +316,7 @@ void WolfShaperUI::onNanoDisplay()
     const float graphMargin = 8;
     const float bottomBarSize = 102;
     const float graphBarHeight = fGraphBar->getHeight();
-    const float graphBarMargin = 6;
 
-    const float graphWidth = width - graphMargin * 2;
     const float graphHeight = height - graphMargin * 2 - bottomBarSize - graphBarHeight;
     const float graphBottom = graphMargin + graphHeight;
 
