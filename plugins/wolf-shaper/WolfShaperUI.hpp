@@ -45,12 +45,12 @@ protected:
   void tryRememberSize();
   void positionWidgets(uint width, uint height);
 
-  void nanoSwitchClicked(NanoSwitch *nanoSwitch);
-  void nanoButtonClicked(NanoButton *nanoButton);
-  void nanoWheelValueChanged(NanoWheel *nanoWheel, const int value);
-  void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value);
+  void nanoSwitchClicked(NanoSwitch *nanoSwitch) override;
+  void nanoButtonClicked(NanoButton *nanoButton) override;
+  void nanoWheelValueChanged(NanoWheel *nanoWheel, const int value) override;
+  void nanoKnobValueChanged(NanoKnob *nanoKnob, const float value) override;
 
-  void resizeHandleMoved(int width, int height);
+  void resizeHandleMoved(int width, int height) override;
 
   void stateChanged(const char *key, const char *value) override;
   void onNanoDisplay() override;

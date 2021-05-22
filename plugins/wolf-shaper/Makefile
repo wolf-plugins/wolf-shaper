@@ -58,10 +58,10 @@ BUILD_LADSPA ?= false
 # Files to build
 
 FILES_DSP = \
-	Common/Utils/src/Mathf.cpp \
-	Common/Structures/src/Graph.cpp \
-	Common/Structures/src/Oversampler.cpp \
-	Common/Structures/src/ParamSmooth.cpp \
+	Utils/src/Mathf.cpp \
+	Structures/src/Graph.cpp \
+	Structures/src/Oversampler.cpp \
+	Structures/src/ParamSmooth.cpp \
 	Libs/DSPFilters/source/Butterworth.cpp \
 	Libs/DSPFilters/source/Biquad.cpp \
 	Libs/DSPFilters/source/Cascade.cpp \
@@ -75,31 +75,31 @@ FILES_DSP = \
 	WolfShaperPlugin.cpp
 
 FILES_UI  = \
-	Common/Utils/src/Mathf.cpp \
-	Common/Structures/src/Graph.cpp \
-	Common/Structures/src/Margin.cpp \
-	Common/Structures/src/Animation.cpp \
-	Common/Widgets/src/WolfWidget.cpp \
-	Common/Widgets/src/GraphNode.cpp \
-	Common/Widgets/src/GraphWidget.cpp \
-	Common/Widgets/src/NanoSwitch.cpp \
-	Common/Widgets/src/RemoveDCSwitch.cpp \
-	Common/Widgets/src/NanoButton.cpp \
-	Common/Widgets/src/ResetGraphButton.cpp \
-	Common/Widgets/src/NanoWheel.cpp \
-	Common/Widgets/src/OversampleWheel.cpp \
-	Common/Widgets/src/NanoKnob.cpp \
-	Common/Widgets/src/VolumeKnob.cpp \
-	Common/Widgets/src/ResizeHandle.cpp \
-	Common/Widgets/src/LabelBox.cpp \
-	Common/Widgets/src/LabelBoxList.cpp \
-	Common/Widgets/src/BipolarModeSwitch.cpp \
-	Common/Widgets/src/LabelContainer.cpp \
-	Common/Widgets/src/GlowingLabelsBox.cpp \
-	Common/Widgets/src/NanoLabel.cpp \
-	Common/Widgets/src/WidgetBar.cpp \
-	Common/Widgets/src/ArrowButton.cpp \
-	Common/Widgets/src/RightClickMenu.cpp \
+	Utils/src/Mathf.cpp \
+	Structures/src/Graph.cpp \
+	Structures/src/Margin.cpp \
+	Structures/src/Animation.cpp \
+	Widgets/src/WolfWidget.cpp \
+	Widgets/src/GraphNode.cpp \
+	Widgets/src/GraphWidget.cpp \
+	Widgets/src/NanoSwitch.cpp \
+	Widgets/src/RemoveDCSwitch.cpp \
+	Widgets/src/NanoButton.cpp \
+	Widgets/src/ResetGraphButton.cpp \
+	Widgets/src/NanoWheel.cpp \
+	Widgets/src/OversampleWheel.cpp \
+	Widgets/src/NanoKnob.cpp \
+	Widgets/src/VolumeKnob.cpp \
+	Widgets/src/ResizeHandle.cpp \
+	Widgets/src/LabelBox.cpp \
+	Widgets/src/LabelBoxList.cpp \
+	Widgets/src/BipolarModeSwitch.cpp \
+	Widgets/src/LabelContainer.cpp \
+	Widgets/src/GlowingLabelsBox.cpp \
+	Widgets/src/NanoLabel.cpp \
+	Widgets/src/WidgetBar.cpp \
+	Widgets/src/ArrowButton.cpp \
+	Widgets/src/RightClickMenu.cpp \
 	Resources/Fonts/chivo_bold.cpp \
 	Resources/Fonts/chivo_italic.cpp \
 	WolfShaperUI.cpp
@@ -113,7 +113,7 @@ include ../../dpf/Makefile.plugins.mk
 # --------------------------------------------------------------
 # Additional flags
 
-BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Common/Structures -I./Common/Widgets -I./Common/Utils -I./Resources -I./Config -I./Libs/inih -I./Libs/DSPFilters/include
+BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources -I./Libs/inih -I./Libs/DSPFilters/include
 
 BASE_FLAGS += $(CUSTOM_DEFINES)
 
