@@ -43,9 +43,9 @@ endif
 # --------------------------------------------------------------
 
 release:
-	LINUX=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
-	WIN32=true ./plugins/wolf-shaper/Common/Utils/make_release.sh
-	./plugins/wolf-shaper/Common/Utils/bundle_source.sh
+	LINUX=true ./plugins/wolf-shaper/Utils/make_release.sh
+	WIN32=true ./plugins/wolf-shaper/Utils/make_release.sh
+	./plugins/wolf-shaper/Utils/bundle_source.sh
 
 # --------------------------------------------------------------
 

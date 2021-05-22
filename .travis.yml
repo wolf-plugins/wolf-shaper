@@ -29,7 +29,7 @@ jobs:
   - name: "Windows (MinGW)"
     env: WIN32=true BUILD_DSSI=false
 
-script: ./plugins/wolf-shaper/Common/Utils/make_release.sh
+script: ./plugins/wolf-shaper/Utils/make_release.sh
 
 notifications:
   email:
