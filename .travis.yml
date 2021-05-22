@@ -17,15 +17,15 @@ addons:
     - libjack-dev
     - gcc-mingw-w64-x86-64
     - g++-mingw-w64-x86-64
-    
+
 jobs:
   include:
   - name: "Linux (GCC)"
     env: LINUX=true BUILD_DSSI=true CC=gcc CXX=g++
-    
+
   - name: "Linux (Clang)"
     env: LINUX=true BUILD_DSSI=true CC=clang-10 CXX=clang++-10
-    
+
   - name: "Windows (MinGW)"
     env: WIN32=true BUILD_DSSI=false
 

@@ -1,3 +1,11 @@
+/*
+ * Wolf Shaper audio effect based on DISTRHO Plugin Framework (DPF)
+ *
+ * SPDX-License-Identifier: GPL v3+
+ *
+ * Copyright (C) 2021 Patrick Desaulniers
+ */
+
 #ifndef WOLF_SHAPER_UI_HPP_INCLUDED
 #define WOLF_SHAPER_UI_HPP_INCLUDED
 
@@ -52,8 +60,6 @@ protected:
   bool onMouse(const MouseEvent &ev) override;
 
 private:
-  void toggleBottomBarVisibility();
-
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
   ScopedPointer<NanoLabel> fLabelRemoveDC;
 
@@ -81,8 +87,6 @@ private:
   ScopedPointer<WidgetBar> fGraphBar;
   ScopedPointer<ResetGraphButton> fButtonResetGraph;
   ScopedPointer<NanoLabel> fLabelButtonResetGraph;
-
-  bool fBottomBarVisible;
 
   DISTRHO_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WolfShaperUI)
 };
