@@ -40,9 +40,6 @@ dpf/utils/lv2_ttl_generator.exe:
 	$(MAKE) -C dpf/utils/lv2-ttl-generator WINDOWS=true
 endif
 
-patch:
-	patch -d dpf -p 1 -i "$(CURDIR)/dpf-subwidgets.patch"
-
 # --------------------------------------------------------------
 
 release:
