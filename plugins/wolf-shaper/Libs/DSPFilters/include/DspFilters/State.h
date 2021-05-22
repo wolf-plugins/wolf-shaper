@@ -178,7 +178,7 @@ public:
   template <typename Sample>
   inline Sample process1 (const Sample in,
                           const BiquadBase& s,
-                          const double vsa)
+                          const double)
   {
     double out;
 
@@ -308,9 +308,9 @@ public:
   }
 
   template <class FilterDesign, typename Sample>
-  void process (int numSamples,
-                Sample* const* arrayOfChannels,
-                FilterDesign& filter)
+  void process (int,
+                Sample* const*,
+                FilterDesign&)
   {
     throw std::logic_error ("attempt to process empty ChannelState");
   }

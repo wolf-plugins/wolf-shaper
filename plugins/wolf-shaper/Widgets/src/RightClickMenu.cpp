@@ -65,7 +65,6 @@ RightClickMenuSection::RightClickMenuSection(const char *label) noexcept : Right
 
 RightClickMenu::RightClickMenu(Widget  *parent) noexcept : Window(parent->getApp(), parent->getWindow()),
                                                               WolfWidget(parent),
-                                                              fParent(parent),
                                                               fFontSize(17.0f),
                                                               fSectionFontSize(14.0f),
                                                               fHoveredIndex(-1),

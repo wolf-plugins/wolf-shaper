@@ -89,7 +89,6 @@ private:
   void findLongestItem();
 
   std::vector<RightClickMenuItem> fItems;
-  Widget *fParent;
 
   float fFontSize;
   float fSectionFontSize;

@@ -79,7 +79,7 @@ protected:
 
   void idleCallback() override;
 
-  void rightClickMenuItemSelected(RightClickMenuItem *rightClickMenuItem);
+  void rightClickMenuItemSelected(RightClickMenuItem *rightClickMenuItem) override;
 
   void onMouseLeave();
 
