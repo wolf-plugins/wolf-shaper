@@ -22,6 +22,8 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662)
     const uint minWidth = 611;
     const uint minHeight = 438;
 
+    setGeometryConstraints(minWidth, minHeight, false, false);
+
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
 
@@ -124,6 +126,11 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662)
     fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
     fHandleResize->setMinSize(minWidth, minHeight);
+
+    if (getWindow().isResizable())
+    {
+        fHandleResize->hide();
+    }
 
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32, 32));
     fButtonResetGraph->setCallback(this);
