@@ -49,6 +49,6 @@ All plugin builds will then be placed in the bin folder. Copy them to their appr
 This project uses git submodules. Thus, to update your local copy of the repo, you need to run the following commands:
 ```
 git pull
-git submodule update
+git submodule update --init --recursive
 ```
 You should then be able to build the plugin with the most recent changes.
