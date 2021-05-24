@@ -650,6 +650,12 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
 
     DISTRHO_SAFE_ASSERT_RETURN(normalizedX >= 0.f && normalizedX <= 1.f && normalizedY >= 0.f && normalizedY <= 1.f, nullptr);
 
+    // Avoid a crash when we make a pixel perfect click on the sides of the graph
+    if (normalizedX == 0.f || normalizedX == 1.f)
+    {
+        return nullptr;
+    }
+    
     int i = lineEditor.getVertexCount();
 
     if (i == wolf::maxVertices)
