@@ -1,21 +1,23 @@
+/*
+ * Wolf Shaper audio effect based on DISTRHO Plugin Framework (DPF)
+ *
+ * SPDX-License-Identifier: GPL v3+
+ *
+ * Copyright (C) 2021 Patrick Desaulniers
+ */
+
 #include "DistrhoUI.hpp"
 
 #include "WolfShaperUI.hpp"
 #include "Window.hpp"
 #include "Config.hpp"
 #include "Margin.hpp"
-#include "Fonts/chivo_bold.hpp"
 
 #include <string>
 
-#if defined(DISTRHO_OS_WINDOWS)
-#include "windows.h"
-#endif
-
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(611, 662),
-                               fBottomBarVisible(true)
+WolfShaperUI::WolfShaperUI() : UI(611, 662)
 {
     const uint minWidth = 611;
     const uint minHeight = 438;
@@ -25,12 +27,6 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
     loadSharedResources();
 
-    using namespace WOLF_FONTS;
-    NanoVG::FontId chivoBoldId = createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
-    NanoVG::FontId dejaVuSansId = findFont(NANOVG_DEJAVU_SANS_TTF);
-
-    WolfShaperConfig::load();
-
     const float width = getWidth();
     const float height = getHeight();
 
@@ -39,7 +35,7 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
     const float graphBarHeight = 42;
 
     fGraphBar = new WidgetBar(this, Size<uint>(width, graphBarHeight));
-    fGraphBar->setStrokePaint(linearGradient(0, 0, 0, graphBarHeight, Color(43, 43, 43, 255), Color(34, 34, 34, 255)));
+    // fGraphBar->setStrokePaint();
     fGraphBar->setStrokeWidth(4.0f);
 
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30, 29));
@@ -48,7 +44,7 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
     fLabelRemoveDC = new NanoLabel(this, Size<uint>(100, 29));
     fLabelRemoveDC->setText("CENTER");
-    fLabelRemoveDC->setFontId(chivoBoldId);
+    //fLabelRemoveDC->setFontId(chivoBoldId);
     fLabelRemoveDC->setFontSize(14.0f);
     fLabelRemoveDC->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelRemoveDC->setMargin(Margin(3, 0, fSwitchRemoveDC->getWidth() / 2.0f, 0));
@@ -134,7 +130,7 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
     fLabelButtonResetGraph = new NanoLabel(this, Size<uint>(50, fButtonResetGraph->getHeight()));
     fLabelButtonResetGraph->setText("RESET");
-    fLabelButtonResetGraph->setFontId(dejaVuSansId);
+    // fLabelButtonResetGraph->setFontId(dejaVuSansId);
     fLabelButtonResetGraph->setFontSize(15.0f);
     fLabelButtonResetGraph->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelButtonResetGraph->setMargin(Margin(6, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1, 0));
@@ -145,7 +141,7 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662),
 
     fLabelWheelOversample = new NanoLabel(this, Size<uint>(85, 26));
     fLabelWheelOversample->setText("OVERSAMPLE");
-    fLabelWheelOversample->setFontId(chivoBoldId);
+    //fLabelWheelOversample->setFontId(chivoBoldId);
     fLabelWheelOversample->setFontSize(14.0f);
     fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
@@ -162,20 +158,20 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     //TODO: Clean that up
 
     const float graphMargin = 8;
-    const float bottomBarSize = fBottomBarVisible ? 102 : 0;
+    const float bottomBarSize = 102;
     const float graphBarHeight = fGraphBar->getHeight();
     const float graphBarMargin = 6;
 
-    fGraphWidget->setSize(width - graphMargin * 2, height - graphMargin * 2 - bottomBarSize - graphBarHeight);
-    fGraphWidget->setAbsolutePos(graphMargin, graphMargin);
+    const float graphWidth = width - graphMargin * 2;
+    const float graphHeight = height - graphMargin * 2 - bottomBarSize - graphBarHeight;
+    const float graphBottom = graphMargin + graphHeight;
 
-    const float graphBottom = fGraphWidget->getAbsoluteY() + fGraphWidget->getHeight();
+    fGraphWidget->setSize(graphWidth, graphHeight);
+    fGraphWidget->setAbsolutePos(graphMargin, graphMargin);
 
     fGraphBar->setWidth(width);
     fGraphBar->setAbsolutePos(0, graphBottom + graphBarMargin);
     fGraphBar->setFillPaint(radialGradient(width / 2.0f, graphBarHeight / 2.0f, graphBarHeight, width / 2.0f, Color(71, 74, 80, 255), Color(40, 42, 46, 255)));
-
-    const float knobLabelMarginBottom = 12;
 
     fSwitchRemoveDC->setAbsolutePos(24, height - 38);
     fLabelRemoveDC->setAbsolutePos(24 + fSwitchRemoveDC->getWidth(), height - 38);
@@ -190,6 +186,8 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
 
     fWheelOversample->setAbsolutePos(width - fWheelOversample->getWidth() - 35, graphBarMiddleY - fWheelOversample->getHeight() / 2.0f);
     fLabelWheelOversample->setAbsolutePos(fWheelOversample->getAbsoluteX() - fLabelWheelOversample->getWidth(), fWheelOversample->getAbsoluteY());
+
+    const float knobLabelMarginBottom = 12;
 
     float centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
@@ -283,7 +281,7 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
         break;
     default:
         break;
-    }
+    } 
 }
 
 void WolfShaperUI::stateChanged(const char *key, const char *value)
@@ -315,7 +313,13 @@ void WolfShaperUI::onNanoDisplay()
     const int shadowHeight = 8;
     const int shadowMargin = 2;
 
-    const float graphBottom = fGraphWidget->getAbsoluteY() + fGraphWidget->getHeight();
+    const float graphMargin = 8;
+    const float bottomBarSize = 102;
+    const float graphBarHeight = fGraphBar->getHeight();
+
+    const float graphHeight = height - graphMargin * 2 - bottomBarSize - graphBarHeight;
+    const float graphBottom = graphMargin + graphHeight;
+
     const float shadowTop = graphBottom + shadowMargin;
     const float shadowBottom = shadowTop + shadowHeight;
 
@@ -344,45 +348,8 @@ void WolfShaperUI::uiReshape(uint width, uint height)
     positionWidgets(width, height);
 }
 
-void WolfShaperUI::toggleBottomBarVisibility()
+bool WolfShaperUI::onKeyboard(const KeyboardEvent &)
 {
-    fBottomBarVisible = !fBottomBarVisible;
-
-    fLabelsBoxBipolarMode->setVisible(fBottomBarVisible);
-    fSwitchBipolarMode->setVisible(fBottomBarVisible);
-    fSwitchRemoveDC->setVisible(fBottomBarVisible);
-    fKnobPostGain->setVisible(fBottomBarVisible);
-    fKnobPreGain->setVisible(fBottomBarVisible);
-
-    fKnobHorizontalWarp->setVisible(fBottomBarVisible);
-    fLabelListHorizontalWarpType->setVisible(fBottomBarVisible);
-    fButtonLeftArrowHorizontalWarp->setVisible(fBottomBarVisible);
-    fButtonRightArrowHorizontalWarp->setVisible(fBottomBarVisible);
-
-    fKnobVerticalWarp->setVisible(fBottomBarVisible);
-    fLabelListVerticalWarpType->setVisible(fBottomBarVisible);
-    fButtonLeftArrowVerticalWarp->setVisible(fBottomBarVisible);
-    fButtonRightArrowVerticalWarp->setVisible(fBottomBarVisible);
-
-    fKnobWet->setVisible(fBottomBarVisible);
-    fLabelPostGain->setVisible(fBottomBarVisible);
-    fLabelPreGain->setVisible(fBottomBarVisible);
-    fLabelWet->setVisible(fBottomBarVisible);
-    fLabelRemoveDC->setVisible(fBottomBarVisible);
-
-    positionWidgets(getWidth(), getHeight());
-}
-
-bool WolfShaperUI::onKeyboard(const KeyboardEvent &ev)
-{
-    if (ev.press)
-    {
-        if (ev.key == 95) //F11
-        {
-            toggleBottomBarVisibility();
-        }
-    }
-
     return true;
 }
 
