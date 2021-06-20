@@ -59,7 +59,7 @@ public:
 		virtual void propagateMouseEvent(const MouseEvent& ev) = 0;
 	};
 
-	explicit MenuWidget( NanoWidget *widget ) noexcept;
+	explicit MenuWidget( Widget *widget ) noexcept;
 
 	// shows and hides the widget without affecting the elements
 	void show(const Point<int>& click_pos,

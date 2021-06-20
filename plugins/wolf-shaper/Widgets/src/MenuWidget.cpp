@@ -4,11 +4,11 @@
 
 START_NAMESPACE_DISTRHO
 
-MenuWidget::MenuWidget( NanoWidget *widget ) noexcept
+MenuWidget::MenuWidget( Widget *widget ) noexcept
 	: WolfWidget(widget),
+	  max_item_w_px(0),
 	  hover_i(-1),
 	  selected_i(-1),
-	  max_item_w_px(0),
 	  margin(Margin(7,15,7,13)),
 	  font_item_size(17.0f),
 	  font_item_color(255,255,255),
@@ -43,15 +43,16 @@ void MenuWidget::show(const Point<int>& click_pos,
 	if (menu_br.getY() > parent_br.getY()) show_pos.moveBy(0, -getHeight());
 
 	// set the cursor style to the default until the user hovers over an item
-	getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+	//getWindow().setCursorStyle(Window::CursorStyle::Default);
+	// not sure how to do this in current dgl
 
-	NanoWidget::setAbsolutePos(show_pos);
-	NanoWidget::show();
+	NanoSubWidget::setAbsolutePos(show_pos);
+	NanoSubWidget::show();
 }
 
 void MenuWidget::hide()
 {
-	NanoWidget::hide();
+	NanoSubWidget::hide();
 }
 
 void MenuWidget::clear()
@@ -128,8 +129,8 @@ void MenuWidget::onNanoDisplay()
 {
 	if (items.size() == 0) return; // don't render an empty menu
 
-	const float h = NanoWidget::getHeight();
-	const float w = NanoWidget::getWidth();
+	const float h = NanoSubWidget::getHeight();
+	const float w = NanoSubWidget::getWidth();
 
 	beginPath();
 
@@ -228,7 +229,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 
 	if (ev.press == true) {
 		if (!bounds.contains(mouse_pos)) {
-			NanoWidget::hide();
+			NanoSubWidget::hide();
 			return true;
 		}
 
@@ -245,7 +246,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 				if (bounds.contains(mouse_pos)) {
 					callback->menuItemSelected(items[i].id);
 					selected_i = i;
-					NanoWidget::hide();
+					NanoSubWidget::hide();
 					return true;
 				}
 			}
@@ -266,7 +267,7 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 	}
 
 	// check if mouse is outside menu and change cursor style
-	const auto menu_bounds = getBounds<int>();
+	const auto menu_bounds = getBounds<double>();
 	if (menu_bounds.contains(ev.pos)) {
 		// update hover_i
 		for (size_t i = 0; i < items.size(); ++i) {
@@ -280,13 +281,15 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 			if (static_cast<int>(i) != selected_i
 				&& !items[i].is_section
 				&& bounds.contains(mouse_pos)) {
-				getParentWindow().setCursorStyle(Window::CursorStyle::Grab);
+				//getWindow().setCursorStyle(Window::CursorStyle::Grab);
+				// not sure how to do this in current dgl
 				hover_i = i;
 				return true;
 			}
 		}
 	}
-	getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+	//getWindow().setCursorStyle(Window::CursorStyle::Default);
+	// not sure how to do this in current dgl
 	hover_i = -1;
 	return true;
 }
@@ -298,7 +301,7 @@ void MenuWidget::updateMaxItemWidth(const Item& item)
 
 void MenuWidget::adaptSize()
 {
-	NanoWidget::setSize(Size<uint>(
+	NanoSubWidget::setSize(Size<uint>(
 		max_item_w_px + margin.left + margin.right + font_section_size,
 		items.size()*font_item_size + margin.top + margin.bottom
 	));
