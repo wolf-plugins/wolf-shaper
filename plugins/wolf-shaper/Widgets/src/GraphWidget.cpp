@@ -869,15 +869,15 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
 
 				// get click position and the bounds of this widget
-				auto click_pos = Point<int>(
-					getAbsoluteX() + ev.pos.getX(),
-					getAbsoluteY() + ev.pos.getY()
+				const auto my_pos_absolute = Point<int>(
+					getAbsoluteX(),
+					getAbsoluteY()
 				);
-				auto widget_bounds = Rectangle<int>(
+				const auto widget_bounds = Rectangle<int>(
 					getAbsoluteX(), getAbsoluteY(),
 					getWidth(), getHeight()
 				);
-				fRightClickMenu->show(click_pos, widget_bounds);
+				fRightClickMenu->show(my_pos_absolute, ev.pos, widget_bounds);
             }
             /* else
             {
@@ -929,7 +929,7 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
     if (mustHideVertices)
         return false;
 
-	if (fRightClickMenu->mouseEvent(ev))
+	if (fRightClickMenu->mouseEvent(ev, getAbsolutePos()))
 		return true;
 
     switch (ev.button)
@@ -949,7 +949,7 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
     if (mustHideVertices)
         return false;
 
-	if (fRightClickMenu->motionEvent(ev))
+	if (fRightClickMenu->motionEvent(ev, getAbsolutePos()))
 		return true;
 
     const Point<int> point = projectCursorPos(ev.pos);

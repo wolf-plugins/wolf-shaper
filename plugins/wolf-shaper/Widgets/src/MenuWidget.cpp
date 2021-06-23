@@ -2,6 +2,17 @@
 #include "Config.hpp"
 #include "Application.hpp"
 #include <iostream>
+#include "Fonts/chivo_bold.hpp"
+
+/*
+#define PRINT_RECT(rect) \
+	std::cout << "x" << rect.getX()	 \
+		<< "y" << rect.getY() << " " \
+		<< "w" << rect.getWidth()    \
+		<< "h" << rect.getHeight()
+#define PRINT_POINT(pt) \
+	std::cout << "x" << pt.getX() << "y" << pt.getY()
+*/
 
 START_NAMESPACE_DISTRHO
 
@@ -21,26 +32,35 @@ MenuWidget::MenuWidget( Widget *widget ) noexcept
 	  border_color(CONFIG_NAMESPACE::right_click_menu_border_color),
 	  callback(nullptr)
 {
+	using namespace WOLF_FONTS;
+	createFontFromMemory("chivo_bold",
+		(const uchar *)chivo_bold,
+		chivo_bold_size,
+		0
+	);
+	hide();
 }
 
-void MenuWidget::show(const Point<int>& click_pos,
-	const Rectangle<int>& parent_widget_bounds)
+void MenuWidget::show(const Point<int>& parent_pos_absolute,
+	const Point<double>& click_pos,
+	const Rectangle<int>& mouse_bounds_absolute)
 {
+	this->mouse_bounds_absolute = mouse_bounds_absolute;
 	adaptSize();
+
+	auto show_pos = Point<int>(
+		click_pos.getX() + parent_pos_absolute.getX(),
+		click_pos.getY() + parent_pos_absolute.getY()
+	);
 
 	// move the menuwidget so that it always appears within the parent widget
 	// bounds
-	const auto menu_br = Point<int>(
-		click_pos.getX() + getWidth(),
-		click_pos.getY() + getHeight()
-	);
-	const auto parent_br = Point<int>(
-		parent_widget_bounds.getX() + parent_widget_bounds.getWidth(),
-		parent_widget_bounds.getY() + parent_widget_bounds.getHeight()
-	);
-	auto show_pos = click_pos;
-	if (menu_br.getX() > parent_br.getX()) show_pos.moveBy(-getWidth(), 0);
-	if (menu_br.getY() > parent_br.getY()) show_pos.moveBy(0, -getHeight());
+	const int menu_bottom = show_pos.getY() + getHeight();
+	const int menu_right  = show_pos.getX() + getWidth();
+	if (menu_right > mouse_bounds_absolute.getWidth())
+		show_pos.moveBy(-getWidth(), 0);
+	if (menu_bottom > mouse_bounds_absolute.getHeight())
+		show_pos.moveBy(0, -getHeight());
 
 	// set the cursor style to the default until the user hovers over an item
 	//getWindow().setCursorStyle(Window::CursorStyle::Default);
@@ -143,6 +163,7 @@ void MenuWidget::onNanoDisplay()
 
 	// these four lines are used to calculate the height of a line of text
 	Rectangle<float> bounds;
+	fontFace("chivo_bold");
 	fontSize(font_item_size);
 	textBounds(0, 0, items[0].name.c_str(), NULL, bounds);
 	const float text_h = bounds.getHeight();
@@ -201,7 +222,7 @@ void MenuWidget::onNanoDisplay()
 		text(left_offset, vertical_offset, item.name.c_str(), NULL);
 
 		if (static_cast<int>(i) == selected_i) {
-			text(0, vertical_offset, "✓", NULL);
+			text(0, vertical_offset, "-", NULL);
 		}
 
 		// render description if an item has one
@@ -222,16 +243,26 @@ void MenuWidget::onNanoDisplay()
 	}
 }
 
-auto MenuWidget::mouseEvent(const MouseEvent& ev) -> bool
+bool MenuWidget::mouseEvent(const MouseEvent& ev, const Point<int>& offset)
 {
 	if (!isVisible()) return false;
-	return onMouse(ev);
+	MouseEvent ev_offset = ev;
+	ev_offset.pos = Point<double>(
+		ev.pos.getX() + offset.getX() - getAbsoluteX(),
+		ev.pos.getY() + offset.getY() - getAbsoluteY()
+	);
+	return onMouse(ev_offset);
 }
 
-auto MenuWidget::motionEvent(const MotionEvent& ev) -> bool
+bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
 {
 	if (!isVisible()) return false;
-	return onMotion(ev);
+	MotionEvent ev_offset = ev;
+	ev_offset.pos = Point<double>(
+		ev.pos.getX() + offset.getX() - getAbsoluteX(),
+		ev.pos.getY() + offset.getY() - getAbsoluteY()
+	);
+	return onMotion(ev_offset);
 }
 
 auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
@@ -242,15 +273,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 		static_cast<float>(ev.pos.getY())
 	);
 
-//	callback->propagateMouseEvent(ev);
-	std::cout << " called onmouse" << std::endl;
-	std::cout << "    pos: " << mouse_pos.getX() << "x" << mouse_pos.getY()
-		<< " bounds: " << bounds.getX() << "x" << bounds.getY()
-		<< " w" << bounds.getWidth() << " h" << bounds.getHeight()
-		<< std::endl;
-
 	if (ev.press == true) {
-		std::cout << " mouse pressed" << std::endl;
 		if (!bounds.contains(mouse_pos)) {
 			NanoSubWidget::hide();
 			return true;
@@ -280,37 +303,31 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 
 auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 {
-	// check if mouse has moved outside the bounds of the parent widget
+	// check if mouse has moved out of bounds
 	const auto mouse_pos_absolute = Point<int>(
 		ev.pos.getX() + getAbsoluteX(),
 		ev.pos.getY() + getAbsoluteY()
 	);
-	if (!parent_widget_bounds.contains(mouse_pos_absolute)) {
-		hide();
-	}
-	std::cout << " called onMotion" << std::endl;
+	if (!mouse_bounds_absolute.contains(mouse_pos_absolute)) { hide(); }
 
 	// check if mouse is outside menu and change cursor style
 	const auto menu_bounds = getBounds<double>();
 	if (menu_bounds.contains(ev.pos)) {
 		// update hover_i
 		for (size_t i = 0; i < items.size(); ++i) {
-			Rectangle<float> bounds = getItemBoundsPx(i);
-			bounds.setWidth(Widget::getWidth() - margin.right);
-			const Point<float> mouse_pos = Point<float>(
-				static_cast<float>(ev.pos.getX()),
-				static_cast<float>(ev.pos.getY())
-			);
+			const auto item_bounds = getItemBoundsFullWidthPx(i);
 
 			if (static_cast<int>(i) != selected_i
 				&& !items[i].is_section
-				&& bounds.contains(mouse_pos)) {
+				&& item_bounds.contains(ev.pos))
+			{
 				//getWindow().setCursorStyle(Window::CursorStyle::Grab);
 				// not sure how to do this in current dgl
 				hover_i = i;
 				return true;
 			}
 		}
+		hover_i = -1;
 		return true;
 	}
 	//getWindow().setCursorStyle(Window::CursorStyle::Default);
@@ -334,6 +351,7 @@ void MenuWidget::adaptSize()
 
 auto MenuWidget::getItemWidthPx(const Item& item) -> float
 {
+	fontFace("chivo_bold");
 	if (item.is_section) {
 		Rectangle<float> bounds;
 		fontSize(font_section_size);
@@ -354,12 +372,25 @@ auto MenuWidget::getItemWidthPx(const Item& item) -> float
 
 auto MenuWidget::getItemBoundsPx(const int index) -> Rectangle<float>
 {
+	fontFace("chivo_bold");
 	fontSize(font_item_size);
 	textAlign(ALIGN_LEFT | ALIGN_TOP);
 	Rectangle<float> bounds;
 	textBounds(margin.left, index*font_item_size + margin.top,
 		items[index].name.c_str(), NULL, bounds);
 	return bounds;
+}
+
+auto MenuWidget::getItemBoundsFullWidthPx(const int index) -> Rectangle<double>
+{
+	auto bounds = getItemBoundsPx(index);
+	bounds.setWidth(Widget::getWidth() - margin.right);
+	return Rectangle<double>(
+		bounds.getX(),
+		bounds.getY(),
+		bounds.getWidth(),
+		bounds.getHeight()
+	);
 }
 
 END_NAMESPACE_DISTRHO

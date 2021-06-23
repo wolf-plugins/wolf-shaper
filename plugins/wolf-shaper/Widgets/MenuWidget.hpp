@@ -59,15 +59,16 @@ public:
 	explicit MenuWidget( Widget *widget ) noexcept;
 
 	// shows and hides the widget without affecting the elements
-	void show(const Point<int>& click_pos,
-		const Rectangle<int>& parent_widget_bounds);
+	void show(const Point<int>& parent_pos,
+		const Point<double>& click_pos,
+		const Rectangle<int>& mouse_bounds_absolute);
 	void hide();
 
 	// clear all sections and items
 	void clear();
 
 	void addItem(int id, const char *label, const char *comment = "");
-	void addSection(const char *sectionName);
+	void addSection(const char *section_name);
 
 	// find the index of the first item with a matching name/id
 	// obviously this won't work if two items have the same name/id
@@ -81,7 +82,7 @@ public:
 	void setItemEnabled(const std::string& name, const bool enabled);
 
 	// updates selected_i
-	void setItemSelected(const uint  i);
+	void setItemSelected(const uint i);
 
 	void setRegularFontSize(const uint size) noexcept;
 	void setSectionFontSize(const uint size) noexcept;
@@ -97,10 +98,10 @@ public:
 
 	void setCallback(Callback *callback) noexcept;
 
-	// must manually call onMouse/onMotion if the parent isn't a
-	// TopLevelWidget
-	auto mouseEvent(const MouseEvent &ev) -> bool;
-	auto motionEvent(const MotionEvent &ev) -> bool;
+	// must manually call onMouse/onMotion if the parent isn't a TopLevelWidget
+	// also must manually offset by the required amount from the parent widget
+	bool mouseEvent(const MouseEvent &ev, const Point<int>& offset);
+	bool motionEvent(const MotionEvent &ev, const Point<int>& offset);
 
 protected:
 	auto onMouse( const MouseEvent &)  -> bool override;
@@ -116,7 +117,7 @@ private:
 	// updated on show. assumes the bounds won't change while the menu is open.
 	// this is a safe assumption in most cases, because the user will have to
 	// click somewhere to change the bounds, which will close the menu.
-	Rectangle<int> parent_widget_bounds;
+	Rectangle<int> mouse_bounds_absolute;
 
 	float max_item_w_px;
 
@@ -124,14 +125,9 @@ private:
 	int selected_i;
 
 	Margin margin;
-	float font_item_size;
-	Color font_item_color;
-	Color font_item_hover_color;
-	float font_section_size;
-	Color font_section_color;
-	Color background_color;
-	Color background_hover_color;
-	Color border_color;
+	float font_item_size, font_section_size;
+	Color font_item_color, font_item_hover_color, font_section_color;
+	Color background_color, background_hover_color, border_color;
 
 	Callback *callback;
 
@@ -139,6 +135,7 @@ private:
 	void adaptSize();
 	auto getItemWidthPx(const Item& item) -> float;
 	auto getItemBoundsPx(const int index) -> Rectangle<float>;
+	auto getItemBoundsFullWidthPx(const int index) -> Rectangle<double>;
 };
 
 END_NAMESPACE_DISTRHO
