@@ -54,9 +54,6 @@ public:
 	public:
 		virtual ~Callback() {}
 		virtual void menuItemSelected(const int id) = 0;
-		// this is necessary to maintain the stored state of mouse buttons in
-		// the parent class
-		virtual void propagateMouseEvent(const MouseEvent& ev) = 0;
 	};
 
 	explicit MenuWidget( Widget *widget ) noexcept;
@@ -98,12 +95,17 @@ public:
 		);
 	}
 
-	void setCallback(Callback *callback) noexcept {this->callback = callback;}
+	void setCallback(Callback *callback) noexcept;
+
+	// must manually call onMouse/onMotion if the parent isn't a
+	// TopLevelWidget
+	auto mouseEvent(const MouseEvent &ev) -> bool;
+	auto motionEvent(const MotionEvent &ev) -> bool;
 
 protected:
-	void onNanoDisplay() override;
 	auto onMouse( const MouseEvent &)  -> bool override;
 	auto onMotion(const MotionEvent &) -> bool override;
+	void onNanoDisplay() override;
 
 	DGL_NAMESPACE::Rectangle<float> getBoundsOfItem(const int i);
 

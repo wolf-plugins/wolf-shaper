@@ -1,5 +1,6 @@
 #include "MenuWidget.hpp"
 #include "Config.hpp"
+#include "Application.hpp"
 #include <iostream>
 
 START_NAMESPACE_DISTRHO
@@ -25,7 +26,6 @@ MenuWidget::MenuWidget( Widget *widget ) noexcept
 void MenuWidget::show(const Point<int>& click_pos,
 	const Rectangle<int>& parent_widget_bounds)
 {
-	this->parent_widget_bounds = parent_widget_bounds;
 	adaptSize();
 
 	// move the menuwidget so that it always appears within the parent widget
@@ -89,7 +89,7 @@ auto MenuWidget::findItemIndex(const std::string& name) -> int
 auto MenuWidget::findItemIndex(const int id) -> int
 {
 	for (size_t i = 0; i < items.size(); ++i) {
-		if (items[i].id == id) return i;
+		if (items[i].id == static_cast<uint>(id)) return i;
 	}
 	return -1;
 }
@@ -123,6 +123,11 @@ void MenuWidget::setRegularFontSize(const uint size) noexcept
 void MenuWidget::setSectionFontSize(const uint size) noexcept
 {
 	this->font_section_size = size;
+}
+
+void MenuWidget::setCallback(Callback *callback) noexcept
+{
+	this->callback = callback;
 }
 
 void MenuWidget::onNanoDisplay()
@@ -217,6 +222,18 @@ void MenuWidget::onNanoDisplay()
 	}
 }
 
+auto MenuWidget::mouseEvent(const MouseEvent& ev) -> bool
+{
+	if (!isVisible()) return false;
+	return onMouse(ev);
+}
+
+auto MenuWidget::motionEvent(const MotionEvent& ev) -> bool
+{
+	if (!isVisible()) return false;
+	return onMotion(ev);
+}
+
 auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 {
 	const auto bounds = getBounds<float>();
@@ -225,9 +242,15 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 		static_cast<float>(ev.pos.getY())
 	);
 
-	callback->propagateMouseEvent(ev);
+//	callback->propagateMouseEvent(ev);
+	std::cout << " called onmouse" << std::endl;
+	std::cout << "    pos: " << mouse_pos.getX() << "x" << mouse_pos.getY()
+		<< " bounds: " << bounds.getX() << "x" << bounds.getY()
+		<< " w" << bounds.getWidth() << " h" << bounds.getHeight()
+		<< std::endl;
 
 	if (ev.press == true) {
+		std::cout << " mouse pressed" << std::endl;
 		if (!bounds.contains(mouse_pos)) {
 			NanoSubWidget::hide();
 			return true;
@@ -252,7 +275,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 			}
 		}
 	}
-	return true;
+	return false;
 }
 
 auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
@@ -265,6 +288,7 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 	if (!parent_widget_bounds.contains(mouse_pos_absolute)) {
 		hide();
 	}
+	std::cout << " called onMotion" << std::endl;
 
 	// check if mouse is outside menu and change cursor style
 	const auto menu_bounds = getBounds<double>();
@@ -287,11 +311,12 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 				return true;
 			}
 		}
+		return true;
 	}
 	//getWindow().setCursorStyle(Window::CursorStyle::Default);
 	// not sure how to do this in current dgl
 	hover_i = -1;
-	return true;
+	return false;
 }
 
 void MenuWidget::updateMaxItemWidth(const Item& item)
