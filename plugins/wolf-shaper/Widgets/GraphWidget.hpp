@@ -57,6 +57,12 @@ public:
 
   void setMustHideVertices(const bool hide);
 
+  /**
+   * Allows WolfShaperUI to close the menu if the mouse appears outside the
+   * graph (this can happen when mouse is moved very fast outside the window)
+   */
+  void hideMenuOnMouseOut(const Point<double>& mouse_pos_absolute);
+
 protected:
   enum GraphRightClickMenuItems
   {
@@ -88,8 +94,8 @@ protected:
   */
   void menuItemSelected(const int id) override;
 
-  void onMouseLeave();
 
+  void onMouseLeave();
   /**
    * Unused.
    */

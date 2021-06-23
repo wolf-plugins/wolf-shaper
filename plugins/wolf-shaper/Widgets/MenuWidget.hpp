@@ -63,6 +63,7 @@ public:
 		const Point<double>& click_pos,
 		const Rectangle<int>& mouse_bounds_absolute);
 	void hide();
+	bool hideOnMouseOutOfBounds(const Point<double>& mouse_pos_absolute);
 
 	// clear all sections and items
 	void clear();
@@ -88,11 +89,22 @@ public:
 	void setSectionFontSize(const uint size) noexcept;
 
 	template<typename T>
-	auto getBounds() const -> Rectangle<T>
+	Rectangle<T> getBounds() const noexcept
 	{
 		return Rectangle<T>(0, 0,
 			static_cast<T>(Widget::getWidth()),
 			static_cast<T>(Widget::getHeight())
+		);
+	}
+
+	template<typename T>
+	Rectangle<T> getMouseBoundsAbsolute() const noexcept
+	{
+		return Rectangle<T>(
+			static_cast<T>(mouse_bounds_absolute.getX()),
+			static_cast<T>(mouse_bounds_absolute.getY()),
+			static_cast<T>(mouse_bounds_absolute.getWidth()),
+			static_cast<T>(mouse_bounds_absolute.getHeight())
 		);
 	}
 

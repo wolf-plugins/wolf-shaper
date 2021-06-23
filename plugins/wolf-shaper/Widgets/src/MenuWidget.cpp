@@ -1,7 +1,6 @@
 #include "MenuWidget.hpp"
 #include "Config.hpp"
 #include "Application.hpp"
-#include <iostream>
 #include "Fonts/chivo_bold.hpp"
 
 /*
@@ -74,6 +73,18 @@ void MenuWidget::hide()
 {
 	hover_i = -1; // cant hover over a hidden menu, so set this to invalid
 	NanoSubWidget::hide();
+}
+
+bool MenuWidget::hideOnMouseOutOfBounds(const Point<double>& mouse_pos_absolute)
+{
+	if (!isVisible()) return false;
+	const auto mouse_bounds_absolute_double = getMouseBoundsAbsolute<double>();
+	if (mouse_bounds_absolute_double.contains(mouse_pos_absolute)) {
+		return false;
+	} else {
+		hide();
+		return true;
+	}
 }
 
 void MenuWidget::clear()
@@ -248,6 +259,8 @@ bool MenuWidget::mouseEvent(const MouseEvent& ev, const Point<int>& offset)
 {
 	if (!isVisible()) return false;
 	MouseEvent ev_offset = ev;
+	// translate from coordinates relative to parent, to coordinates relative
+	// to the top left corner of this MenuWidget
 	ev_offset.pos = Point<double>(
 		ev.pos.getX() + offset.getX() - getAbsoluteX(),
 		ev.pos.getY() + offset.getY() - getAbsoluteY()
@@ -259,6 +272,8 @@ bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
 {
 	if (!isVisible()) return false;
 	MotionEvent ev_offset = ev;
+	// translate from coordinates relative to parent, to coordinates relative
+	// to the top left corner of this MenuWidget
 	ev_offset.pos = Point<double>(
 		ev.pos.getX() + offset.getX() - getAbsoluteX(),
 		ev.pos.getY() + offset.getY() - getAbsoluteY()
@@ -268,18 +283,21 @@ bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
 
 auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 {
-	const auto bounds = getBounds<float>();
-	const auto mouse_pos = Point<float>(
-		static_cast<float>(ev.pos.getX()),
-		static_cast<float>(ev.pos.getY())
+	// check if mouse has moved out of bounds
+	const auto mouse_pos_absolute = Point<double>(
+		ev.pos.getX() + getAbsoluteX(),
+		ev.pos.getY() + getAbsoluteY()
 	);
+	if (hideOnMouseOutOfBounds(mouse_pos_absolute)) return false;
 
 	if (ev.press == true) {
-		if (!bounds.contains(mouse_pos)) {
+		// first check if the mouse click even happened inside the menu
+		const auto menu_bounds = getBounds<double>();
+		if (!menu_bounds.contains(ev.pos)) {
 			hide();
-			return true;
+			return false;
 		}
-
+		// then check each section to see if the mouse click intersects
 		bool cur_section_enabled = true;
 		for (size_t i = 0; i < items.size(); ++i) {
 			const bool is_section = items[i].is_section;
@@ -287,10 +305,9 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 			bool is_enabled = cur_section_enabled && items[i].enabled;
 
 			if (!is_section && is_enabled) {
-				Rectangle<float> bounds = getItemBoundsPx(i);
-				bounds.setWidth(Widget::getWidth() - margin.right);
+				const auto item_bounds = getItemBoundsFullWidthPx(i);
 
-				if (bounds.contains(mouse_pos)) {
+				if (item_bounds.contains(ev.pos)) {
 					callback->menuItemSelected(items[i].id);
 					selected_i = i;
 					hide();
@@ -305,11 +322,11 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 {
 	// check if mouse has moved out of bounds
-	const auto mouse_pos_absolute = Point<int>(
+	const auto mouse_pos_absolute = Point<double>(
 		ev.pos.getX() + getAbsoluteX(),
 		ev.pos.getY() + getAbsoluteY()
 	);
-	if (!mouse_bounds_absolute.contains(mouse_pos_absolute)) { hide(); }
+	if (hideOnMouseOutOfBounds(mouse_pos_absolute)) return false;
 
 	// check if mouse is outside menu and change cursor style
 	const auto menu_bounds = getBounds<double>();
