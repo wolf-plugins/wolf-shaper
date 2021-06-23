@@ -845,8 +845,8 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
                 repaint();
             }
 
-            //else, show curve selection menu
-            else
+            //else, show curve selection menu (only on press, not release)
+            else if (ev.press)
             {
                 fNodeSelectedByRightClick = node;
 
@@ -929,8 +929,15 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
     if (mustHideVertices)
         return false;
 
-	if (fRightClickMenu->mouseEvent(ev, getAbsolutePos()))
+	// first, check if a menu item was clicked
+	if (!mouseLeftDown
+		&& !mouseRightDown
+		&& fRightClickMenu->mouseEvent(ev, getAbsolutePos())) {
+		// the above function ensures we can only get here if ev.press == true
+		if (ev.button == 1) mouseLeftDown = ev.press;
+		else if (ev.button == 3) mouseRightDown = ev.press;
 		return true;
+	}
 
     switch (ev.button)
     {

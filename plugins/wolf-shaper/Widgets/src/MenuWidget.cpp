@@ -72,6 +72,7 @@ void MenuWidget::show(const Point<int>& parent_pos_absolute,
 
 void MenuWidget::hide()
 {
+	hover_i = -1; // cant hover over a hidden menu, so set this to invalid
 	NanoSubWidget::hide();
 }
 
@@ -275,7 +276,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 
 	if (ev.press == true) {
 		if (!bounds.contains(mouse_pos)) {
-			NanoSubWidget::hide();
+			hide();
 			return true;
 		}
 
@@ -292,7 +293,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 				if (bounds.contains(mouse_pos)) {
 					callback->menuItemSelected(items[i].id);
 					selected_i = i;
-					NanoSubWidget::hide();
+					hide();
 					return true;
 				}
 			}
