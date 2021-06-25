@@ -1,5 +1,5 @@
 # Wolf Shaper
-[![Build Status](https://travis-ci.org/wolf-plugins/wolf-shaper.svg?branch=master)](https://travis-ci.org/wolf-plugins/wolf-shaper)
+[![Build Status](https://img.shields.io/github/workflow/status/wolf-plugins/wolf-shaper/Wolf%20Shaper%20CI.svg?logo=github)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3A%22Wolf+Shaper+CI%22)
 
 ![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/plugins/wolf-shaper/Screenshot.png)
 
