@@ -13,7 +13,10 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: install-deps
+      with:
+        submodules: recursive
+        
+    - name: "Install dependencies"
       run: sudo apt install gcc g++ clang libx11-dev libgl1-mesa-dev liblo-dev libjack-dev gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
       
     - name: "Linux (GCC)"
