@@ -1,6 +1,3 @@
-set(THREADS_PREFER_PTHREAD_FLAG ON)
-find_package(Threads REQUIRED)
-
 dpf_add_plugin(wolf-shaper
 	TARGETS jack lv2 vst2 dssi
 	FILES_DSP
@@ -61,4 +58,4 @@ target_include_directories(wolf-shaper PUBLIC
 	"./Libs/DSPFilters/include"
 )
 
-target_link_libraries(wolf-shaper PRIVATE Threads::Threads)
+target_link_libraries(wolf-shaper PUBLIC Threads::Threads)
