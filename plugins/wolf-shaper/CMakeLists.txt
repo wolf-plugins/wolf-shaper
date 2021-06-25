@@ -1,0 +1,64 @@
+set(THREADS_PREFER_PTHREAD_FLAG ON)
+find_package(Threads REQUIRED)
+
+dpf_add_plugin(wolf-shaper
+	TARGETS jack lv2 vst2 dssi
+	FILES_DSP
+		Utils/src/Mathf.cpp
+		Structures/src/Graph.cpp 
+		Structures/src/Oversampler.cpp 
+		Structures/src/ParamSmooth.cpp 
+		Libs/DSPFilters/source/Butterworth.cpp 
+		Libs/DSPFilters/source/Biquad.cpp 
+		Libs/DSPFilters/source/Cascade.cpp 
+		Libs/DSPFilters/source/Filter.cpp 
+		Libs/DSPFilters/source/Param.cpp 
+		Libs/DSPFilters/source/Butterworth.cpp 
+		Libs/DSPFilters/source/PoleFilter.cpp 
+		Libs/DSPFilters/source/RBJ.cpp
+		Libs/DSPFilters/source/Bessel.cpp
+		Libs/DSPFilters/source/RootFinder.cpp
+		WolfShaperPlugin.cpp
+	FILES_UI
+		Utils/src/Mathf.cpp 
+		Structures/src/Graph.cpp 
+		Structures/src/Margin.cpp 
+		Structures/src/Animation.cpp 
+		Widgets/src/WolfWidget.cpp 
+		Widgets/src/GraphNode.cpp 
+		Widgets/src/GraphWidget.cpp 
+		Widgets/src/NanoSwitch.cpp 
+		Widgets/src/RemoveDCSwitch.cpp 
+		Widgets/src/NanoButton.cpp 
+		Widgets/src/ResetGraphButton.cpp 
+		Widgets/src/NanoWheel.cpp 
+		Widgets/src/OversampleWheel.cpp 
+		Widgets/src/NanoKnob.cpp 
+		Widgets/src/VolumeKnob.cpp 
+		Widgets/src/ResizeHandle.cpp 
+		Widgets/src/LabelBox.cpp 
+		Widgets/src/LabelBoxList.cpp 
+		Widgets/src/BipolarModeSwitch.cpp 
+		Widgets/src/LabelContainer.cpp 
+		Widgets/src/GlowingLabelsBox.cpp 
+		Widgets/src/NanoLabel.cpp 
+		Widgets/src/WidgetBar.cpp 
+		Widgets/src/ArrowButton.cpp 
+		Widgets/src/RightClickMenu.cpp 
+		Resources/Fonts/chivo_bold.cpp 
+		Resources/Fonts/chivo_italic.cpp 
+		WolfShaperUI.cpp
+)
+
+target_include_directories(wolf-shaper PUBLIC
+	"."
+	"../../dpf/distrho"
+	"../../dpf/dgl"
+	"./Structures"
+	"./Widgets"
+	"./Utils"
+	"./Resources"
+	"./Libs/DSPFilters/include"
+)
+
+target_link_libraries(wolf-shaper PRIVATE Threads::Threads)
