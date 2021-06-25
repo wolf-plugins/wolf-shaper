@@ -1,0 +1,39 @@
+name: Wolf Shaper CI
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: install-deps
+      run: sudo apt install gcc g++ clang libx11-dev libgl1-mesa-dev liblo-dev libjack-dev gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64
+      
+    - name: "Linux (GCC)"
+      env: 
+        LINUX: true 
+        BUILD_DSSI: true 
+        CC: gcc 
+        CXX: g++
+      run: ./plugins/wolf-shaper/Utils/make_release.sh
+      
+    - name: "Linux (Clang)"
+      env: 
+        LINUX: true
+        BUILD_DSSI: true 
+        CC: clang 
+        CXX: clang++
+      run: ./plugins/wolf-shaper/Utils/make_release.sh
+      
+    - name: "Windows (MinGW)"
+      env: 
+        WIN32: true 
+        BUILD_DSSI: false
+      run: ./plugins/wolf-shaper/Utils/make_release.sh
