@@ -25,7 +25,7 @@ jobs:
         BUILD_DSSI: true 
         CC: gcc 
         CXX: g++
-      run: ./plugins/wolf-shaper/Utils/make_release.sh
+      run: make
       
     - name: "Linux (Clang)"
       env: 
@@ -33,10 +33,13 @@ jobs:
         BUILD_DSSI: true 
         CC: clang 
         CXX: clang++
-      run: ./plugins/wolf-shaper/Utils/make_release.sh
+      run: make clean && make
       
     - name: "Windows (MinGW)"
       env: 
         WIN32: true 
         BUILD_DSSI: false
-      run: ./plugins/wolf-shaper/Utils/make_release.sh
+        CC: x86_64-w64-mingw32-gcc 
+        AR: x86_64-w64-mingw32-ar 
+        CXX: x86_64-w64-mingw32-g++
+      run: make clean && make
