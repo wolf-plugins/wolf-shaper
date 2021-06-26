@@ -99,8 +99,7 @@ FILES_UI  = \
 	Widgets/src/NanoLabel.cpp \
 	Widgets/src/WidgetBar.cpp \
 	Widgets/src/ArrowButton.cpp \
-	Widgets/src/RightClickMenu.cpp \
-	Common/Widgets/src/MenuWidget.cpp.o \
+	Widgets/src/MenuWidget.cpp \
 	Resources/Fonts/chivo_bold.cpp \
 	Resources/Fonts/chivo_italic.cpp \
 	WolfShaperUI.cpp

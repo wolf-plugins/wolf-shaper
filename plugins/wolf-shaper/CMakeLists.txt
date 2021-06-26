@@ -41,7 +41,7 @@ dpf_add_plugin(wolf-shaper
 		Widgets/src/NanoLabel.cpp 
 		Widgets/src/WidgetBar.cpp 
 		Widgets/src/ArrowButton.cpp 
-		Widgets/src/RightClickMenu.cpp 
+		Widgets/src/MenuWidget.cpp
 		Resources/Fonts/chivo_bold.cpp 
 		Resources/Fonts/chivo_italic.cpp 
 		WolfShaperUI.cpp
