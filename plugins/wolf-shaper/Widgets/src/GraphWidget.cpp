@@ -931,8 +931,7 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
 bool GraphWidget::onMouse(const MouseEvent &ev)
 {
-    if (mustHideVertices)
-        return false;
+    if (mustHideVertices) { return false; }
 
 	// first, check if a menu item was clicked
 	if (!mouseLeftDown
@@ -958,8 +957,7 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
 
 bool GraphWidget::onMotion(const MotionEvent &ev)
 {
-    if (mustHideVertices)
-        return false;
+    if (mustHideVertices) { return false; }
 
 	if (fRightClickMenu->motionEvent(ev, getAbsolutePos()))
 		return true;
