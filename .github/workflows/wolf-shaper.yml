@@ -44,7 +44,4 @@ jobs:
         CC: x86_64-w64-mingw32-gcc 
         AR: x86_64-w64-mingw32-ar 
         CXX: x86_64-w64-mingw32-g++
-      run: |
-        make clean 
-        cmake -S . -B build
-        cmake --build build
+      run: make clean && make
