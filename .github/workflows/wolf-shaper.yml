@@ -17,7 +17,7 @@ jobs:
         submodules: recursive
         
     - name: "Install dependencies"
-      run: sudo apt install gcc g++ clang gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 libx11-dev libgl1-mesa-dev liblo-dev libjack-dev cmake
+      run: sudo apt install gcc g++ clang gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 libx11-dev libgl-dev liblo-dev libjack-dev cmake
       
     - name: "Linux (GCC)"
       env: 
