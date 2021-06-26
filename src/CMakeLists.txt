@@ -5,16 +5,16 @@ dpf_add_plugin(wolf-shaper
 		Structures/src/Graph.cpp 
 		Structures/src/Oversampler.cpp 
 		Structures/src/ParamSmooth.cpp 
-		Libs/DSPFilters/source/Butterworth.cpp 
-		Libs/DSPFilters/source/Biquad.cpp 
-		Libs/DSPFilters/source/Cascade.cpp 
-		Libs/DSPFilters/source/Filter.cpp 
-		Libs/DSPFilters/source/Param.cpp 
-		Libs/DSPFilters/source/Butterworth.cpp 
-		Libs/DSPFilters/source/PoleFilter.cpp 
-		Libs/DSPFilters/source/RBJ.cpp
-		Libs/DSPFilters/source/Bessel.cpp
-		Libs/DSPFilters/source/RootFinder.cpp
+		../thirdparty/DSPFilters/source/Butterworth.cpp 
+		../thirdparty/DSPFilters/source/Biquad.cpp 
+		../thirdparty/DSPFilters/source/Cascade.cpp 
+		../thirdparty/DSPFilters/source/Filter.cpp 
+		../thirdparty/DSPFilters/source/Param.cpp 
+		../thirdparty/DSPFilters/source/Butterworth.cpp 
+		../thirdparty/DSPFilters/source/PoleFilter.cpp 
+		../thirdparty/DSPFilters/source/RBJ.cpp
+		../thirdparty/DSPFilters/source/Bessel.cpp
+		../thirdparty/DSPFilters/source/RootFinder.cpp
 		WolfShaperPlugin.cpp
 	FILES_UI
 		Utils/src/Mathf.cpp 
@@ -55,7 +55,7 @@ target_include_directories(wolf-shaper PUBLIC
 	"./Widgets"
 	"./Utils"
 	"./Resources"
-	"./Libs/DSPFilters/include"
+	"../thirdparty/DSPFilters/include"
 )
 
 target_link_libraries(wolf-shaper PUBLIC Threads::Threads)
