@@ -108,7 +108,12 @@ FILES_UI  = \
 # Do some magic
 
 UI_TYPE = opengl
-include ../../dpf/Makefile.plugins.mk
+
+DPF_CUSTOM_PATH = ../dpf
+DPF_CUSTOM_TARGET_DIR = ../bin
+DPF_CUSTOM_BUILD_DIR = ../build
+
+include ../dpf/Makefile.plugins.mk
 
 # --------------------------------------------------------------
 # Additional flags
