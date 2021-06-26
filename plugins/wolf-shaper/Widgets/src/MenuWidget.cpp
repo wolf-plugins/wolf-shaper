@@ -305,7 +305,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 			bool is_enabled = cur_section_enabled && items[i].enabled;
 
 			if (!is_section && is_enabled) {
-				const auto item_bounds = getItemBoundsFullWidthPx(i);
+				const auto item_bounds = getItemBounds(i);
 
 				if (item_bounds.contains(ev.pos)) {
 					callback->menuItemSelected(items[i].id);
@@ -333,7 +333,7 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 	if (menu_bounds.contains(ev.pos)) {
 		// update hover_i
 		for (size_t i = 0; i < items.size(); ++i) {
-			const auto item_bounds = getItemBoundsFullWidthPx(i);
+			const auto item_bounds = getItemBounds(i);
 
 			if (static_cast<int>(i) != selected_i
 				&& !items[i].is_section
@@ -356,7 +356,7 @@ auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 
 void MenuWidget::updateMaxItemWidth(const Item& item)
 {
-	max_item_w_px = std::max(max_item_w_px, getItemWidthPx(item));
+	max_item_w_px = std::max(max_item_w_px, getItemWidth(item));
 }
 
 void MenuWidget::adaptSize()
@@ -367,7 +367,7 @@ void MenuWidget::adaptSize()
 	));
 }
 
-auto MenuWidget::getItemWidthPx(const Item& item) -> float
+auto MenuWidget::getItemWidth(const Item& item) -> float
 {
 	fontFace("chivo_bold");
 	if (item.is_section) {
@@ -388,7 +388,7 @@ auto MenuWidget::getItemWidthPx(const Item& item) -> float
 	}
 }
 
-auto MenuWidget::getItemBoundsPx(const int index) -> Rectangle<float>
+auto MenuWidget::getItemBounds(const int index) -> Rectangle<double>
 {
 	fontFace("chivo_bold");
 	fontSize(font_item_size);
@@ -396,12 +396,6 @@ auto MenuWidget::getItemBoundsPx(const int index) -> Rectangle<float>
 	Rectangle<float> bounds;
 	textBounds(margin.left, index*font_item_size + margin.top,
 		items[index].name.c_str(), NULL, bounds);
-	return bounds;
-}
-
-auto MenuWidget::getItemBoundsFullWidthPx(const int index) -> Rectangle<double>
-{
-	auto bounds = getItemBoundsPx(index);
 	bounds.setWidth(Widget::getWidth() - margin.right);
 	return Rectangle<double>(
 		bounds.getX(),
