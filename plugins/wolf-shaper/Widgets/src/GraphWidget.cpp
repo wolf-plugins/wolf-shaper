@@ -17,15 +17,14 @@ START_NAMESPACE_DISTRHO
 
 static const char* const graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;";
 
-GraphWidget::GraphWidget(UI* ui, Size<uint> size)
-    : WolfWidget(ui),
-      fMargin(16, 16, 16, 16),
-      ui(ui),
-      mouseLeftDown(false),
-      mouseRightDown(false),
-      graphGradientMode(GraphGradientMode::None),
-      fInput(0.0f),
-      fLastCurveTypeSelected(wolf::SingleCurve)
+GraphWidget::GraphWidget(UI* ui, Size<uint> size) : WolfWidget(ui),
+                                                    fMargin(16, 16, 16, 16),
+                                                    ui(ui),
+                                                    mouseLeftDown(false),
+                                                    mouseRightDown(false),
+                                                    graphGradientMode(GraphGradientMode::None),
+                                                    fInput(0.0f),
+                                                    fLastCurveTypeSelected(wolf::SingleCurve)
 {
     setSize(size);
 
@@ -41,6 +40,9 @@ GraphWidget::~GraphWidget() = default;
 
 void GraphWidget::onResize(const ResizeEvent& ev)
 {
+    lineEditor.setRange(fMargin.left, getHeight() - fMargin.bottom, getWidth() - fMargin.right, fMargin.top);
+
+    (void)ev;
 }
 
 void GraphWidget::reset()
@@ -52,11 +54,6 @@ void GraphWidget::reset()
 void GraphWidget::rebuildFromString(const char* serializedGraph)
 {
     lineEditor.rebuildFromString(serializedGraph);
-}
-
-void GraphWidget::flipYAxis()
-{
-    transform(1.0f, 0.0f, 0.0f, -1.0f, 0.0f, getHeight());
 }
 
 void GraphWidget::drawGrid()
@@ -183,11 +180,8 @@ void GraphWidget::drawGraphEdge(int vertexIndex, float lineWidth, Color color)
 {
     DISTRHO_SAFE_ASSERT(vertexIndex < lineEditor.getVertexCount() - 1);
 
-    const float width = getWidth();
-    const float height = getHeight();
-
-    wolf::Vertex* leftVertex = lineEditor.getVertexAtIndex(vertexIndex);
-    wolf::Vertex* rightVertex = lineEditor.getVertexAtIndex(vertexIndex + 1);
+    auto leftVertex = lineEditor.getVertexPosAtIndex(vertexIndex);
+    auto rightVertex = lineEditor.getVertexPosAtIndex(vertexIndex + 1);
 
     beginPath();
 
@@ -195,18 +189,14 @@ void GraphWidget::drawGraphEdge(int vertexIndex, float lineWidth, Color color)
     strokeWidth(lineWidth);
     lineJoin(ROUND);
 
-    moveTo(leftVertex->getX() * width, leftVertex->getY() * height);
+    moveTo(leftVertex.getX(), leftVertex.getY());
 
-    const float edgeLength = (rightVertex->getX() - leftVertex->getX()) * width;
-
-    for (int i = 0; i <= edgeLength; ++i)
+    for (int i = leftVertex.getX(); i <= rightVertex.getX(); ++i)
     {
-        const float normalizedX = leftVertex->getX() + i / width;
-
-        lineTo(normalizedX * width, lineEditor.getValueAt(normalizedX) * height);
+        lineTo(i, lineEditor.getValueAt(i));
     }
 
-    lineTo(rightVertex->getX() * width, rightVertex->getY() * height);
+    lineTo(rightVertex.getX(), rightVertex.getY());
 
     stroke();
 
@@ -256,6 +246,7 @@ void GraphWidget::drawGradient()
     if (graphGradientMode == GraphGradientMode::None)
         return;
 
+    /*
     const float width = getWidth();
     const float height = getHeight();
 
@@ -290,7 +281,7 @@ void GraphWidget::drawGradient()
     fillPaint(linearGradient(width / 2.0f, 0, width / 2.0f, peak, CONFIG_NAMESPACE::graph_gradient_icol, CONFIG_NAMESPACE::graph_gradient_ocol));
     fill();
 
-    closePath();
+    closePath(); */
 }
 
 void GraphWidget::updateInput(const float input)
@@ -390,7 +381,7 @@ void GraphWidget::drawVertices()
 
     for (int i = 0; i < vertexCount; ++i)
     {
-        const auto pos = getVertexPos(i);
+        const auto pos = lineEditor.getVertexPosAtIndex(i);
 
         beginPath();
 
@@ -407,38 +398,20 @@ void GraphWidget::drawVertices()
     }
 }
 
-Point<float> GraphWidget::getVertexPos(const int vertexIndex)
-{
-    DISTRHO_SAFE_ASSERT_RETURN(vertexIndex >= 0 && vertexIndex < lineEditor.getVertexCount(), Point<float>(0.f, 0.f));
-
-    const auto width = static_cast<float>(getWidth());
-    const auto height = static_cast<float>(getHeight());
-
-    auto* vertex = lineEditor.getVertexAtIndex(vertexIndex);
-
-    auto vx = vertex->getX();
-    auto vy = vertex->getY();
-
-    return Point<float>(vx * width, vy * height);
-}
-
 Point<float> GraphWidget::getTensionHandlePos(const int vertexIndex)
 {
     DISTRHO_SAFE_ASSERT_RETURN(vertexIndex >= 0 && vertexIndex < lineEditor.getVertexCount() - 1, Point<float>(0.f, 0.f));
 
-    const auto width = static_cast<float>(getWidth());
-    const auto height = static_cast<float>(getHeight());
+    const auto leftVertex = lineEditor.getVertexPosAtIndex(vertexIndex);
+    const auto rightVertex = lineEditor.getVertexPosAtIndex(vertexIndex + 1);
 
-    auto* leftVertex = lineEditor.getVertexAtIndex(vertexIndex);
-    auto* rightVertex = lineEditor.getVertexAtIndex(vertexIndex + 1);
-
-    auto lx = leftVertex->getX();
-    auto rx = rightVertex->getX();
+    auto lx = leftVertex.getX();
+    auto rx = rightVertex.getX();
 
     auto tx = (lx + rx) / 2.f;
     auto ty = lineEditor.getValueAt(tx);
 
-    return Point<float>(tx * width, ty * height);
+    return Point<float>(tx, ty);
 }
 
 void GraphWidget::drawTensionHandles()
@@ -494,6 +467,8 @@ void GraphWidget::onNanoDisplay()
 
     closePath();
 
+    save();
+
     translate(fMargin.left, fMargin.top);
     scale((float)(width - fMargin.left - fMargin.right) / width, (float)(height - fMargin.top - fMargin.bottom) / height);
 
@@ -501,12 +476,13 @@ void GraphWidget::onNanoDisplay()
     drawGrid();
     drawInOutLabels();
 
-    flipYAxis();
+    restore();
 
     /* if (focusedElement != nullptr && dynamic_cast<GraphVertex*>(focusedElement))
         drawAlignmentLines(); */
 
     drawGradient();
+
     drawGraphLine(CONFIG_NAMESPACE::graph_edges_stroke_width, CONFIG_NAMESPACE::graph_edges_foreground_normal, CONFIG_NAMESPACE::graph_edges_foreground_focused); //inner
 
     drawInputIndicator();
@@ -564,27 +540,6 @@ bool GraphWidget::insertVertex(const Point<int> pos)
     return true;
 }
 
-Point<int> GraphWidget::projectCursorPos(Point<double> pt)
-{
-    // Flip the position upside down
-    const Point<double> flippedPos = wolf::flipY(pt, getHeight());
-
-    // Adjust for zoom
-    const float innerGraphLeft = fMargin.left;
-    const float innerGraphRight = getWidth() - fMargin.right;
-    const float innerGraphWidth = innerGraphRight - innerGraphLeft;
-
-    const float innerGraphTop = fMargin.top;
-    const float innerGraphBottom = getHeight() - fMargin.bottom;
-    const float innerGraphHeight = innerGraphBottom - innerGraphTop;
-
-    // Inverse lerp
-    const float x = (flippedPos.getX() - innerGraphLeft) / innerGraphWidth;
-    const float y = (flippedPos.getY() - innerGraphTop) / innerGraphHeight;
-
-    return Point<int>(x * getWidth(), y * getHeight());
-}
-
 bool GraphWidget::innerGraphContains(Point<double> pt)
 {
     const float innerGraphLeft = fMargin.left;
@@ -597,8 +552,6 @@ bool GraphWidget::innerGraphContains(Point<double> pt)
 
 bool GraphWidget::leftClick(const MouseEvent& ev)
 {
-    const Point<int> point = projectCursorPos(ev.pos);
-
     if (mouseRightDown)
         return true;
 
@@ -618,8 +571,6 @@ void GraphWidget::rightClickMenuItemSelected(RightClickMenuItem* rightClickMenuI
 
 bool GraphWidget::rightClick(const MouseEvent& ev)
 {
-    const Point<int> point = projectCursorPos(ev.pos);
-
     if (mouseLeftDown)
         return true;
 

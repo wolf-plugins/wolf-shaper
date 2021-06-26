@@ -12,11 +12,6 @@
 
 START_NAMESPACE_DISTRHO
 
-class GraphVertex;
-class GraphTensionHandle;
-class GraphNode;
-class GraphWidget;
-
 enum class GraphGradientMode
 {
     None = 0,
@@ -77,8 +72,6 @@ protected:
     void idleCallback() override;
 
     void rightClickMenuItemSelected(RightClickMenuItem* rightClickMenuItem) override;
-
-    void flipYAxis();
 
     /**
    * Draw the grid of the graph.
@@ -154,14 +147,7 @@ private:
 
     UI* ui;
 
-    Point<int> projectCursorPos(Point<double> pt);
-
     bool innerGraphContains(Point<double> pt);
-
-    /*
-     * Returns the position of the vertex at the specified index.
-     */
-    Point<float> getVertexPos(const int vertexIndex);
 
     /**
      * @brief Returns the position of the tension handle at the right of the specified vertex.

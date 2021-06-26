@@ -96,6 +96,7 @@ float invLogScale(const float value, const float min, const float max);
 float randomNumber(const float min, const float max);
 
 float lerp(float a, float b, float f);
+float invLerp(float a, float b, float f);
 
 int doubleToRadixCString(char *buf, double value, int radix);
 

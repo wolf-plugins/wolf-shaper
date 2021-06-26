@@ -1,6 +1,7 @@
 #ifndef WOLF_GRAPH_DEFINED_H
 #define WOLF_GRAPH_DEFINED_H
 
+#include "Geometry.hpp"
 #include "src/DistrhoDefines.h"
 
 START_NAMESPACE_DISTRHO
@@ -77,11 +78,31 @@ private:
 class Graph
 {
 public:
+    struct Range
+    {
+    public:
+        Range(const float minX = 0, const float minY = 0, const float maxX = 1, const float maxY = 1) : minX(minX),
+                                                                                                        minY(minY),
+                                                                                                        maxX(maxX),
+                                                                                                        maxY(maxY)
+        {
+        }
+
+        float minX;
+        float minY;
+        float maxX;
+        float maxY;
+    };
+
     Graph();
 
     void insertVertex(float x, float y, float tension = 0.0f, CurveType type = CurveType::SingleCurve);
     void removeVertex(int index);
+
+    [[deprecated]]
     Vertex* getVertexAtIndex(int index);
+
+    Point<float> getVertexPosAtIndex(int index);
 
     void setTensionAtIndex(int index, float tension);
 
@@ -90,7 +111,7 @@ public:
      */
     int getVertexCount();
 
-    static float getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y, CurveType type);
+    float getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y, CurveType type);
 
     /**
      * Get the y value at x in the graph.
@@ -133,6 +154,8 @@ public:
      */
     void rebuildFromString(const char* serializedGraph);
 
+    void setRange(const float minX, const float minY, const float maxX, const float maxY);
+
 private:
     Vertex vertices[maxVertices];
     int vertexCount;
@@ -147,6 +170,8 @@ private:
 
     // format: x,y,tension,type;
     char serializationBuffer[(sizeof(char) * 256 + 4) * maxVertices + 1];
+
+    Range range;
 };
 
 } // namespace wolf

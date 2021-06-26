@@ -66,6 +66,13 @@ float lerp(float a, float b, float f)
     return a * (1.0 - f) + (b * f);
 }
 
+float invLerp(float a, float b, float f)
+{
+    f = clamp(f, a, b);
+
+    return (f - a) / (b - a);
+}
+
 /* Hexfloat stuff------------------------------------- */
 
 // Adapted from https://cs.chromium.org/chromium/src/v8/src/conversions.cc

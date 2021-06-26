@@ -410,9 +410,9 @@ float Graph::getOutValue(float input, float tension, float p1x, float p1y, float
 
 float Graph::getValueAt(float x)
 {
-    const float absX = std::abs(x);
+    x = wolf::invLerp(range.minX, range.maxX, x);
 
-    DISTRHO_SAFE_ASSERT_RETURN(absX <= 1.0f, x);
+    DISTRHO_SAFE_ASSERT_RETURN(x >= 0.f && x <= 1.0f, x);
 
     //binary search
     int left = 0;
@@ -423,12 +423,20 @@ float Graph::getValueAt(float x)
     {
         mid = left + (right - left) / 2;
 
-        if (vertices[mid].getX() < absX)
+        if (vertices[mid].getX() < x)
+        {
             left = mid + 1;
-        else if (vertices[mid].getX() > absX)
+        }
+        else if (vertices[mid].getX() > x)
+        {
             right = mid - 1;
+        }
         else
-            return x >= 0 ? vertices[mid].getY() : -vertices[mid].getY();
+        {
+            const float out = x >= 0 ? vertices[mid].getY() : -vertices[mid].getY();
+
+            return wolf::lerp(range.minY, range.maxY, out);
+        }
     }
 
     const float p1x = vertices[left - 1].getX();
@@ -437,7 +445,9 @@ float Graph::getValueAt(float x)
     const float p2x = vertices[left].getX();
     const float p2y = vertices[left].getY();
 
-    return getOutValue(x, vertices[left - 1].getTension(), p1x, p1y, p2x, p2y, vertices[left - 1].getType());
+    const float out = getOutValue(x, vertices[left - 1].getTension(), p1x, p1y, p2x, p2y, vertices[left - 1].getType());
+
+    return wolf::lerp(range.minY, range.maxY, out);
 }
 
 void Graph::setHorizontalWarpAmount(float warp)
@@ -518,9 +528,21 @@ void Graph::setTensionAtIndex(int index, float tension)
 
 Vertex* Graph::getVertexAtIndex(int index)
 {
-    DISTRHO_SAFE_ASSERT(index < vertexCount);
+    DISTRHO_SAFE_ASSERT(index >= 0 && index < vertexCount);
 
     return &vertices[index];
+}
+
+Point<float> Graph::getVertexPosAtIndex(int index)
+{
+    DISTRHO_SAFE_ASSERT(index >= 0 && index < vertexCount);
+
+    const auto vertex = &vertices[index];
+
+    const auto x = wolf::lerp(range.minX, range.maxX, vertex->getX());
+    const auto y = wolf::lerp(range.minY, range.maxY, vertex->getY());
+
+    return Point<float>(x, y);
 }
 
 int Graph::getVertexCount()
@@ -585,6 +607,15 @@ void Graph::rebuildFromString(const char* serializedGraph)
 
     vertexCount = i;
 }
+
+void Graph::setRange(const float minX, const float minY, const float maxX, const float maxY)
+{
+    range.minX = minX;
+    range.minY = minY;
+    range.maxX = maxX;
+    range.maxY = maxY;
+}
+
 } // namespace wolf
 
 END_NAMESPACE_DISTRHO

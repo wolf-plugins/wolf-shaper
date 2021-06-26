@@ -246,14 +246,14 @@ class WolfShaper : public Plugin
 		if (bipolarMode)
 		{
 			const bool positiveInput = value >= 0.0f;
-			const float vertexY = lineEditor.getVertexAtIndex(positiveInput ? lineEditor.getVertexCount() - 1 : 0)->getY();
+            const float vertexY = lineEditor.getVertexPosAtIndex(positiveInput ? lineEditor.getVertexCount() - 1 : 0).getY();
 			const float absValue = std::abs(value);
 
 			return absValue * (-1.0f + vertexY * 2.0f);
 		}
 		else
 		{
-			return value * lineEditor.getVertexAtIndex(lineEditor.getVertexCount() - 1)->getY();
+            return value * lineEditor.getVertexPosAtIndex(lineEditor.getVertexCount() - 1).getY();
 		}
 	}
 
