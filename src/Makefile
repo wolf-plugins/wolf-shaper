@@ -118,7 +118,7 @@ include ../dpf/Makefile.plugins.mk
 # --------------------------------------------------------------
 # Additional flags
 
-BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources -I./../thirdparty/inih -I../thirdparty/DSPFilters/include
+BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources -I../thirdparty/DSPFilters/include
 
 BASE_FLAGS += $(CUSTOM_DEFINES)
 
