@@ -80,7 +80,6 @@ FILES_UI  = \
 	Structures/src/Margin.cpp \
 	Structures/src/Animation.cpp \
 	Widgets/src/WolfWidget.cpp \
-	Widgets/src/GraphNode.cpp \
 	Widgets/src/GraphWidget.cpp \
 	Widgets/src/NanoSwitch.cpp \
 	Widgets/src/RemoveDCSwitch.cpp \

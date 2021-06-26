@@ -1,0 +1,14 @@
+Language: Cpp
+BasedOnStyle: LLVM
+IndentWidth: 4
+TabWidth: 4
+DerivePointerAlignment: false
+PointerAlignment: Left
+BreakBeforeBraces: Allman
+AllowShortIfStatementsOnASingleLine: false
+AllowShortBlocksOnASingleLine: false
+IndentCaseLabels: false
+ColumnLimit: 0
+UseTab: Never
+AccessModifierOffset: -4
+Cpp11BracedListStyle: false

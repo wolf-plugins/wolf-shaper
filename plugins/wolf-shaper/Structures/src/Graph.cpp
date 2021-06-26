@@ -1,10 +1,10 @@
 #include "Graph.hpp"
 #include "Mathf.hpp"
 
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
 #include <cassert>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 START_NAMESPACE_DISTRHO
@@ -28,7 +28,7 @@ Vertex::Vertex() : x(0),
 {
 }
 
-Vertex::Vertex(float posX, float posY, float tension, CurveType type, Graph *graphPtr) : x(posX),
+Vertex::Vertex(float posX, float posY, float tension, CurveType type, Graph* graphPtr) : x(posX),
                                                                                          y(posY),
                                                                                          xDirty(true),
                                                                                          yDirty(true),
@@ -292,7 +292,7 @@ void Vertex::setType(CurveType type)
     this->type = type;
 }
 
-void Vertex::setGraphPtr(Graph *graphPtr)
+void Vertex::setGraphPtr(Graph* graphPtr)
 {
     this->graphPtr = graphPtr;
 }
@@ -516,7 +516,7 @@ void Graph::setTensionAtIndex(int index, float tension)
     vertices[index].setTension(tension);
 }
 
-Vertex *Graph::getVertexAtIndex(int index)
+Vertex* Graph::getVertexAtIndex(int index)
 {
     DISTRHO_SAFE_ASSERT(index < vertexCount);
 
@@ -538,7 +538,7 @@ void Graph::setBipolarMode(bool bipolarMode)
     this->bipolarMode = bipolarMode;
 }
 
-const char *Graph::serialize()
+const char* Graph::serialize()
 {
     Vertex vertex;
 
@@ -564,9 +564,9 @@ void Graph::clear()
     vertexCount = 0;
 }
 
-void Graph::rebuildFromString(const char *serializedGraph)
+void Graph::rebuildFromString(const char* serializedGraph)
 {
-    char *rest = (char *)serializedGraph;
+    char* rest = (char*)serializedGraph;
 
     int i = 0;
 
