@@ -58,6 +58,7 @@ protected:
   void uiReshape(uint width, uint height) override;
   bool onKeyboard(const KeyboardEvent &ev) override;
   bool onMouse(const MouseEvent &ev) override;
+  bool onMotion(const MotionEvent &ev) override;
 
 private:
   ScopedPointer<RemoveDCSwitch> fSwitchRemoveDC;
