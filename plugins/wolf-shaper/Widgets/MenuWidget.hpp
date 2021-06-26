@@ -73,8 +73,8 @@ public:
 
 	// find the index of the first item with a matching name/id
 	// obviously this won't work if two items have the same name/id
-	auto findItemIndex(const std::string& name) -> int;
-	auto findItemIndex(const int id) -> int;
+	int findItemIndex(const std::string& name);
+	int findItemIndex(const int id);
 
 	// if you disable an item that's a section header, all the items
 	// until the next section header will be disabled too
@@ -116,8 +116,8 @@ public:
 	bool motionEvent(const MotionEvent &ev, const Point<int>& offset);
 
 protected:
-	auto onMouse( const MouseEvent &)  -> bool override;
-	auto onMotion(const MotionEvent &) -> bool override;
+	bool onMouse( const MouseEvent &) override;
+	bool onMotion(const MotionEvent &) override;
 	void onNanoDisplay() override;
 
 	DGL_NAMESPACE::Rectangle<float> getBoundsOfItem(const int i);
@@ -145,8 +145,8 @@ private:
 
 	void updateMaxItemWidth(const Item& item);
 	void adaptSize();
-	auto getItemWidth(const Item& item) -> float;
-	auto getItemBounds(const int index) -> Rectangle<double>;
+	float getItemWidth(const Item& item);
+	Rectangle<double> getItemBounds(const int index);
 };
 
 END_NAMESPACE_DISTRHO

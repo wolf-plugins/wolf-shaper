@@ -110,7 +110,7 @@ void MenuWidget::addItem(int id, const char *label, const char *comment)
 	updateMaxItemWidth(item);
 }
 
-auto MenuWidget::findItemIndex(const std::string& name) -> int
+int MenuWidget::findItemIndex(const std::string& name)
 {
 	for (size_t i = 0; i < items.size(); ++i) {
 		if (items[i].name == name) return i;
@@ -118,7 +118,7 @@ auto MenuWidget::findItemIndex(const std::string& name) -> int
 	return -1;
 }
 
-auto MenuWidget::findItemIndex(const int id) -> int
+int MenuWidget::findItemIndex(const int id)
 {
 	for (size_t i = 0; i < items.size(); ++i) {
 		if (items[i].id == static_cast<uint>(id)) return i;
@@ -281,7 +281,7 @@ bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
 	return onMotion(ev_offset);
 }
 
-auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
+bool MenuWidget::onMouse(const MouseEvent& ev)
 {
 	if (ev.press == true) {
 		// first check if the mouse click even happened inside the menu
@@ -312,7 +312,7 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 	return false;
 }
 
-auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
+bool MenuWidget::onMotion(const MotionEvent& ev)
 {
 	// check if mouse is outside menu and change cursor style
 	const auto menu_bounds = getBounds<double>();
@@ -353,7 +353,7 @@ void MenuWidget::adaptSize()
 	));
 }
 
-auto MenuWidget::getItemWidth(const Item& item) -> float
+float MenuWidget::getItemWidth(const Item& item)
 {
 	fontFace("chivo_bold");
 	if (item.is_section) {
@@ -374,7 +374,7 @@ auto MenuWidget::getItemWidth(const Item& item) -> float
 	}
 }
 
-auto MenuWidget::getItemBounds(const int index) -> Rectangle<double>
+Rectangle<double> MenuWidget::getItemBounds(const int index)
 {
 	fontFace("chivo_bold");
 	fontSize(font_item_size);
