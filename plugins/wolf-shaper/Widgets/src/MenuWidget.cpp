@@ -23,9 +23,8 @@ MenuWidget::MenuWidget(Widget* widget) noexcept
     callback(nullptr)
 {
     using namespace WOLF_FONTS;
-    createFontFromMemory(
-      "chivo_bold", (const uchar*)chivo_bold, chivo_bold_size, 0);
-    hide();
+	loadSharedResources();
+	hide();
 }
 
 void MenuWidget::show(const Point<int>& parent_pos_absolute,
@@ -139,7 +138,6 @@ void MenuWidget::onNanoDisplay()
 
     // these four lines are used to calculate the height of a line of text
     Rectangle<float> bounds;
-    fontFace("chivo_bold");
     fontSize(font_item_size);
     textBounds(0, 0, items[0].name.c_str(), NULL, bounds);
     const float text_h = bounds.getHeight();
@@ -198,7 +196,7 @@ void MenuWidget::onNanoDisplay()
         text(left_offset, vertical_offset, item.name.c_str(), NULL);
 
         if (static_cast<int>(i) == selected_i) {
-            text(0, vertical_offset, "-", NULL);
+            text(0, vertical_offset, "✓", NULL);
         }
 
         // render description if an item has one
@@ -316,7 +314,6 @@ void MenuWidget::adaptSize()
 
 float MenuWidget::getItemWidth(const Item& item)
 {
-    fontFace("chivo_bold");
     if (item.is_section) {
         Rectangle<float> bounds;
         fontSize(font_section_size);
@@ -336,7 +333,6 @@ float MenuWidget::getItemWidth(const Item& item)
 
 Rectangle<double> MenuWidget::getItemBounds(const int index)
 {
-    fontFace("chivo_bold");
     fontSize(font_item_size);
     textAlign(ALIGN_LEFT | ALIGN_TOP);
     Rectangle<float> bounds;
