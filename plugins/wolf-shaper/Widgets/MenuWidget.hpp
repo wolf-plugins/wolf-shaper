@@ -95,19 +95,10 @@ class MenuWidget : public WolfWidget
     void addSection(const char* section_name);
 
 	/**
-	 * Assuming a single item exists with the given name or id, searches the
-	 * menu to find its index
-	 * This isn't currently used
-	 */
-	int findItemIndex(const std::string& name);
-    int findItemIndex(const int id);
-
-	/**
 	 * changes the enabled field of items
 	 */
 	void setAllItemsEnabled(const bool enabled);
     void setItemEnabled(const uint index, const bool enabled);
-    void setItemEnabled(const std::string& name, const bool enabled);
 
 	/**
 	 * updates selected_i. this should be called externally to remember user
@@ -163,11 +154,6 @@ class MenuWidget : public WolfWidget
     bool onMouse(const MouseEvent&) override;
     bool onMotion(const MotionEvent&) override;
     void onNanoDisplay() override;
-
-	/**
-	 * gets the Bounds of an individual item (for selection via mouse)
-	 */
-    Rectangle<float> getBoundsOfItem(const int i);
 
   private:
     std::vector<Item> items;

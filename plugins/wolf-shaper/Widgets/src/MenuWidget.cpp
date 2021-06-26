@@ -4,16 +4,6 @@
 #include "Config.hpp"
 #include "Fonts/chivo_bold.hpp"
 
-/*
-#define PRINT_RECT(rect) \
-    std::cout << "x" << rect.getX()	 \
-        << "y" << rect.getY() << " " \
-        << "w" << rect.getWidth()    \
-        << "h" << rect.getHeight()
-#define PRINT_POINT(pt) \
-    std::cout << "x" << pt.getX() << "y" << pt.getY()
-*/
-
 START_NAMESPACE_DISTRHO
 
 MenuWidget::MenuWidget(Widget* widget) noexcept
@@ -106,22 +96,6 @@ void MenuWidget::addItem(int id, const char* label, const char* comment)
     updateMaxItemWidth(item);
 }
 
-int MenuWidget::findItemIndex(const std::string& name)
-{
-    for (size_t i = 0; i < items.size(); ++i) {
-        if (items[i].name == name) return i;
-    }
-    return -1;
-}
-
-int MenuWidget::findItemIndex(const int id)
-{
-    for (size_t i = 0; i < items.size(); ++i) {
-        if (items[i].id == static_cast<uint>(id)) return i;
-    }
-    return -1;
-}
-
 void MenuWidget::setAllItemsEnabled(const bool enabled)
 {
     for (auto& item : items) item.enabled = enabled;
@@ -130,12 +104,6 @@ void MenuWidget::setAllItemsEnabled(const bool enabled)
 void MenuWidget::setItemEnabled(const uint index, const bool enabled)
 {
     items[index].enabled = enabled;
-}
-
-void MenuWidget::setItemEnabled(const std::string& name, const bool enabled)
-{
-    const int index = findItemIndex(name);
-    if (index > 0) setItemEnabled(index, enabled);
 }
 
 void MenuWidget::setItemSelected(const uint i)
