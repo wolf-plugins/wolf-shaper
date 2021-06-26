@@ -283,13 +283,6 @@ bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
 
 auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 {
-	// check if mouse has moved out of bounds
-	const auto mouse_pos_absolute = Point<double>(
-		ev.pos.getX() + getAbsoluteX(),
-		ev.pos.getY() + getAbsoluteY()
-	);
-	if (hideOnMouseOutOfBounds(mouse_pos_absolute)) return false;
-
 	if (ev.press == true) {
 		// first check if the mouse click even happened inside the menu
 		const auto menu_bounds = getBounds<double>();
@@ -321,13 +314,6 @@ auto MenuWidget::onMouse(const MouseEvent& ev) -> bool
 
 auto MenuWidget::onMotion(const MotionEvent& ev) -> bool
 {
-	// check if mouse has moved out of bounds
-	const auto mouse_pos_absolute = Point<double>(
-		ev.pos.getX() + getAbsoluteX(),
-		ev.pos.getY() + getAbsoluteY()
-	);
-	if (hideOnMouseOutOfBounds(mouse_pos_absolute)) return false;
-
 	// check if mouse is outside menu and change cursor style
 	const auto menu_bounds = getBounds<double>();
 	if (menu_bounds.contains(ev.pos)) {
