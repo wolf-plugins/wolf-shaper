@@ -14,7 +14,6 @@
 #include <chrono>
 #include <cstdlib>
 #include <cmath>
-#include <iostream>
 START_NAMESPACE_DISTRHO
 
 const char *graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;";
@@ -1010,7 +1009,6 @@ void GraphWidget::onFocusOut()
     mouseLeftDown = false;
     mouseRightDown = false;
 
-	std::cout << "called onFocusOut" << std::endl;
     //getParentWindow().showCursor();
 
     repaint();

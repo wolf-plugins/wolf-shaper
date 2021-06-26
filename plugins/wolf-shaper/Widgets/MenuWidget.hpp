@@ -21,6 +21,15 @@ START_NAMESPACE_DISTRHO
 class MenuWidget : public WolfWidget
 {
   public:
+	/**
+	 * This struct contains data for each menu entry, including the sections.
+	 * name and description are used for display.
+	 * if enabled==false then selection will be grayed out. If a section isn't
+	 * enabled, then all items up until the next section will also be grayed
+	 * out.
+	 * The "id" field is used to address each user-selectable option, it is
+	 * irrelevant for a section.
+	 */
     struct Item
     {
         const uint id;
@@ -40,7 +49,7 @@ class MenuWidget : public WolfWidget
 
         // constructor for sections
         Item(const std::string& _name)
-          : id(-1),
+          : id(0),
             name(_name),
             description(""),
             enabled(true),
@@ -48,6 +57,9 @@ class MenuWidget : public WolfWidget
         {}
     };
 
+	/**
+	 * Callback for when a menu item is selected.
+	 */
     class Callback
     {
       public:
@@ -57,36 +69,61 @@ class MenuWidget : public WolfWidget
 
     explicit MenuWidget(Widget* widget) noexcept;
 
-    // shows and hides the widget without affecting the elements
-    void show(const Point<int>& parent_pos,
+	/**
+	 * shows and hides the widget without affecting the elements
+	 */
+	void show(const Point<int>& parent_pos,
       const Point<double>& click_pos,
       const Rectangle<int>& mouse_bounds_absolute);
     void hide();
+
+	/**
+	 * this must be called from the top-level widget on mouse/motion events
+	 * to close the menu when the mouse leaves the graph area or clicks anywhere
+	 */
     bool hideOnMouseOutOfBounds(const Point<double>& mouse_pos_absolute);
 
-    // clear all sections and items
+    /**
+	 * clears the list of Items
+	 */
     void clear();
 
+	/**
+	 * Constructs an Item using either constructor, and adds it to the vector
+	 */
     void addItem(int id, const char* label, const char* comment = "");
     void addSection(const char* section_name);
 
-    // find the index of the first item with a matching name/id
-    // obviously this won't work if two items have the same name/id
-    int findItemIndex(const std::string& name);
+	/**
+	 * Assuming a single item exists with the given name or id, searches the
+	 * menu to find its index
+	 * This isn't currently used
+	 */
+	int findItemIndex(const std::string& name);
     int findItemIndex(const int id);
 
-    // if you disable an item that's a section header, all the items
-    // until the next section header will be disabled too
-    void setAllItemsEnabled(const bool enabled);
+	/**
+	 * changes the enabled field of items
+	 */
+	void setAllItemsEnabled(const bool enabled);
     void setItemEnabled(const uint index, const bool enabled);
     void setItemEnabled(const std::string& name, const bool enabled);
 
-    // updates selected_i
-    void setItemSelected(const uint i);
+	/**
+	 * updates selected_i. this should be called externally to remember user
+	 * selections after the menu is hidden.
+	 */
+	void setItemSelected(const uint i);
 
+	/**
+	 * set font sizes externally
+	 */
     void setRegularFontSize(const uint size) noexcept;
     void setSectionFontSize(const uint size) noexcept;
 
+	/**
+	 * Helper functions to get the menu bounds and mouse bounds.
+	 */
     template<typename T>
     Rectangle<T> getBounds() const noexcept
     {
@@ -105,19 +142,32 @@ class MenuWidget : public WolfWidget
           static_cast<T>(mouse_bounds_absolute.getHeight()));
     }
 
+	/**
+	 * set the callback function to call
+	 */
     void setCallback(Callback* callback) noexcept;
 
-    // must manually call onMouse/onMotion if the parent isn't a TopLevelWidget
-    // also must manually offset by the required amount from the parent widget
+    /**
+	 * In current DPF, we must manually call onMouse/onMotion if the instance
+	 * is not owned by a TopLevelWidget. These methods allow onMouse/onMotion
+	 * to be called manually with the same behaviour as if it were called
+	 * automatically by a TopLevelWidget.
+	 */
     bool mouseEvent(const MouseEvent& ev, const Point<int>& offset);
     bool motionEvent(const MotionEvent& ev, const Point<int>& offset);
 
   protected:
+	/**
+	 * DPF methods
+	 */
     bool onMouse(const MouseEvent&) override;
     bool onMotion(const MotionEvent&) override;
     void onNanoDisplay() override;
 
-    DGL_NAMESPACE::Rectangle<float> getBoundsOfItem(const int i);
+	/**
+	 * gets the Bounds of an individual item (for selection via mouse)
+	 */
+    Rectangle<float> getBoundsOfItem(const int i);
 
   private:
     std::vector<Item> items;
@@ -126,13 +176,32 @@ class MenuWidget : public WolfWidget
     // updated on show. assumes the bounds won't change while the menu is open.
     // this is a safe assumption in most cases, because the user will have to
     // click somewhere to change the bounds, which will close the menu.
-    Rectangle<int> mouse_bounds_absolute;
+	/**
+	 * if the mouse moves outside these bounds, the menu will close.
+	 * updated on "show".
+	 * assumes the bounds won't change while the menu is open.
+	 * this will be a safe assumption unless window-manager based resizing of
+	 * windows is allowed, hopefully we can implement an event callback on
+	 * window resize.
+	 */
+	Rectangle<int> mouse_bounds_absolute;
 
+	/**
+	 * This keeps track of the greatest item width in pixels, and is calculated
+	 * whenever items are added. This saves us having to recalculate the menu
+	 * size every time it is displayed.
+	 */
     float max_item_w_px;
 
+	/**
+	 * Keeps track of currently hovered/selected indices
+	 */
     int hover_i;
     int selected_i;
 
+	/**
+	 * Display parameters (with descriptive names!)
+	 */
     Margin margin;
     float font_item_size, font_section_size;
     Color font_item_color, font_item_hover_color, font_section_color;
@@ -140,9 +209,13 @@ class MenuWidget : public WolfWidget
 
     Callback* callback;
 
+	/**
+	 * update max_item_w_px
+	 */
     void updateMaxItemWidth(const Item& item);
-    void adaptSize();
     float getItemWidth(const Item& item);
+
+    void adaptSize();
     Rectangle<double> getItemBounds(const int index);
 };
 

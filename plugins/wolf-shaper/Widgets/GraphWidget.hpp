@@ -73,7 +73,7 @@ protected:
     waveCurveItem
   };
 
-  // for enabling/disabling menu sections
+  // for enabling/disabling menu sections.
   static const int section_index_delete = 0;
   static const int section_index_curve = 2;
 
