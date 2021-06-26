@@ -49,8 +49,8 @@ dpf_add_plugin(wolf-shaper
 
 target_include_directories(wolf-shaper PUBLIC
 	"."
-	"../../dpf/distrho"
-	"../../dpf/dgl"
+	"../dpf/distrho"
+	"../dpf/dgl"
 	"./Structures"
 	"./Widgets"
 	"./Utils"
