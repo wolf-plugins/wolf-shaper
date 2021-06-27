@@ -62,16 +62,16 @@ FILES_DSP = \
 	Structures/src/Graph.cpp \
 	Structures/src/Oversampler.cpp \
 	Structures/src/ParamSmooth.cpp \
-	../thirdparty/DSPFilters/source/Butterworth.cpp \
-	../thirdparty/DSPFilters/source/Biquad.cpp \
-	../thirdparty/DSPFilters/source/Cascade.cpp \
-	../thirdparty/DSPFilters/source/Filter.cpp \
-	../thirdparty/DSPFilters/source/Param.cpp \
-	../thirdparty/DSPFilters/source/Butterworth.cpp \
-	../thirdparty/DSPFilters/source/PoleFilter.cpp \
-	../thirdparty/DSPFilters/source/RBJ.cpp \
-	../thirdparty/DSPFilters/source/Bessel.cpp \
-	../thirdparty/DSPFilters/source/RootFinder.cpp \
+        ../libs/DSPFilters/source/Butterworth.cpp \
+        ../libs/DSPFilters/source/Biquad.cpp \
+        ../libs/DSPFilters/source/Cascade.cpp \
+        ../libs/DSPFilters/source/Filter.cpp \
+        ../libs/DSPFilters/source/Param.cpp \
+        ../libs/DSPFilters/source/Butterworth.cpp \
+        ../libs/DSPFilters/source/PoleFilter.cpp \
+        ../libs/DSPFilters/source/RBJ.cpp \
+        ../libs/DSPFilters/source/Bessel.cpp \
+        ../libs/DSPFilters/source/RootFinder.cpp \
 	WolfShaperPlugin.cpp
 
 FILES_UI  = \
@@ -118,7 +118,7 @@ include ../dpf/Makefile.plugins.mk
 # --------------------------------------------------------------
 # Additional flags
 
-BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources -I../thirdparty/DSPFilters/include
+BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets -I./Utils -I./Resources -I../libs/DSPFilters/include
 
 BASE_FLAGS += $(CUSTOM_DEFINES)
 
