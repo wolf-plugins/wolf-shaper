@@ -5,16 +5,16 @@ dpf_add_plugin(wolf-shaper
 		Structures/src/Graph.cpp 
 		Structures/src/Oversampler.cpp 
 		Structures/src/ParamSmooth.cpp 
-		Libs/DSPFilters/source/Butterworth.cpp 
-		Libs/DSPFilters/source/Biquad.cpp 
-		Libs/DSPFilters/source/Cascade.cpp 
-		Libs/DSPFilters/source/Filter.cpp 
-		Libs/DSPFilters/source/Param.cpp 
-		Libs/DSPFilters/source/Butterworth.cpp 
-		Libs/DSPFilters/source/PoleFilter.cpp 
-		Libs/DSPFilters/source/RBJ.cpp
-		Libs/DSPFilters/source/Bessel.cpp
-		Libs/DSPFilters/source/RootFinder.cpp
+                ../libs/DSPFilters/source/Butterworth.cpp
+                ../libs/DSPFilters/source/Biquad.cpp
+                ../libs/DSPFilters/source/Cascade.cpp
+                ../libs/DSPFilters/source/Filter.cpp
+                ../libs/DSPFilters/source/Param.cpp
+                ../libs/DSPFilters/source/Butterworth.cpp
+                ../libs/DSPFilters/source/PoleFilter.cpp
+                ../libs/DSPFilters/source/RBJ.cpp
+                ../libs/DSPFilters/source/Bessel.cpp
+                ../libs/DSPFilters/source/RootFinder.cpp
 		WolfShaperPlugin.cpp
 	FILES_UI
 		Utils/src/Mathf.cpp 
@@ -49,13 +49,13 @@ dpf_add_plugin(wolf-shaper
 
 target_include_directories(wolf-shaper PUBLIC
 	"."
-	"../../dpf/distrho"
-	"../../dpf/dgl"
+	"../dpf/distrho"
+	"../dpf/dgl"
 	"./Structures"
 	"./Widgets"
 	"./Utils"
 	"./Resources"
-	"./Libs/DSPFilters/include"
+        "../libs/DSPFilters/include"
 )
 
 target_link_libraries(wolf-shaper PUBLIC Threads::Threads)

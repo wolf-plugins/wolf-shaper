@@ -21,7 +21,7 @@ libs:
 	$(MAKE) -C dpf/dgl ../build/libdgl-opengl.a DGL_FLAGS="$(DGL_FLAGS) $(CUSTOM_DEFINES)"
 
 plugins: libs
-	$(MAKE) all -C plugins/wolf-shaper
+	$(MAKE) all -C src
 
 ifneq ($(CROSS_COMPILING),true)
 gen: plugins dpf/utils/lv2_ttl_generator
@@ -43,23 +43,23 @@ endif
 # --------------------------------------------------------------
 
 release:
-	LINUX=true ./plugins/wolf-shaper/Utils/make_release.sh
-	WIN32=true ./plugins/wolf-shaper/Utils/make_release.sh
-	./plugins/wolf-shaper/Utils/bundle_source.sh
+	LINUX=true ./tools/make_release.sh
+	WIN32=true ./tools/make_release.sh
+	./tools/bundle_source.sh
 
 # --------------------------------------------------------------
 
 clean:
 	$(MAKE) clean -C dpf/dgl
 	$(MAKE) clean -C dpf/utils/lv2-ttl-generator
-	$(MAKE) clean -C plugins/wolf-shaper
+	$(MAKE) clean -C src
 	rm -rf bin build
 
 install: all
-	$(MAKE) install -C plugins/wolf-shaper
+	$(MAKE) install -C src
 
 install-user: all
-	$(MAKE) install-user -C plugins/wolf-shaper
+	$(MAKE) install-user -C src
 
 # --------------------------------------------------------------
 
