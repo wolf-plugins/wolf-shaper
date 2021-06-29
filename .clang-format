@@ -1,62 +1,6 @@
-﻿---
 Language: Cpp
-BasedOnStyle: Mozilla
-AccessModifierOffset: -2
-AlignAfterOpenBracket: DontAlign
-AlignEscapedNewlines: Left
-AllowAllConstructorInitializersOnNextLine: false
-AllowAllParametersOfDeclarationOnNextLine: false
-AllowAllArgumentsOnNextLine: true
-AllowShortBlocksOnASingleLine: true
-AllowShortFunctionsOnASingleLine: Inline
-AllowShortIfStatementsOnASingleLine: Always
-AllowShortLambdasOnASingleLine: Inline
-AllowShortLoopsOnASingleLine: true
-AlwaysBreakAfterReturnType: None
-AlwaysBreakAfterDefinitionReturnType: None
-AlwaysBreakBeforeMultilineStrings: true
-AlwaysBreakTemplateDeclarations: Yes
-BinPackArguments: false
-BinPackParameters: false
-BreakBeforeBraces: Custom
-BraceWrapping:
-  AfterCaseLabel: false
-  AfterClass: true
-  AfterControlStatement: Never
-  AfterEnum: true
-  AfterFunction: true
-  AfterNamespace: false
-  AfterStruct: true
-  AfterUnion: true
-  AfterExternBlock: true
-  BeforeCatch: true
-  BeforeElse: false
-  BeforeLambdaBody: false
-  BeforeWhile: false
-  IndentBraces: false
-  SplitEmptyFunction: false
-  SplitEmptyRecord: false
-  SplitEmptyNamespace: true
-BreakConstructorInitializers: BeforeColon
-BreakInheritanceList: BeforeColon
-ConstructorInitializerAllOnOneLineOrOnePerLine: true
-ColumnLimit: 80
-FixNamespaceComments: true
-IncludeBlocks: Regroup
-IndentCaseLabels: false
-IndentWidth: 4
-SortIncludes: true
-SpaceAfterLogicalNot: true
-TabWidth: 4
-UseTab: Never
-PenaltyBreakAssignment: 2
-PenaltyBreakBeforeFirstCallParameter: 19
-PenaltyBreakComment: 300
-PenaltyBreakFirstLessLess: 120
-PenaltyBreakString: 1000
-PenaltyBreakTemplateDeclaration: 10
-PenaltyExcessCharacter: 1000000
-PenaltyReturnTypeOnItsOwnLine: 200
-PenaltyIndentedWhitespace: 0
-
-...
+BasedOnStyle: Microsoft
+ColumnLimit: 0
+AccessModifierOffset: -4
+DeriveLineEnding: false
+UseCRLF: false
