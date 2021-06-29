@@ -1,6 +1,12 @@
 #ifndef WOLF_GRAPH_NODES_HPP_INCLUDED
 #define WOLF_GRAPH_NODES_HPP_INCLUDED
 
+#include "Color.hpp"
+#include "Geometry.hpp"
+#include "Graph.hpp"
+#include "Widget.hpp"
+#include "Window.hpp"
+
 #include <chrono>
 
 START_NAMESPACE_DISTRHO
@@ -54,6 +60,8 @@ protected:
 
     bool grabbed;
 };
+
+class GraphVertex;
 
 class GraphTensionHandle : public GraphNode
 {

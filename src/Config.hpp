@@ -1,6 +1,8 @@
 #ifndef WOLF_SHAPER_CONFIG_H_INCLUDED
 #define WOLF_SHAPER_CONFIG_H_INCLUDED
 
+#include "Color.hpp"
+
 START_NAMESPACE_DISTRHO
 
 #define CONFIG_NAMESPACE WolfShaperConfig
