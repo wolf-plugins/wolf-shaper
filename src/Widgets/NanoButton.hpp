@@ -1,8 +1,8 @@
 #ifndef WOLF_NANO_BUTTON_HPP_INCLUDED
 #define WOLF_NANO_BUTTON_HPP_INCLUDED
 
-#include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "Widget.hpp"
 #include "WolfWidget.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -13,20 +13,23 @@ public:
     class Callback
     {
     public:
-        virtual ~Callback() {}
-        virtual void nanoButtonClicked(NanoButton* nanoButton) = 0;
+        virtual ~Callback()
+        {
+        }
+        virtual void nanoButtonClicked(NanoButton *nanoButton) = 0;
     };
 
-    enum ButtonState {
+    enum ButtonState
+    {
         kNanoStateNormal = 0,
         kNanoStateHover,
         kNanoStateDown
     };
 
-    explicit NanoButton(Window& parent, Size<uint> size) noexcept;
-    explicit NanoButton(Widget * widget, Size<uint> size) noexcept;
+    explicit NanoButton(Window &parent, Size<uint> size) noexcept;
+    explicit NanoButton(Widget *widget, Size<uint> size) noexcept;
 
-    void setCallback(Callback* callback) noexcept;
+    void setCallback(Callback *callback) noexcept;
 
     ButtonState getButtonState();
 
@@ -37,8 +40,8 @@ protected:
     bool middleClick(const MouseEvent &ev);
     bool rightClick(const MouseEvent &ev);
 
-    bool onMouse(const MouseEvent&) override;
-    bool onMotion(const MotionEvent&) override;
+    bool onMouse(const MouseEvent &) override;
+    bool onMotion(const MotionEvent &) override;
 
     virtual void draw() = 0;
 
@@ -48,8 +51,8 @@ private:
 
     bool fHasFocus;
     bool fIsHovered;
-    
-    Callback* fCallback;
+
+    Callback *fCallback;
 
     DISTRHO_LEAK_DETECTOR(NanoButton)
 };

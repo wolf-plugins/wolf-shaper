@@ -37,7 +37,7 @@ static const Color vertex_fill_focused = Color(255, 255, 255, 255);
 static const Color vertex_halo = Color(0, 0, 0, 255);
 
 static const Color vertex_stroke_normal = Color(0, 0, 0, 255);
-static const Color vertex_stroke_focused = Color(0,0,0, 255);
+static const Color vertex_stroke_focused = Color(0, 0, 0, 255);
 
 static const float vertex_radius = 7.0f;
 static const float vertex_stroke_width = 2.0f;
@@ -54,7 +54,7 @@ static const Color top_border = Color(0, 0, 0, 255);
 static const Color side_borders = Color(100, 100, 100, 255);
 static const Color right_click_menu_border_color = Color(10, 10, 10, 255);
 
-}
+} // namespace CONFIG_NAMESPACE
 
 END_NAMESPACE_DISTRHO
 

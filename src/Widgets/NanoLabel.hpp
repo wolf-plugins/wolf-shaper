@@ -1,17 +1,17 @@
 #ifndef WOLF_NANO_LABEL_HPP_INCLUDED
 #define WOLF_NANO_LABEL_HPP_INCLUDED
 
-#include "Widget.hpp"
-#include "NanoVG.hpp"
 #include "Margin.hpp"
+#include "NanoVG.hpp"
+#include "Widget.hpp"
 #include "WolfWidget.hpp"
 
 START_NAMESPACE_DISTRHO
 
 class NanoLabel : public WolfWidget
 {
-  public:
-    explicit NanoLabel(Widget  *widget, Size<uint> size) noexcept;
+public:
+    explicit NanoLabel(Widget *widget, Size<uint> size) noexcept;
 
     void setFontSize(float fontSize);
     void setColor(Color color);
@@ -20,10 +20,10 @@ class NanoLabel : public WolfWidget
     void setText(const char *text);
     void setFontId(NanoVG::FontId fontId);
 
-  protected:
+protected:
     void onNanoDisplay() override;
 
-  private:
+private:
     const char *fText;
     Margin fMargin;
     int fAlign;

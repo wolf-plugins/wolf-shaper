@@ -2,13 +2,14 @@
 
 START_NAMESPACE_DISTRHO
 
-Oversampler::Oversampler() : fRatio(-1),
-                             fSampleRate(44100),
-                             fNumSamples(512),
-                             fLowPass1(),
-                             fLowPass2(),
-                             fCurrentCapacity(fNumSamples),
-                             fRequiredCapacity(fNumSamples)
+Oversampler::Oversampler()
+    : fRatio(-1),
+      fSampleRate(44100),
+      fNumSamples(512),
+      fLowPass1(),
+      fLowPass2(),
+      fCurrentCapacity(fNumSamples),
+      fRequiredCapacity(fNumSamples)
 {
     fBuffer = (float **)malloc(sizeof(float *) * 2);
     fBuffer[0] = (float *)malloc(fNumSamples * sizeof(float));
@@ -22,7 +23,7 @@ Oversampler::~Oversampler()
     free(fBuffer);
 }
 
-float **Oversampler::upsample(int ratio, uint32_t numSamples, double sampleRate, const float * const *audio)
+float **Oversampler::upsample(int ratio, uint32_t numSamples, double sampleRate, const float *const *audio)
 {
     if (fSampleRate != sampleRate * ratio || fRatio != ratio)
     {

@@ -1,8 +1,8 @@
 #ifndef RINGBUFFER_H
 #define RINGBUFFER_H
 
-#include <stdexcept>
 #include "src/DistrhoDefines.h"
+#include <stdexcept>
 
 START_NAMESPACE_DISTRHO
 
@@ -12,7 +12,7 @@ namespace wolf
 template <class T>
 class Ringbuffer
 {
-  public:
+public:
     explicit Ringbuffer(const int size);
     ~Ringbuffer();
 
@@ -25,7 +25,7 @@ class Ringbuffer
     bool full();
     bool empty();
 
-  private:
+private:
     int fCount;
     T *fItems;
     const int fCapacity;
@@ -34,11 +34,12 @@ class Ringbuffer
 };
 
 template <class T>
-Ringbuffer<T>::Ringbuffer(const int capacity) : fCount(0),
-                                                fItems(new T[capacity]),
-                                                fCapacity(capacity),
-                                                fStart(0),
-                                                fEnd(-1)
+Ringbuffer<T>::Ringbuffer(const int capacity)
+    : fCount(0),
+      fItems(new T[capacity]),
+      fCapacity(capacity),
+      fStart(0),
+      fEnd(-1)
 {
 }
 

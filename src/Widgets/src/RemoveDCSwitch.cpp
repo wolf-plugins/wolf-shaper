@@ -3,16 +3,17 @@
 
 START_NAMESPACE_DISTRHO
 
-RemoveDCSwitch::RemoveDCSwitch(Widget  *widget, Size<uint> size) noexcept : NanoSwitch(widget, size),
+RemoveDCSwitch::RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept
+    : NanoSwitch(widget, size),
 
-                                                                               fSocketColor(27, 27, 27, 255),
-                                                                               fSocketColorTransition(0.080f, &fSocketColor, Color(59, 36, 27, 255)),
+      fSocketColor(27, 27, 27, 255),
+      fSocketColorTransition(0.080f, &fSocketColor, Color(59, 36, 27, 255)),
 
-                                                                               fGlowIcol(Color(210, 123, 30, 0)),
-                                                                               fGlowIcolTransition(0.200f, &fGlowIcol, Color(210, 123, 30, 125)),
+      fGlowIcol(Color(210, 123, 30, 0)),
+      fGlowIcolTransition(0.200f, &fGlowIcol, Color(210, 123, 30, 125)),
 
-                                                                               fMainRectColor(Color(73, 73, 73, 255)),
-                                                                               fMainRectColorTransition(0.150f, &fMainRectColor, Color(234, 151, 39, 255))
+      fMainRectColor(Color(73, 73, 73, 255)),
+      fMainRectColorTransition(0.150f, &fMainRectColor, Color(234, 151, 39, 255))
 {
     const float socketMargin = 2.0f; //how much we can see the socket behind the main square
     const float doubleSocketMargin = socketMargin * 2.0f;
@@ -79,7 +80,7 @@ void RemoveDCSwitch::onStateChanged()
     else
     {
         fMainRectGradientTransition.setSpeed(1.0f / 15.0f);
-        fMainRectGradientTransition.play(Animation::Backward);  
+        fMainRectGradientTransition.play(Animation::Backward);
     }
 }
 

@@ -4,7 +4,7 @@
 
 START_NAMESPACE_DISTRHO
 
-NanoWheel::NanoWheel(Widget  *parent, Size<uint> size) noexcept
+NanoWheel::NanoWheel(Widget *parent, Size<uint> size) noexcept
     : WolfWidget(parent),
       fLeftMouseDown(false),
       fLeftMouseDownLocation(Point<double>(0, 0)),
@@ -133,7 +133,7 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
         if (!fIsHovered)
         {
             fIsHovered = true;
-//            getParentWindow().setCursorStyle(Window::CursorStyle::UpDown);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::UpDown);
         }
 
         return true;
@@ -141,7 +141,7 @@ bool NanoWheel::onMotion(const MotionEvent &ev)
     else if (fIsHovered)
     {
         fIsHovered = false;
-//        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+        //        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
     }
 
     return false;

@@ -1,30 +1,42 @@
+#include "GraphNode.hpp"
+#include "Config.hpp"
 #include "Geometry.hpp"
 #include "Graph.hpp"
+#include "GraphWidget.hpp"
+#include "Mathf.hpp"
 #include "NanoVG.hpp"
 #include "Window.hpp"
-#include "GraphWidget.hpp"
-#include "GraphNode.hpp"
-#include "Mathf.hpp"
-#include "Config.hpp"
 
 START_NAMESPACE_DISTRHO
 
-GraphNode::GraphNode(GraphWidget *parent) : parent(parent),
-                                                 grabbed(false)
+GraphNode::GraphNode(GraphWidget *parent)
+    : parent(parent),
+      grabbed(false)
 {
 }
 
-GraphNode::~GraphNode() {}
+GraphNode::~GraphNode()
+{
+}
 
-bool GraphNode::onMotion(const Widget::MotionEvent &) { return false; }
-bool GraphNode::onMouse(const Widget::MouseEvent &) { return false; }
-void GraphNode::render() {}
+bool GraphNode::onMotion(const Widget::MotionEvent &)
+{
+    return false;
+}
+bool GraphNode::onMouse(const Widget::MouseEvent &)
+{
+    return false;
+}
+void GraphNode::render()
+{
+}
 
-GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type) : GraphNode(parent),
-                                                                           tensionHandle(parent, this),
-                                                                           surface(Circle<int>(0, 0, 8.0f)),
-                                                                           type(type),
-                                                                           lastClickButton(0)
+GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type)
+    : GraphNode(parent),
+      tensionHandle(parent, this),
+      surface(Circle<int>(0, 0, 8.0f)),
+      type(type),
+      lastClickButton(0)
 {
     switch (type)
     {
@@ -57,7 +69,6 @@ void GraphVertex::render()
     parent->beginPath();
 
     parent->strokeWidth(CONFIG_NAMESPACE::vertex_stroke_width);
-
 
     if (focused)
     {
@@ -324,7 +335,6 @@ bool GraphVertex::leftDoubleClick(const Widget::MouseEvent &)
 
 void GraphVertex::clipCursorToNeighbouringVertices()
 {
-
 }
 
 bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
@@ -356,8 +366,9 @@ bool GraphVertex::onMouse(const Widget::MouseEvent &ev)
     return true;
 }
 
-GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphVertex *vertex) : GraphNode(parent),
-                                                                                        vertex(vertex)
+GraphTensionHandle::GraphTensionHandle(GraphWidget *parent, GraphVertex *vertex)
+    : GraphNode(parent),
+      vertex(vertex)
 {
 }
 

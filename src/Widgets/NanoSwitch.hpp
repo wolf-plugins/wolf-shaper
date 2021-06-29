@@ -7,22 +7,24 @@ START_NAMESPACE_DISTRHO
 
 class NanoSwitch : public WolfWidget
 {
-  public:
+public:
     class Callback
     {
-      public:
-        virtual ~Callback() {}
+    public:
+        virtual ~Callback()
+        {
+        }
         virtual void nanoSwitchClicked(NanoSwitch *nanoSwitch) = 0;
     };
 
-    explicit NanoSwitch(Widget  *widget, Size<uint> size) noexcept;
+    explicit NanoSwitch(Widget *widget, Size<uint> size) noexcept;
 
     bool isDown() const noexcept;
     void setDown(bool down) noexcept;
 
     void setCallback(Callback *callback) noexcept;
 
-  protected:
+protected:
     void onNanoDisplay() override;
     bool onMouse(const MouseEvent &) override;
     bool onMotion(const MotionEvent &ev) override;
@@ -31,10 +33,10 @@ class NanoSwitch : public WolfWidget
 
     virtual void onStateChanged();
 
-  private:
+private:
     bool fIsDown;
     bool fIsHovered;
-    
+
     Callback *fCallback;
 
     DISTRHO_LEAK_DETECTOR(NanoSwitch)

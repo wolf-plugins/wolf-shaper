@@ -14,14 +14,14 @@ public:
         Right
     };
 
-    explicit ArrowButton(Widget  *widget, Size<uint> size) noexcept;
+    explicit ArrowButton(Widget *widget, Size<uint> size) noexcept;
     void setArrowDirection(ArrowDirection direction);
 
 protected:
     void drawBackground();
     void drawArrow();
     void draw() override;
-    
+
 private:
     ArrowDirection fArrowDirection;
 

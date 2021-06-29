@@ -3,7 +3,8 @@
 
 START_NAMESPACE_DISTRHO
 
-WolfWidget::WolfWidget(Widget *widget) noexcept : NanoSubWidget(widget)
+WolfWidget::WolfWidget(Widget *widget) noexcept
+    : NanoSubWidget(widget)
 {
 }
 

@@ -2,8 +2,9 @@
 
 START_NAMESPACE_DISTRHO
 
-ArrowButton::ArrowButton(Widget  *widget, Size<uint> size) noexcept : NanoButton(widget, size),
-                                                                         fArrowDirection(Left)
+ArrowButton::ArrowButton(Widget *widget, Size<uint> size) noexcept
+    : NanoButton(widget, size),
+      fArrowDirection(Left)
 {
 }
 
@@ -24,7 +25,7 @@ void ArrowButton::drawArrow()
 
     beginPath();
 
-    if(fArrowDirection == Left)
+    if (fArrowDirection == Left)
     {
         translate(width, 0);
         scale(-1, 1); // flip
@@ -39,7 +40,7 @@ void ArrowButton::drawArrow()
     lineTo(marginLeftRight, marginTopBottom);
 
     fill();
-    
+
     closePath();
 }
 
@@ -50,11 +51,11 @@ void ArrowButton::drawBackground()
 
     beginPath();
 
-    fillColor(Color(52,52,52, 255));
+    fillColor(Color(52, 52, 52, 255));
     strokeColor(Color(64, 64, 64, 255));
     strokeWidth(2.0f);
 
-    rect(0,0,width,height);
+    rect(0, 0, width, height);
     fill();
     stroke();
 

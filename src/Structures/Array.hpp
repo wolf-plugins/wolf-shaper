@@ -1,7 +1,7 @@
 #pragma once
 
-#include <stdexcept>
 #include <cassert>
+#include <stdexcept>
 
 START_NAMESPACE_DISTRHO
 
@@ -11,7 +11,7 @@ namespace wolf
 template <class T>
 class Array
 {
-  public:
+public:
     explicit Array(const int size);
     ~Array();
 
@@ -28,16 +28,17 @@ class Array
     bool full();
     bool empty();
 
-  private:
+private:
     int fCount;
     T *fItems;
     const int fCapacity;
 };
 
 template <class T>
-Array<T>::Array(const int capacity) : fCount(0),
-                                      fItems(new T[capacity]),
-                                      fCapacity(capacity)
+Array<T>::Array(const int capacity)
+    : fCount(0),
+      fItems(new T[capacity]),
+      fCapacity(capacity)
 {
 }
 

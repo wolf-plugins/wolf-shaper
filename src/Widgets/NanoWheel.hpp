@@ -1,23 +1,25 @@
 #ifndef WOLF_NANO_WHEEL_HPP_INCLUDED
 #define WOLF_NANO_WHEEL_HPP_INCLUDED
 
-#include "Widget.hpp"
 #include "NanoVG.hpp"
+#include "Widget.hpp"
 #include "WolfWidget.hpp"
 
 START_NAMESPACE_DISTRHO
 
 class NanoWheel : public WolfWidget
 {
-  public:
+public:
     class Callback
     {
-      public:
-        virtual ~Callback() {}
+    public:
+        virtual ~Callback()
+        {
+        }
         virtual void nanoWheelValueChanged(NanoWheel *nanoWheel, int value) = 0;
     };
 
-    explicit NanoWheel(Widget  *widget, Size<uint> size) noexcept;
+    explicit NanoWheel(Widget *widget, Size<uint> size) noexcept;
 
     void setValue(int value, bool sendCallback = false) noexcept;
     int getValue() noexcept;
@@ -25,7 +27,7 @@ class NanoWheel : public WolfWidget
 
     void setCallback(Callback *callback) noexcept;
 
-  protected:
+protected:
     void onNanoDisplay() override;
 
     bool onScroll(const ScrollEvent &ev) override;
@@ -34,7 +36,7 @@ class NanoWheel : public WolfWidget
 
     virtual void draw() = 0;
 
-  private:
+private:
     Callback *fCallback;
 
     bool fLeftMouseDown;

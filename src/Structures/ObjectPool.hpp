@@ -10,9 +10,9 @@ namespace wolf
 template <class T>
 class ObjectPool
 {
-  public:
+public:
     template <typename... Args>
-    ObjectPool(int numberOfObjects, Args &&... args);
+    ObjectPool(int numberOfObjects, Args &&...args);
     ~ObjectPool();
 
     T *getObject();
@@ -20,13 +20,14 @@ class ObjectPool
 
     int numberObjectsLeft();
 
-  private:
+private:
     wolf::Stack<T *> objects;
 };
 
 template <class T>
 template <typename... Args>
-ObjectPool<T>::ObjectPool(int numberOfObjects, Args &&... args) : objects(numberOfObjects)
+ObjectPool<T>::ObjectPool(int numberOfObjects, Args &&...args)
+    : objects(numberOfObjects)
 {
     for (int i = 0; i < objects.getSize(); ++i)
     {
@@ -36,7 +37,7 @@ ObjectPool<T>::ObjectPool(int numberOfObjects, Args &&... args) : objects(number
 
 template <class T>
 ObjectPool<T>::~ObjectPool()
-{    
+{
     while (objects.getCount() > 0)
     {
         delete this->objects.pop();
@@ -62,7 +63,7 @@ int ObjectPool<T>::numberObjectsLeft()
 {
     return this->objects.getCount();
 }
-}
+} // namespace wolf
 
 END_NAMESPACE_DISTRHO
 

@@ -1,30 +1,30 @@
 #ifndef WOLF_PARAM_SMOOTH_INCLUDED
 #define WOLF_PARAM_SMOOTH_INCLUDED
 
-#include "src/DistrhoDefines.h"
 #include "extra/LeakDetector.hpp"
+#include "src/DistrhoDefines.h"
 
 START_NAMESPACE_DISTRHO
 
 class ParamSmooth
 {
 public:
-  ParamSmooth();
-  ParamSmooth(float value);
+    ParamSmooth();
+    ParamSmooth(float value);
 
-  void calculateCoeff(float frequency, double sampleRate);
+    void calculateCoeff(float frequency, double sampleRate);
 
-  float getSmoothedValue();
-  float getRawValue() const;
+    float getSmoothedValue();
+    float getRawValue() const;
 
-  void setValue(float value);
+    void setValue(float value);
 
 private:
-  float fHistory;
-  float fValue;
-  float fCoeff;
+    float fHistory;
+    float fValue;
+    float fCoeff;
 
-  DISTRHO_LEAK_DETECTOR(ParamSmooth)
+    DISTRHO_LEAK_DETECTOR(ParamSmooth)
 };
 
 END_NAMESPACE_DISTRHO

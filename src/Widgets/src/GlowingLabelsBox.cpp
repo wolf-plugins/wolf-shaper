@@ -3,7 +3,8 @@
 
 START_NAMESPACE_DISTRHO
 
-GlowingLabelsBox::GlowingLabelsBox(Widget  *widget, Size<uint> size) noexcept : LabelContainer(widget, size)
+GlowingLabelsBox::GlowingLabelsBox(Widget *widget, Size<uint> size) noexcept
+    : LabelContainer(widget, size)
 {
 }
 

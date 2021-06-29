@@ -1,12 +1,13 @@
 #include "LabelBox.hpp"
-#include "Mathf.hpp"
 #include "Fonts/chivo_bold.hpp"
+#include "Mathf.hpp"
 
 //#include "Fonts/chivo_bold.hpp"
 
 START_NAMESPACE_DISTRHO
 
-LabelBox::LabelBox(Widget  *widget, Size<uint> size) noexcept : WolfWidget(widget)
+LabelBox::LabelBox(Widget *widget, Size<uint> size) noexcept
+    : WolfWidget(widget)
 {
     setSize(size);
 
@@ -37,7 +38,7 @@ void LabelBox::onNanoDisplay()
     //Shadow at top of box
     beginPath();
 
-    strokeColor(0,0,0,255);
+    strokeColor(0, 0, 0, 255);
     strokeWidth(boxOutlineWidth);
 
     moveTo(boxOutlineWidth, boxOutlineWidth);

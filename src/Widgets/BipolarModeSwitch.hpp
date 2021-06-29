@@ -8,14 +8,14 @@ START_NAMESPACE_DISTRHO
 class BipolarModeSwitch : public NanoSwitch
 {
 public:
-    explicit BipolarModeSwitch(Widget  *widget, Size<uint> size) noexcept;
+    explicit BipolarModeSwitch(Widget *widget, Size<uint> size) noexcept;
 
 protected:
     void drawHandle();
     void drawSocket();
 
     void draw() override;
-    
+
 private:
     DISTRHO_LEAK_DETECTOR(BipolarModeSwitch)
 };

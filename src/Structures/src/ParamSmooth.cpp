@@ -2,14 +2,16 @@
 
 START_NAMESPACE_DISTRHO
 
-ParamSmooth::ParamSmooth() : fHistory(0.0f),
-                             fValue(0.0f)
+ParamSmooth::ParamSmooth()
+    : fHistory(0.0f),
+      fValue(0.0f)
 {
 }
 
-ParamSmooth::ParamSmooth(float value) : fHistory(0.0f),
-                                        fValue(value),
-                                        fCoeff(0.0f)
+ParamSmooth::ParamSmooth(float value)
+    : fHistory(0.0f),
+      fValue(value),
+      fCoeff(0.0f)
 {
 }
 

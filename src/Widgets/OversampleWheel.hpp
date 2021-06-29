@@ -8,7 +8,7 @@ START_NAMESPACE_DISTRHO
 class OversampleWheel : public NanoWheel
 {
 public:
-    explicit OversampleWheel(Widget  *widget, Size<uint> size) noexcept;
+    explicit OversampleWheel(Widget *widget, Size<uint> size) noexcept;
 
     void setFontSize(float size);
 
@@ -18,7 +18,7 @@ protected:
     void drawBackground();
     void drawText();
     void drawOutline();
-    
+
 private:
     float fFontSize;
 

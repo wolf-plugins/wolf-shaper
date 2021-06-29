@@ -3,10 +3,10 @@
 
 #include "Geometry.hpp"
 
-#include <cmath>
-#include <type_traits>
 #include <algorithm>
 #include <cassert>
+#include <cmath>
+#include <type_traits>
 
 START_NAMESPACE_DISTRHO
 
@@ -45,7 +45,7 @@ T normalizeBipolar(const T &value, const T &min, const T &max)
     return 2 * normalize(value, min, max) - 1;
 }
 
-inline int modulo(int a, int b) 
+inline int modulo(int a, int b)
 {
     const int result = a % b;
     return result >= 0 ? result : result + b;
@@ -103,8 +103,8 @@ int toHexFloat(char *buffer, const double value);
 
 double ipow2(int exponent);
 
-double parseHexFloat(char const* ptr, char **endPointer);
-}
+double parseHexFloat(char const *ptr, char **endPointer);
+} // namespace wolf
 
 END_NAMESPACE_DISTRHO
 

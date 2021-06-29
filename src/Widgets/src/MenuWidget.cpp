@@ -6,36 +6,36 @@
 
 START_NAMESPACE_DISTRHO
 
-MenuWidget::MenuWidget(Widget* widget) noexcept
-  : WolfWidget(widget),
-    max_item_w_px(0),
-    hover_i(-1),
-    selected_i(-1),
-    margin(Margin(7, 15, 7, 13)),
-    font_item_size(17.0f),
-    font_section_size(14.0f),
-    font_item_color(255, 255, 255),
-    font_item_hover_color(0, 0, 0),
-    font_section_color(100, 100, 100),
-    background_color(39, 39, 39),
-    background_hover_color(255, 255, 255),
-    border_color(CONFIG_NAMESPACE::right_click_menu_border_color),
-    callback(nullptr)
+MenuWidget::MenuWidget(Widget *widget) noexcept
+    : WolfWidget(widget),
+      max_item_w_px(0),
+      hover_i(-1),
+      selected_i(-1),
+      margin(Margin(7, 15, 7, 13)),
+      font_item_size(17.0f),
+      font_section_size(14.0f),
+      font_item_color(255, 255, 255),
+      font_item_hover_color(0, 0, 0),
+      font_section_color(100, 100, 100),
+      background_color(39, 39, 39),
+      background_hover_color(255, 255, 255),
+      border_color(CONFIG_NAMESPACE::right_click_menu_border_color),
+      callback(nullptr)
 {
     using namespace WOLF_FONTS;
-	loadSharedResources();
-	hide();
+    loadSharedResources();
+    hide();
 }
 
-void MenuWidget::show(const Point<int>& parent_pos_absolute,
-  const Point<double>& click_pos,
-  const Rectangle<int>& mouse_bounds_absolute)
+void MenuWidget::show(const Point<int> &parent_pos_absolute,
+                      const Point<double> &click_pos,
+                      const Rectangle<int> &mouse_bounds_absolute)
 {
     this->mouse_bounds_absolute = mouse_bounds_absolute;
     adaptSize();
 
     auto show_pos = Point<int>(click_pos.getX() + parent_pos_absolute.getX(),
-      click_pos.getY() + parent_pos_absolute.getY());
+                               click_pos.getY() + parent_pos_absolute.getY());
 
     // move the menuwidget so that it always appears within the parent widget
     // bounds
@@ -60,13 +60,17 @@ void MenuWidget::hide()
     NanoSubWidget::hide();
 }
 
-bool MenuWidget::hideOnMouseOutOfBounds(const Point<double>& mouse_pos_absolute)
+bool MenuWidget::hideOnMouseOutOfBounds(const Point<double> &mouse_pos_absolute)
 {
-    if (! isVisible()) return false;
-    const auto mouse_bounds_absolute_double = getMouseBoundsAbsolute<double>();
-    if (mouse_bounds_absolute_double.contains(mouse_pos_absolute)) {
+    if (!isVisible())
         return false;
-    } else {
+    const auto mouse_bounds_absolute_double = getMouseBoundsAbsolute<double>();
+    if (mouse_bounds_absolute_double.contains(mouse_pos_absolute))
+    {
+        return false;
+    }
+    else
+    {
         hide();
         return true;
     }
@@ -80,14 +84,14 @@ void MenuWidget::clear()
     selected_i = -1;
 }
 
-void MenuWidget::addSection(const char* sectionName)
+void MenuWidget::addSection(const char *sectionName)
 {
     Item item = Item(sectionName);
     items.push_back(item);
     updateMaxItemWidth(item);
 }
 
-void MenuWidget::addItem(int id, const char* label, const char* comment)
+void MenuWidget::addItem(int id, const char *label, const char *comment)
 {
     DISTRHO_SAFE_ASSERT(id >= 0)
     Item item = Item(id, std::string(label), std::string(comment));
@@ -97,7 +101,8 @@ void MenuWidget::addItem(int id, const char* label, const char* comment)
 
 void MenuWidget::setAllItemsEnabled(const bool enabled)
 {
-    for (auto& item : items) item.enabled = enabled;
+    for (auto &item : items)
+        item.enabled = enabled;
 }
 
 void MenuWidget::setItemEnabled(const uint index, const bool enabled)
@@ -120,14 +125,15 @@ void MenuWidget::setSectionFontSize(const uint size) noexcept
     this->font_section_size = size;
 }
 
-void MenuWidget::setCallback(Callback* callback) noexcept
+void MenuWidget::setCallback(Callback *callback) noexcept
 {
     this->callback = callback;
 }
 
 void MenuWidget::onNanoDisplay()
 {
-    if (items.size() == 0) return; // don't render an empty menu
+    if (items.size() == 0)
+        return; // don't render an empty menu
 
     const float h = NanoSubWidget::getHeight();
     const float w = NanoSubWidget::getWidth();
@@ -157,17 +163,20 @@ void MenuWidget::onNanoDisplay()
 
     translate(margin.left, margin.top);
 
-    for (size_t i = 0; i < items.size(); ++i) {
-        Item& item = items[i];
+    for (size_t i = 0; i < items.size(); ++i)
+    {
+        Item &item = items[i];
 
         // black out items if section is disabled
         const bool is_section = item.is_section;
-        if (is_section) cur_section_enabled = item.enabled;
+        if (is_section)
+            cur_section_enabled = item.enabled;
         const bool is_enabled = (cur_section_enabled && item.enabled);
         const bool is_hovered = (static_cast<int>(i) == hover_i);
 
         // draw highlight background for hovered item
-        if (is_hovered && ! is_section && is_enabled) {
+        if (is_hovered && !is_section && is_enabled)
+        {
             beginPath();
             fillColor(background_hover_color);
             rect(0, vertical_offset, w - margin.right, font_item_size);
@@ -178,29 +187,38 @@ void MenuWidget::onNanoDisplay()
         beginPath();
 
         int left_offset = 0;
-        if (is_section) {
+        if (is_section)
+        {
             fontSize(font_section_size);
             fillColor(font_section_color);
-        } else {
+        }
+        else
+        {
             left_offset = font_section_size;
             fontSize(font_item_size);
-            if (is_enabled) {
-                if (is_hovered) fillColor(font_item_hover_color);
+            if (is_enabled)
+            {
+                if (is_hovered)
+                    fillColor(font_item_hover_color);
                 else
                     fillColor(font_item_color);
-            } else {
+            }
+            else
+            {
                 fillColor(font_section_color);
             }
         }
 
         text(left_offset, vertical_offset, item.name.c_str(), NULL);
 
-        if (static_cast<int>(i) == selected_i) {
+        if (static_cast<int>(i) == selected_i)
+        {
             text(0, vertical_offset, "✓", NULL);
         }
 
         // render description if an item has one
-        if (item.description.size() > 0) {
+        if (item.description.size() > 0)
+        {
             Rectangle<float> name_bounds;
             fontSize(font_item_size);
             textBounds(0, 0, item.name.c_str(), NULL, name_bounds);
@@ -208,9 +226,9 @@ void MenuWidget::onNanoDisplay()
             fontSize(font_section_size);
             fillColor(font_section_color);
             text(name_bounds.getWidth() + font_item_size,
-              vertical_offset,
-              item.description.c_str(),
-              NULL);
+                 vertical_offset,
+                 item.description.c_str(),
+                 NULL);
         }
 
         vertical_offset += text_h;
@@ -219,50 +237,58 @@ void MenuWidget::onNanoDisplay()
     }
 }
 
-bool MenuWidget::mouseEvent(const MouseEvent& ev, const Point<int>& offset)
+bool MenuWidget::mouseEvent(const MouseEvent &ev, const Point<int> &offset)
 {
-    if (! isVisible()) return false;
+    if (!isVisible())
+        return false;
     MouseEvent ev_offset = ev;
     // translate from coordinates relative to parent, to coordinates relative
     // to the top left corner of this MenuWidget
     ev_offset.pos =
-      Point<double>(ev.pos.getX() + offset.getX() - getAbsoluteX(),
-        ev.pos.getY() + offset.getY() - getAbsoluteY());
+        Point<double>(ev.pos.getX() + offset.getX() - getAbsoluteX(),
+                      ev.pos.getY() + offset.getY() - getAbsoluteY());
     return onMouse(ev_offset);
 }
 
-bool MenuWidget::motionEvent(const MotionEvent& ev, const Point<int>& offset)
+bool MenuWidget::motionEvent(const MotionEvent &ev, const Point<int> &offset)
 {
-    if (! isVisible()) return false;
+    if (!isVisible())
+        return false;
     MotionEvent ev_offset = ev;
     // translate from coordinates relative to parent, to coordinates relative
     // to the top left corner of this MenuWidget
     ev_offset.pos =
-      Point<double>(ev.pos.getX() + offset.getX() - getAbsoluteX(),
-        ev.pos.getY() + offset.getY() - getAbsoluteY());
+        Point<double>(ev.pos.getX() + offset.getX() - getAbsoluteX(),
+                      ev.pos.getY() + offset.getY() - getAbsoluteY());
     return onMotion(ev_offset);
 }
 
-bool MenuWidget::onMouse(const MouseEvent& ev)
+bool MenuWidget::onMouse(const MouseEvent &ev)
 {
-    if (ev.press == true) {
+    if (ev.press == true)
+    {
         // first check if the mouse click even happened inside the menu
         const auto menu_bounds = getBounds<double>();
-        if (! menu_bounds.contains(ev.pos)) {
+        if (!menu_bounds.contains(ev.pos))
+        {
             hide();
             return false;
         }
         // then check each section to see if the mouse click intersects
         bool cur_section_enabled = true;
-        for (size_t i = 0; i < items.size(); ++i) {
+        for (size_t i = 0; i < items.size(); ++i)
+        {
             const bool is_section = items[i].is_section;
-            if (is_section) cur_section_enabled = items[i].enabled;
+            if (is_section)
+                cur_section_enabled = items[i].enabled;
             bool is_enabled = cur_section_enabled && items[i].enabled;
 
-            if (! is_section && is_enabled) {
+            if (!is_section && is_enabled)
+            {
                 const auto item_bounds = getItemBounds(i);
 
-                if (item_bounds.contains(ev.pos)) {
+                if (item_bounds.contains(ev.pos))
+                {
                     callback->menuItemSelected(items[i].id);
                     selected_i = i;
                     hide();
@@ -274,17 +300,20 @@ bool MenuWidget::onMouse(const MouseEvent& ev)
     return false;
 }
 
-bool MenuWidget::onMotion(const MotionEvent& ev)
+bool MenuWidget::onMotion(const MotionEvent &ev)
 {
     // check if mouse is outside menu and change cursor style
     const auto menu_bounds = getBounds<double>();
-    if (menu_bounds.contains(ev.pos)) {
+    if (menu_bounds.contains(ev.pos))
+    {
         // update hover_i
-        for (size_t i = 0; i < items.size(); ++i) {
+        for (size_t i = 0; i < items.size(); ++i)
+        {
             const auto item_bounds = getItemBounds(i);
 
-            if (static_cast<int>(i) != selected_i && ! items[i].is_section &&
-                item_bounds.contains(ev.pos)) {
+            if (static_cast<int>(i) != selected_i && !items[i].is_section &&
+                item_bounds.contains(ev.pos))
+            {
                 // getWindow().setCursorStyle(Window::CursorStyle::Grab);
                 // not sure how to do this in current dgl
                 hover_i = i;
@@ -300,7 +329,7 @@ bool MenuWidget::onMotion(const MotionEvent& ev)
     return false;
 }
 
-void MenuWidget::updateMaxItemWidth(const Item& item)
+void MenuWidget::updateMaxItemWidth(const Item &item)
 {
     max_item_w_px = std::max(max_item_w_px, getItemWidth(item));
 }
@@ -308,22 +337,26 @@ void MenuWidget::updateMaxItemWidth(const Item& item)
 void MenuWidget::adaptSize()
 {
     NanoSubWidget::setSize(
-      Size<uint>(max_item_w_px + margin.left + margin.right + font_section_size,
-        items.size() * font_item_size + margin.top + margin.bottom));
+        Size<uint>(max_item_w_px + margin.left + margin.right + font_section_size,
+                   items.size() * font_item_size + margin.top + margin.bottom));
 }
 
-float MenuWidget::getItemWidth(const Item& item)
+float MenuWidget::getItemWidth(const Item &item)
 {
-    if (item.is_section) {
+    if (item.is_section)
+    {
         Rectangle<float> bounds;
         fontSize(font_section_size);
         textBounds(0, 0, (item.name + item.description).c_str(), NULL, bounds);
         return bounds.getWidth();
-    } else {
+    }
+    else
+    {
         Rectangle<float> bounds_item, bounds_section;
         fontSize(font_item_size);
         textBounds(0, 0, item.name.c_str(), NULL, bounds_item);
-        if (item.description.length() > 0) {
+        if (item.description.length() > 0)
+        {
             fontSize(font_section_size);
             textBounds(0, 0, item.description.c_str(), NULL, bounds_section);
         }
@@ -337,13 +370,13 @@ Rectangle<double> MenuWidget::getItemBounds(const int index)
     textAlign(ALIGN_LEFT | ALIGN_TOP);
     Rectangle<float> bounds;
     textBounds(margin.left,
-      index * font_item_size + margin.top,
-      items[index].name.c_str(),
-      NULL,
-      bounds);
+               index * font_item_size + margin.top,
+               items[index].name.c_str(),
+               NULL,
+               bounds);
     bounds.setWidth(Widget::getWidth() - margin.right);
     return Rectangle<double>(
-      bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
+        bounds.getX(), bounds.getY(), bounds.getWidth(), bounds.getHeight());
 }
 
 END_NAMESPACE_DISTRHO

@@ -3,7 +3,7 @@
 
 START_NAMESPACE_DISTRHO
 
-NanoSwitch::NanoSwitch(Widget  *widget, Size<uint> size) noexcept
+NanoSwitch::NanoSwitch(Widget *widget, Size<uint> size) noexcept
     : WolfWidget(widget),
       fIsDown(false),
       fIsHovered(false),
@@ -68,7 +68,7 @@ bool NanoSwitch::onMotion(const MotionEvent &ev)
         if (!fIsHovered)
         {
             fIsHovered = true;
-//            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
         }
 
         return true;
@@ -76,7 +76,7 @@ bool NanoSwitch::onMotion(const MotionEvent &ev)
     else if (fIsHovered)
     {
         fIsHovered = false;
-//        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+        //        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
     }
 
     return false;

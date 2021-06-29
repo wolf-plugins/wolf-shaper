@@ -3,8 +3,9 @@
 
 START_NAMESPACE_DISTRHO
 
-LabelBoxList::LabelBoxList(Widget  *widget, Size<uint> size) noexcept : LabelContainer(widget, size),
-                                                                           fLabelBox(widget, size)
+LabelBoxList::LabelBoxList(Widget *widget, Size<uint> size) noexcept
+    : LabelContainer(widget, size),
+      fLabelBox(widget, size)
 {
     setSize(size);
 }

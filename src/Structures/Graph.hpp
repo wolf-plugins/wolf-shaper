@@ -14,21 +14,21 @@ const int maxVertices = 99;
 
 enum CurveType
 {
-  SingleCurve = 0,
-  DoubleCurve,
-  StairsCurve,
-  WaveCurve
+    SingleCurve = 0,
+    DoubleCurve,
+    StairsCurve,
+    WaveCurve
 };
 
 enum WarpType
 {
-  None = 0,
-  BendPlus,
-  BendMinus,
-  BendPlusMinus,
-  SkewPlus,
-  SkewMinus,
-  SkewPlusMinus
+    None = 0,
+    BendPlus,
+    BendMinus,
+    BendPlusMinus,
+    SkewPlus,
+    SkewMinus,
+    SkewPlusMinus
 };
 
 class Graph;
@@ -36,116 +36,116 @@ class Graph;
 class Vertex
 {
 public:
-  friend class Graph;
+    friend class Graph;
 
-  float getX();
-  float getY();
-  float getTension() const;
-  CurveType getType() const;
+    float getX();
+    float getY();
+    float getTension() const;
+    CurveType getType() const;
 
-  void setX(float x);
-  void setY(float y);
-  void setPosition(float x, float y);
-  void setTension(float tension);
-  void setType(CurveType type);
-  void setGraphPtr(Graph *graphPtr);
+    void setX(float x);
+    void setY(float y);
+    void setPosition(float x, float y);
+    void setTension(float tension);
+    void setType(CurveType type);
+    void setGraphPtr(Graph *graphPtr);
 
 protected:
-  Vertex();
-  Vertex(float posX, float posY, float tension, CurveType type, Graph *graphPtr);
+    Vertex();
+    Vertex(float posX, float posY, float tension, CurveType type, Graph *graphPtr);
 
-  float warpCoordinate(const float coordinate, const float warpAmount, const WarpType warpType) const;
-  float unwarpCoordinate(float coordinate, const float warpAmount, const WarpType warpType) const;
+    float warpCoordinate(const float coordinate, const float warpAmount, const WarpType warpType) const;
+    float unwarpCoordinate(float coordinate, const float warpAmount, const WarpType warpType) const;
 
 private:
-  float x;
-  float y;
-  bool xDirty;
-  bool yDirty;
-  float tension;
-  float hWarp;
-  float vWarp;
-  float graphHWarp;
-  float graphVWarp;
-  WarpType graphHType;
-  WarpType graphVType;
-  CurveType type;
+    float x;
+    float y;
+    bool xDirty;
+    bool yDirty;
+    float tension;
+    float hWarp;
+    float vWarp;
+    float graphHWarp;
+    float graphVWarp;
+    WarpType graphHType;
+    WarpType graphVType;
+    CurveType type;
 
-  Graph *graphPtr;
+    Graph *graphPtr;
 };
 
 class Graph
 {
 public:
-  Graph();
+    Graph();
 
-  void insertVertex(float x, float y, float tension = 0.0f, CurveType type = CurveType::SingleCurve);
-  void removeVertex(int index);
-  Vertex *getVertexAtIndex(int index);
+    void insertVertex(float x, float y, float tension = 0.0f, CurveType type = CurveType::SingleCurve);
+    void removeVertex(int index);
+    Vertex *getVertexAtIndex(int index);
 
-  void setTensionAtIndex(int index, float tension);
+    void setTensionAtIndex(int index, float tension);
 
-  /**
+    /**
    * Return the number of vertices contained in the graph.
    */
-  int getVertexCount();
+    int getVertexCount();
 
-  static float getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y, CurveType type);
+    static float getOutValue(float input, float tension, float p1x, float p1y, float p2x, float p2y, CurveType type);
 
-  /**
+    /**
    * Get the y value at x in the graph. 
    */
-  float getValueAt(float x);
+    float getValueAt(float x);
 
-  /**
+    /**
    * Empty the graph.
    */
-  void clear();
+    void clear();
 
-  /**
+    /**
    * Save the graph into a string.
    */
-  const char *serialize();
+    const char *serialize();
 
-  bool getBipolarMode();
-  void setBipolarMode(bool bipolarMode);
+    bool getBipolarMode();
+    void setBipolarMode(bool bipolarMode);
 
-  /**
+    /**
    * warp getter/setters
    */
-  //-------------------------------------------
-  void setHorizontalWarpAmount(float warp);
-  float getHorizontalWarpAmount() const;
+    //-------------------------------------------
+    void setHorizontalWarpAmount(float warp);
+    float getHorizontalWarpAmount() const;
 
-  void setVerticalWarpAmount(float warp);
-  float getVerticalWarpAmount() const;
+    void setVerticalWarpAmount(float warp);
+    float getVerticalWarpAmount() const;
 
-  void setHorizontalWarpType(WarpType warpType);
-  WarpType getHorizontalWarpType() const;
+    void setHorizontalWarpType(WarpType warpType);
+    WarpType getHorizontalWarpType() const;
 
-  void setVerticalWarpType(WarpType warpType);
-  WarpType getVerticalWarpType() const;
-  //-------------------------------------------
+    void setVerticalWarpType(WarpType warpType);
+    WarpType getVerticalWarpType() const;
+    //-------------------------------------------
 
-  /**
+    /**
    * Rebuild the graph from a string.
    */
-  void rebuildFromString(const char *serializedGraph);
+    void rebuildFromString(const char *serializedGraph);
 
 private:
-  Vertex vertices[maxVertices];
-  int vertexCount;
+    Vertex vertices[maxVertices];
+    int vertexCount;
 
-  float horizontalWarpAmount;
-  float verticalWarpAmount;
+    float horizontalWarpAmount;
+    float verticalWarpAmount;
 
-  WarpType horizontalWarpType;
-  WarpType verticalWarpType;
+    WarpType horizontalWarpType;
+    WarpType verticalWarpType;
 
-  bool bipolarMode;
+    bool bipolarMode;
 
-  //format: x,y,tension,type;
-  char serializationBuffer[(sizeof(char) * 256 + 4) * maxVertices + 1];
+    //format: x,y,tension,type;
+    char serializationBuffer[(sizeof(char) * 256 + 4) * maxVertices + 1];
 };
 
 } // namespace wolf

@@ -1,19 +1,19 @@
 #include "Widget.hpp"
 #include "Window.hpp"
 
-#include "Graph.hpp"
-#include "ObjectPool.hpp"
-#include "GraphWidget.hpp"
-#include "GraphNode.hpp"
-#include "Mathf.hpp"
-#include "Config.hpp"
 #include "Application.hpp"
+#include "Config.hpp"
+#include "Graph.hpp"
+#include "GraphNode.hpp"
+#include "GraphWidget.hpp"
+#include "Mathf.hpp"
+#include "ObjectPool.hpp"
 
 #include "Fonts/chivo_italic.hpp"
 
 #include <chrono>
-#include <cstdlib>
 #include <cmath>
+#include <cstdlib>
 START_NAMESPACE_DISTRHO
 
 const char *graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;";
@@ -39,7 +39,7 @@ GraphWidget::GraphWidget(UI *ui, Size<uint> size)
 
     getApp().addIdleCallback(this);
 
-	fRightClickMenu = new MenuWidget(this);
+    fRightClickMenu = new MenuWidget(this);
 
     fRightClickMenu->addSection("Node");
     fRightClickMenu->addItem(deleteNodeItem, "Delete", "(double L-click)");
@@ -468,9 +468,9 @@ void GraphWidget::setMustHideVertices(const bool hide)
     repaint();
 }
 
-void GraphWidget::hideMenuOnMouseOut(const Point<double>& mouse_pos_absolute)
+void GraphWidget::hideMenuOnMouseOut(const Point<double> &mouse_pos_absolute)
 {
-	fRightClickMenu->hideOnMouseOutOfBounds(mouse_pos_absolute);
+    fRightClickMenu->hideOnMouseOutOfBounds(mouse_pos_absolute);
 }
 
 void GraphWidget::drawInputIndicator()
@@ -672,7 +672,7 @@ GraphVertex *GraphWidget::insertVertex(const Point<int> pos)
     {
         return nullptr;
     }
-    
+
     int i = lineEditor.getVertexCount();
 
     if (i == wolf::maxVertices)
@@ -752,10 +752,7 @@ bool GraphWidget::innerGraphContains(Point<double> pt)
     const float innerGraphTop = fMargin.top;
     const float innerGraphBottom = getHeight() - fMargin.bottom;
 
-    return pt.getX() >= innerGraphLeft
-        && pt.getX() <= innerGraphRight
-        && pt.getY() >= innerGraphTop
-        && pt.getY() <= innerGraphBottom;
+    return pt.getX() >= innerGraphLeft && pt.getX() <= innerGraphRight && pt.getY() >= innerGraphTop && pt.getY() <= innerGraphBottom;
 }
 
 bool GraphWidget::leftClick(const MouseEvent &ev)
@@ -843,7 +840,7 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
                 if (node == nullptr)
                 {
-//                    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+                    //                    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
                 }
 
                 repaint();
@@ -854,34 +851,33 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
             {
                 fNodeSelectedByRightClick = node;
 
-				// disable certain items depending which kind of vertex selected
-				fRightClickMenu->setAllItemsEnabled(true);
-				const auto vertex = dynamic_cast<GraphVertex*>(node);
-				const auto vertex_type = vertex->getType();
-				if (vertex_type != GraphVertexType::Middle) {
-					fRightClickMenu->setItemEnabled(section_index_delete, false);
-					if (vertex_type == GraphVertexType::Right) {
-						fRightClickMenu->setItemEnabled(section_index_curve, false);
-					}
-				}
+                // disable certain items depending which kind of vertex selected
+                fRightClickMenu->setAllItemsEnabled(true);
+                const auto vertex = dynamic_cast<GraphVertex *>(node);
+                const auto vertex_type = vertex->getType();
+                if (vertex_type != GraphVertexType::Middle)
+                {
+                    fRightClickMenu->setItemEnabled(section_index_delete, false);
+                    if (vertex_type == GraphVertexType::Right)
+                    {
+                        fRightClickMenu->setItemEnabled(section_index_curve, false);
+                    }
+                }
 
-				// set the currently selected curve type in the menu
-				const wolf::CurveType vertex_curve = lineEditor
-					.getVertexAtIndex(vertex->getIndex())
-					->getType();
-				fRightClickMenu->setItemSelected(vertex_curve+3);
+                // set the currently selected curve type in the menu
+                const wolf::CurveType vertex_curve = lineEditor
+                                                         .getVertexAtIndex(vertex->getIndex())
+                                                         ->getType();
+                fRightClickMenu->setItemSelected(vertex_curve + 3);
 
-
-				// get click position and the bounds of this widget
-				const auto my_pos_absolute = Point<int>(
-					getAbsoluteX(),
-					getAbsoluteY()
-				);
-				const auto widget_bounds = Rectangle<int>(
-					getAbsoluteX(), getAbsoluteY(),
-					getWidth(), getHeight()
-				);
-				fRightClickMenu->show(my_pos_absolute, ev.pos, widget_bounds);
+                // get click position and the bounds of this widget
+                const auto my_pos_absolute = Point<int>(
+                    getAbsoluteX(),
+                    getAbsoluteY());
+                const auto widget_bounds = Rectangle<int>(
+                    getAbsoluteX(), getAbsoluteY(),
+                    getWidth(), getHeight());
+                fRightClickMenu->show(my_pos_absolute, ev.pos, widget_bounds);
             }
             /* else
             {
@@ -930,17 +926,21 @@ bool GraphWidget::rightClick(const MouseEvent &ev)
 
 bool GraphWidget::onMouse(const MouseEvent &ev)
 {
-    if (mustHideVertices) { return false; }
+    if (mustHideVertices)
+    {
+        return false;
+    }
 
-	// first, check if a menu item was clicked
-	if (!mouseLeftDown
-		&& !mouseRightDown
-		&& fRightClickMenu->mouseEvent(ev, getAbsolutePos())) {
-		// the above function ensures we can only get here if ev.press == true
-		if (ev.button == 1) mouseLeftDown = ev.press;
-		else if (ev.button == 3) mouseRightDown = ev.press;
-		return true;
-	}
+    // first, check if a menu item was clicked
+    if (!mouseLeftDown && !mouseRightDown && fRightClickMenu->mouseEvent(ev, getAbsolutePos()))
+    {
+        // the above function ensures we can only get here if ev.press == true
+        if (ev.button == 1)
+            mouseLeftDown = ev.press;
+        else if (ev.button == 3)
+            mouseRightDown = ev.press;
+        return true;
+    }
 
     switch (ev.button)
     {
@@ -951,18 +951,21 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
     case 3:
         return rightClick(ev);
     }
-	return false;
+    return false;
 }
 
 bool GraphWidget::onMotion(const MotionEvent &ev)
 {
-    if (mustHideVertices) { return false; }
+    if (mustHideVertices)
+    {
+        return false;
+    }
 
-	if (fRightClickMenu->motionEvent(ev, getAbsolutePos()))
-		return true;
+    if (fRightClickMenu->motionEvent(ev, getAbsolutePos()))
+        return true;
 
     const Point<int> point = projectCursorPos(ev.pos);
-    
+
     GraphNode *hoveredNode = getHoveredNode(point);
 
     if (contains(ev.pos) || hoveredNode != nullptr)
@@ -992,7 +995,7 @@ bool GraphWidget::onMotion(const MotionEvent &ev)
     }
 
     //The mouse pointer is not over any graph node
-//    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+    //    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
     return true;
 }
@@ -1016,7 +1019,7 @@ void GraphWidget::onFocusOut()
 
 void GraphWidget::onMouseLeave()
 {
-//    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+    //    getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 }
 
 END_NAMESPACE_DISTRHO

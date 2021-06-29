@@ -11,7 +11,7 @@ namespace wolf
 template <class T>
 class Stack
 {
-  public:
+public:
     Stack(int size);
     ~Stack();
 
@@ -21,7 +21,7 @@ class Stack
     int getCount();
     int getSize();
 
-  private:
+private:
     T *items;
     int count;
     int size;
@@ -76,7 +76,7 @@ int Stack<T>::getSize()
 {
     return size;
 }
-}
+} // namespace wolf
 
 END_NAMESPACE_DISTRHO
 

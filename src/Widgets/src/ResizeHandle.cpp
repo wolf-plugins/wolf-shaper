@@ -5,7 +5,7 @@
 
 START_NAMESPACE_DISTRHO
 
-ResizeHandle::ResizeHandle(Widget  *parent, Size<uint> size) noexcept
+ResizeHandle::ResizeHandle(Widget *parent, Size<uint> size) noexcept
     : WolfWidget(parent),
       fHasFocus(false),
       fIsHovered(false),
@@ -103,7 +103,7 @@ bool ResizeHandle::onMotion(const MotionEvent &ev)
         if (!fIsHovered)
         {
             fIsHovered = true;
-//            getParentWindow().setCursorStyle(Window::CursorStyle::SouthEastResize);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::SouthEastResize);
         }
 
         return true;
@@ -111,7 +111,7 @@ bool ResizeHandle::onMotion(const MotionEvent &ev)
     else if (fIsHovered)
     {
         fIsHovered = false;
-//        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+        //        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
     }
 
     return false;

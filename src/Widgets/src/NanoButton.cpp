@@ -3,7 +3,7 @@
 
 START_NAMESPACE_DISTRHO
 
-NanoButton::NanoButton(Widget  *parent, Size<uint> size) noexcept
+NanoButton::NanoButton(Widget *parent, Size<uint> size) noexcept
     : WolfWidget(parent),
       fState(kNanoStateNormal),
       fHasFocus(false),
@@ -110,12 +110,12 @@ bool NanoButton::onMotion(const MotionEvent &ev)
         if (hover)
         {
             setButtonState(kNanoStateHover);
-//            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
         }
         else
         {
             setButtonState(kNanoStateHover);
-//            getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::Default);
         }
 
         return true;
@@ -126,7 +126,7 @@ bool NanoButton::onMotion(const MotionEvent &ev)
         if (fState == kNanoStateNormal)
         {
             setButtonState(kNanoStateHover);
-//            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
+            //            getParentWindow().setCursorStyle(Window::CursorStyle::Pointer);
         }
 
         return true;
@@ -134,7 +134,7 @@ bool NanoButton::onMotion(const MotionEvent &ev)
     else if (fState == kNanoStateHover)
     {
         setButtonState(kNanoStateNormal);
-//        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
+        //        getParentWindow().setCursorStyle(Window::CursorStyle::Default);
 
         return false;
     }

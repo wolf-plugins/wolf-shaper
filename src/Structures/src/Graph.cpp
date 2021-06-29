@@ -1,10 +1,10 @@
 #include "Graph.hpp"
 #include "Mathf.hpp"
 
-#include <cmath>
-#include <cstdlib>
-#include <cstdio>
 #include <cassert>
+#include <cmath>
+#include <cstdio>
+#include <cstdlib>
 #include <cstring>
 
 START_NAMESPACE_DISTRHO
@@ -12,35 +12,37 @@ START_NAMESPACE_DISTRHO
 namespace wolf
 {
 
-Vertex::Vertex() : x(0),
-                   y(0),
-                   xDirty(true),
-                   yDirty(true),
-                   tension(0),
-                   hWarp(0.0f),
-                   vWarp(0.0f),
-                   graphHWarp(0.0f),
-                   graphVWarp(0.0f),
-                   graphHType(None),
-                   graphVType(None),
-                   type(SingleCurve),
-                   graphPtr(nullptr)
+Vertex::Vertex()
+    : x(0),
+      y(0),
+      xDirty(true),
+      yDirty(true),
+      tension(0),
+      hWarp(0.0f),
+      vWarp(0.0f),
+      graphHWarp(0.0f),
+      graphVWarp(0.0f),
+      graphHType(None),
+      graphVType(None),
+      type(SingleCurve),
+      graphPtr(nullptr)
 {
 }
 
-Vertex::Vertex(float posX, float posY, float tension, CurveType type, Graph *graphPtr) : x(posX),
-                                                                                         y(posY),
-                                                                                         xDirty(true),
-                                                                                         yDirty(true),
-                                                                                         tension(tension),
-                                                                                         hWarp(0.0f),
-                                                                                         vWarp(0.0f),
-                                                                                         graphHWarp(0.0f),
-                                                                                         graphVWarp(0.0f),
-                                                                                         graphHType(None),
-                                                                                         graphVType(None),
-                                                                                         type(type),
-                                                                                         graphPtr(graphPtr)
+Vertex::Vertex(float posX, float posY, float tension, CurveType type, Graph *graphPtr)
+    : x(posX),
+      y(posY),
+      xDirty(true),
+      yDirty(true),
+      tension(tension),
+      hWarp(0.0f),
+      vWarp(0.0f),
+      graphHWarp(0.0f),
+      graphVWarp(0.0f),
+      graphHType(None),
+      graphVType(None),
+      type(type),
+      graphPtr(graphPtr)
 {
 }
 
@@ -141,8 +143,7 @@ float Vertex::warpCoordinate(const float coordinate, const float warpAmount, con
         return bendPlus(coordinate, warpAmount, false);
     case BendMinus:
         return bendMinus(coordinate, warpAmount, false);
-    case BendPlusMinus:
-    {
+    case BendPlusMinus: {
         if (warpAmount < 0.5f)
         {
             return bendPlus(coordinate, (0.5f - warpAmount) * 2, false);
@@ -160,8 +161,7 @@ float Vertex::warpCoordinate(const float coordinate, const float warpAmount, con
         return skewPlus(coordinate, warpAmount);
     case SkewMinus:
         return skewMinus(coordinate, warpAmount);
-    case SkewPlusMinus:
-    {
+    case SkewPlusMinus: {
         if (warpAmount < 0.5f)
         {
             return skewPlus(coordinate, (0.5f - warpAmount) * 2);
@@ -244,8 +244,7 @@ float Vertex::unwarpCoordinate(float coordinate, const float warpAmount, const W
         return invSkewPlus(coordinate, warpAmount);
     case SkewMinus:
         return invSkewMinus(coordinate, warpAmount);
-    case SkewPlusMinus:
-    {
+    case SkewPlusMinus: {
         if (warpAmount < 0.5f)
         {
             return invSkewPlus(coordinate, (0.5f - warpAmount) * 2);
@@ -297,12 +296,13 @@ void Vertex::setGraphPtr(Graph *graphPtr)
     this->graphPtr = graphPtr;
 }
 
-Graph::Graph() : vertexCount(0),
-                 horizontalWarpAmount(0.0f),
-                 verticalWarpAmount(0.0f),
-                 horizontalWarpType(None),
-                 verticalWarpType(None),
-                 bipolarMode(false)
+Graph::Graph()
+    : vertexCount(0),
+      horizontalWarpAmount(0.0f),
+      verticalWarpAmount(0.0f),
+      horizontalWarpType(None),
+      verticalWarpType(None),
+      bipolarMode(false)
 {
     insertVertex(0.0f, 0.0f);
     insertVertex(1.0f, 1.0f);
@@ -337,12 +337,10 @@ float Graph::getOutValue(float input, float tension, float p1x, float p1y, float
 
     switch (type)
     {
-    case SingleCurve:
-    {
+    case SingleCurve: {
         return powerScale(input, tension, 15.0f, p1x, p1y, p2x, p2y, false);
     }
-    case DoubleCurve:
-    {
+    case DoubleCurve: {
         const float middleX = p1x + deltaX / 2.0f;
         const float middleY = p1y + deltaY / 2.0f;
 
@@ -355,8 +353,7 @@ float Graph::getOutValue(float input, float tension, float p1x, float p1y, float
             return powerScale(input, tension, 15.0f, p1x, p1y, middleX, middleY, false);
         }
     }
-    case StairsCurve:
-    {
+    case StairsCurve: {
         if (tension == 0.0f) //straight line
         {
             return powerScale(input, tension, 15.0f, p1x, p1y, p2x, p2y, false);
@@ -386,8 +383,7 @@ float Graph::getOutValue(float input, float tension, float p1x, float p1y, float
 
         return inputSign * wolf::clamp(result, minY, maxY);
     }
-    case WaveCurve:
-    {
+    case WaveCurve: {
         tension = std::floor(tension * 100.f);
         input = std::abs(input);
 

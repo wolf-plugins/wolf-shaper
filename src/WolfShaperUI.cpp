@@ -8,16 +8,17 @@
 
 #include "DistrhoUI.hpp"
 
-#include "WolfShaperUI.hpp"
-#include "Window.hpp"
 #include "Config.hpp"
 #include "Margin.hpp"
+#include "Window.hpp"
+#include "WolfShaperUI.hpp"
 
 #include <string>
 
 START_NAMESPACE_DISTRHO
 
-WolfShaperUI::WolfShaperUI() : UI(611, 662)
+WolfShaperUI::WolfShaperUI()
+    : UI(611, 662)
 {
     const uint minWidth = 611;
     const uint minHeight = 438;
@@ -145,7 +146,7 @@ WolfShaperUI::WolfShaperUI() : UI(611, 662)
     fLabelWheelOversample->setFontSize(14.0f);
     fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
-    
+
     positionWidgets(width, height);
 }
 
@@ -242,16 +243,14 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
     case paramOversample:
         fWheelOversample->setValue(value);
         break;
-    case paramBipolarMode:
-    {
+    case paramBipolarMode: {
         const bool down = value >= 0.50f;
 
         fSwitchBipolarMode->setDown(down);
         fLabelsBoxBipolarMode->setSelectedIndex(down ? 1 : 0);
         break;
     }
-    case paramHorizontalWarpType:
-    {
+    case paramHorizontalWarpType: {
         const int warpType = std::round(value);
 
         fGraphWidget->setHorizontalWarpType((wolf::WarpType)warpType);
@@ -263,8 +262,7 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
         fKnobHorizontalWarp->setValue(value);
         fGraphWidget->setHorizontalWarpAmount(value);
         break;
-    case paramVerticalWarpType:
-    {
+    case paramVerticalWarpType: {
         const int warpType = std::round(value);
 
         fGraphWidget->setVerticalWarpType((wolf::WarpType)warpType);
@@ -281,7 +279,7 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
         break;
     default:
         break;
-    } 
+    }
 }
 
 void WolfShaperUI::stateChanged(const char *key, const char *value)
@@ -337,16 +335,16 @@ void WolfShaperUI::uiIdle()
 {
 }
 
-bool WolfShaperUI::onMouse(const MouseEvent& ev)
+bool WolfShaperUI::onMouse(const MouseEvent &ev)
 {
-	fGraphWidget->hideMenuOnMouseOut(ev.pos);
+    fGraphWidget->hideMenuOnMouseOut(ev.pos);
     return false;
 }
 
-bool WolfShaperUI::onMotion(const MotionEvent& ev)
+bool WolfShaperUI::onMotion(const MotionEvent &ev)
 {
-	fGraphWidget->hideMenuOnMouseOut(ev.pos);
-	return false;
+    fGraphWidget->hideMenuOnMouseOut(ev.pos);
+    return false;
 }
 
 void WolfShaperUI::uiReshape(uint width, uint height)

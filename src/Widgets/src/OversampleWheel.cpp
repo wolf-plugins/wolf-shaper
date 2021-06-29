@@ -11,8 +11,9 @@ const float trianglesHeight = 6.0f;
 const float textMarginRight = 3.0f;
 const float outlineWidth = 2.0f;
 
-OversampleWheel::OversampleWheel(Widget  *widget, Size<uint> size) noexcept : NanoWheel(widget, size),
-                                                                                 fFontSize(18.0f)
+OversampleWheel::OversampleWheel(Widget *widget, Size<uint> size) noexcept
+    : NanoWheel(widget, size),
+      fFontSize(18.0f)
 {
     using namespace WOLF_FONTS;
     createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);

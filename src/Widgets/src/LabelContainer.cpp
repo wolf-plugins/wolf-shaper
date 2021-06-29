@@ -3,8 +3,9 @@
 
 START_NAMESPACE_DISTRHO
 
-LabelContainer::LabelContainer(Widget  *widget, Size<uint> size) noexcept : WolfWidget(widget),
-                                                                               fSelectedIndex(0)
+LabelContainer::LabelContainer(Widget *widget, Size<uint> size) noexcept
+    : WolfWidget(widget),
+      fSelectedIndex(0)
 {
     setSize(size);
 

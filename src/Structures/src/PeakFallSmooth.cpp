@@ -2,14 +2,16 @@
 
 START_NAMESPACE_DISTRHO
 
-PeakFallSmooth::PeakFallSmooth() : fHistory(0.0f),
-                                   fValue(0.0f)
+PeakFallSmooth::PeakFallSmooth()
+    : fHistory(0.0f),
+      fValue(0.0f)
 {
 }
 
-PeakFallSmooth::PeakFallSmooth(const float value) : fHistory(0.0f),
-                                                    fValue(value),
-                                                    fCoeff(0.0f)
+PeakFallSmooth::PeakFallSmooth(const float value)
+    : fHistory(0.0f),
+      fValue(value),
+      fCoeff(0.0f)
 {
 }
 

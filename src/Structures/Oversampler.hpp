@@ -2,27 +2,27 @@
 #define WOLF_OVERSAMPLER_INCLUDED
 
 #include "DspFilters/Dsp.h"
-#include "src/DistrhoDefines.h"
 #include "extra/LeakDetector.hpp"
+#include "src/DistrhoDefines.h"
 
 START_NAMESPACE_DISTRHO
 
 class Oversampler
 {
-  public:
+public:
     Oversampler();
     ~Oversampler();
 
-    float **upsample(int ratio, uint32_t numSamples, double sampleRate, const float * const *audio);
+    float **upsample(int ratio, uint32_t numSamples, double sampleRate, const float *const *audio);
     void downsample(float **targetBuffer);
 
-  protected:
+protected:
     void lowPass1();
     void lowPass2();
 
     void gainBoost();
 
-  private:
+private:
     int fRatio;
     double fSampleRate;
     uint32_t fNumSamples;
