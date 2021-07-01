@@ -21,7 +21,7 @@
 
     <style>
         body {
-            background-color: #242526;
+            background-color: #1f2022;
             color: white;
             font-family: sans-serif;
         }
@@ -32,9 +32,21 @@
             align-items: center;
         }
 
+        .sub-header {
+            text-align: center;
+            padding: 0.5em 0em 1em 0em;
+            font-size: 1.2rem;
+        }
+
         .page {
-            max-width: 62.5em;
+            max-width: 71.25rem;
+            /* 1140px */
             margin: auto;
+            margin-top: 2rem;
+        }
+
+        .presentation-section {
+            overflow: auto;
         }
 
         h1 {
@@ -48,8 +60,9 @@
         }
 
         .screenshot img {
-            filter: drop-shadow(0 0 2rem #000000a6);
+            filter: drop-shadow(0 0 1.5rem #000000a6);
             float: right;
+            margin: 1em 1em 1em 2em;
         }
 
         a {
@@ -70,7 +83,7 @@
         }
 
         .button:hover {
-            background-color: #863b83;
+            background-color: #73306f;
         }
 
         .download-section {
@@ -78,19 +91,28 @@
             flex-direction: column;
             align-items: flex-start;
         }
+
+        .how-to-use-section {
+            margin-top: 2rem;
+        }
+
+        .block {
+            background-color: #2a2c2f;
+            padding: 1.7rem;
+            border-radius: 0.5rem;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="page">
-        <div class="header">
-            <img class="logo" src="images/wolf-logo.svg" />
+        <div class="presentation-section block">
+            <div class="header">
+                <img class="logo" src="images/wolf-logo.svg" />
+                <h1>Wolf Shaper</h1>
+            </div>
 
-            <h1>Wolf Shaper</h1>
-        </div>
-
-        <div class="presentation-section">
             <div class="screenshot">
                 <img src="images/screenshot.png" />
             </div>
@@ -98,17 +120,15 @@
             <p>
                 Wolf Shaper is a <b>free, open-source distortion plugin</b>.
             </p>
-
+            <p>
+                It lets you create your own waveshaping
+                functions using a spline-based graph editor and 4 different curve types.
+            </p>
             <h4>Creative sound mangling.</h4>
             <p>
-                Create your own waveshaping functions using a spline-based graph editor and 4 different curve types. Use
-                warping algorithms to alter the graph dynamically. Asymmetrical distortion lets you distort both poles
+                Use warping algorithms to alter the graph dynamically. Asymmetrical distortion lets you distort both
+                poles
                 of the signal separately.
-            </p>
-
-            <h4>Clean.</h4>
-            <p>
-                Remove aliasing artifacts using up to 16x oversampling.
             </p>
 
             <h4>Free forever.</h4>
@@ -125,14 +145,16 @@
                 <a class="button" href="#">Download for Windows</a>
                 <a class="button" href="#">Download for Linux</a>
                 <a class="button" href="#">Download for FreeBSD</a>
+
                 <p>
                     Latest release: v0.1.8 (2020-10-01)
                 </p>
+
                 <a href="#">See other versions</a>
             </div>
         </div>
 
-        <div class="how-to-use-section">
+        <div class="how-to-use-section block">
             <h2>How to use</h2>
 
             <h3>Parameters and controls</h3>
