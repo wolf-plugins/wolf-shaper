@@ -3,25 +3,131 @@
 <html lang="en">
 
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <title>Wolf Shaper</title>
-  
-  <meta name="description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
-  <meta name="author" content="Wolf Plugins">
-  
-  <meta property="og:title" content="Wolf Shaper">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://wolf-plugins.github.io/wolf-shaper/">
-  <meta property="og:description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
-  <meta property="og:image" content="images/screenshot.png">
+    <title>Wolf Shaper</title>
 
-  <link rel="icon" href="images/favicon.ico">
+    <meta name="description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
+    <meta name="author" content="Wolf Plugins">
+
+    <meta property="og:title" content="Wolf Shaper">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://wolf-plugins.github.io/wolf-shaper/">
+    <meta property="og:description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
+    <meta property="og:image" content="images/screenshot.png">
+
+    <link rel="icon" href="images/favicon.ico">
 </head>
 
 <body>
-  <!-- wow, it's a plugin -->
+
+    <div class="page">
+        <div class="header">
+            <h1>Wolf Shaper</h1>
+        </div>
+
+        <div class="presentation-section">
+            <img src="images/screenshot.png" />
+
+            <p>
+                Wolf Shaper is a free, open-source distortion plugin that lets you create your own waveshaping functions
+                using a spline-based graph editor.
+            </p>
+
+            <p>
+                This tool makes the input signal more harmonically rich, which can be useful for sound design and
+                mixing.
+            </p>
+        </div>
+
+        <div class="download-section">
+            <h2>Download</h2>
+
+            <h3>Windows</h3>
+            <a>64-bit VST</a>
+
+            <h3>Linux</h3>
+            <a>See installation instructions</a>
+
+            <h3>Source code</h3>
+            <a>Git repository</a>
+        </div>
+
+        <div class="how-to-use-section">
+            <h2>How to use</h2>
+
+            <h3>Parameters and controls</h3>
+            <ul>
+                <li>
+                    <strong>Pre</strong> – Controls the input volume, before any processing has taken place.
+                </li>
+                <li>
+                    <strong>Wet</strong> – Determines the mix between the original and the processed signal in the
+                    output. Set this parameter at maximum value to only hear the processed signal.
+                </li>
+                <li>
+                    <strong>Post</strong> – Controls the output volume, after all processing has been done.
+                </li>
+                <li>
+                    <strong>Center</strong> – Removes DC offset from the output. This ensures that the resulting
+                    waveform
+                    is vertically centered at zero.
+                </li>
+                <li>
+                    <strong>Oversample</strong> – Sets the multiple of the sample rate at which the processing will be
+                    done. This allows the plugin to filter out some harmonics that would otherwise cause aliasing
+                    artifacts.
+                </li>
+                <li>
+                    <strong>Uni/Bi switch</strong> – Allows switching between symmetrical and asymmetrical waveshaping.
+
+                </li>
+                <li>
+                    <strong>Warp knobs</strong> - The two yellow knobs in the middle of the UI allow to bend the
+                    distortion curve dynamically. These knobs can be automated by the plugin host for interesting
+                    effects.
+
+                </li>
+                <li>
+                    <strong>Reset button</strong> – Puts the graph back at its default state, which is a straight
+                    diagonal line.
+                </li>
+            </ul>
+
+            <h3>Graph editing</h3>
+            <ul>
+                <li>
+                    <strong>Add a vertex</strong> – Right-click in the graph to add a vertex. Keep holding the right
+                    mouse button to position the vertex.
+                </li>
+                <li>
+                    <strong>Move a vertex</strong> – Left-click and drag the vertex.
+                </li>
+                <li>
+                    <strong>Remove a vertex</strong> – Double left-click on the vertex.
+                </li>
+                <li>
+                    <strong>Tweak the tension of an edge</strong> – Left-click and drag vertically the tension handle
+                    located at the center of the edge.
+                </li>
+                <li>
+                    <strong>Change the curve type</strong> - Right-click on a vertex, then select the curve type in the
+                    context menu.
+                </li>
+            </ul>
+
+            <h3>User interface</h3>
+            <ul>
+                <li>
+                    <strong>Resize the window</strong> – Left-click and drag the resize handle located at the
+                    bottom-right to resize the window.
+                </li>
+            </ul>
+
+        </div>
+    </div>
+
 </body>
 
 </html>
