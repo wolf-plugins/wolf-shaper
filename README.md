@@ -9,7 +9,7 @@ To find out more about this plugin, check out [this video series by unfa!](https
 
 ## Install
 
-You can find some precompiled plugin binaries in the [Releases](https://github.com/wolf-plugins/wolf-shaper/releases) tab. Some packages are also available for Ubuntu and Arch Linux:
+You can find some precompiled plugin binaries in the [Releases](https://github.com/wolf-plugins/wolf-shaper/releases) tab. Some packages are also available for various operating systems:
 
 ### Ubuntu
 Download the plugin from the [pdesaulniers/wolf PPA](https://launchpad.net/~pdesaulniers/+archive/ubuntu/wolf):
@@ -24,6 +24,12 @@ For installing the latest release:
 sudo pacman -S wolf-shaper
 ```
 A git package is also available [in the AUR](https://aur.archlinux.org/packages/wolf-shaper-git/).
+
+### Debian
+Install the plugin from the [KXStudio repositories](https://kx.studio/Repositories).
+
+### FreeBSD
+Wolf Shaper is available in the [FreeBSD Ports collection](https://www.freshports.org/audio/wolf-shaper-lv2/).
 
 ## Build manually
 
