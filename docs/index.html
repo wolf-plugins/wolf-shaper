@@ -8,50 +8,128 @@
 
     <title>Wolf Shaper</title>
 
-    <meta name="description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
+    <meta name="description" content="Wolf Shaper is a free, open-source distortion plugin.">
     <meta name="author" content="Wolf Plugins">
 
     <meta property="og:title" content="Wolf Shaper">
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://wolf-plugins.github.io/wolf-shaper/">
-    <meta property="og:description" content="Wolf Shaper: a waveshaper plugin with a spline-based graph editor">
+    <meta property="og:description" content="Wolf Shaper is a free, open-source distortion plugin.">
     <meta property="og:image" content="images/screenshot.png">
 
     <link rel="icon" href="images/favicon.ico">
+
+    <style>
+        body {
+            background-color: #242526;
+            color: white;
+            font-family: sans-serif;
+        }
+
+        .header {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .page {
+            max-width: 62.5em;
+            margin: auto;
+        }
+
+        h1 {
+            font-size: 3rem;
+            padding-left: 0.5em;
+            font-weight: 500;
+        }
+
+        .logo {
+            height: 6em;
+        }
+
+        .screenshot img {
+            filter: drop-shadow(0 0 2rem #000000a6);
+            float: right;
+        }
+
+        a {
+            color: #ee8be8;
+        }
+
+        .button {
+            background-color: #994294;
+            border: none;
+            color: white;
+            padding: 0.5rem 1.2rem;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            border-radius: 0.25rem;
+            transition: background-color 0.10s ease-in-out;
+            margin: 0.45rem 0rem;
+        }
+
+        .button:hover {
+            background-color: #863b83;
+        }
+
+        .download-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    </style>
 </head>
 
 <body>
 
     <div class="page">
         <div class="header">
+            <img class="logo" src="images/wolf-logo.svg" />
+
             <h1>Wolf Shaper</h1>
         </div>
 
         <div class="presentation-section">
-            <img src="images/screenshot.png" />
+            <div class="screenshot">
+                <img src="images/screenshot.png" />
+            </div>
 
             <p>
-                Wolf Shaper is a free, open-source distortion plugin that lets you create your own waveshaping functions
-                using a spline-based graph editor.
+                Wolf Shaper is a <b>free, open-source distortion plugin</b>.
             </p>
 
+            <h4>Creative sound mangling.</h4>
             <p>
-                This tool makes the input signal more harmonically rich, which can be useful for sound design and
-                mixing.
+                Create your own waveshaping functions using a spline-based graph editor and 4 different curve types. Use
+                warping algorithms to alter the graph dynamically. Asymmetrical distortion lets you distort both poles
+                of the signal separately.
             </p>
-        </div>
 
-        <div class="download-section">
-            <h2>Download</h2>
+            <h4>Clean.</h4>
+            <p>
+                Remove aliasing artifacts using up to 16x oversampling.
+            </p>
 
-            <h3>Windows</h3>
-            <a>64-bit VST</a>
+            <h4>Free forever.</h4>
+            <p>
+                Wolf Shaper is free software. You are free to redistribute copies of this program, and to study and
+                change the source code.
+            </p>
+            <p>
+                <a href="https://www.gnu.org/philosophy/">Learn more about software freedom</a>
+            </p>
 
-            <h3>Linux</h3>
-            <a>See installation instructions</a>
-
-            <h3>Source code</h3>
-            <a>Git repository</a>
+            <h3>Download</h3>
+            <div class="download-section">
+                <a class="button" href="#">Download for Windows</a>
+                <a class="button" href="#">Download for Linux</a>
+                <a class="button" href="#">Download for FreeBSD</a>
+                <p>
+                    Latest release: v0.1.8 (2020-10-01)
+                </p>
+                <a href="#">See other versions</a>
+            </div>
         </div>
 
         <div class="how-to-use-section">
@@ -75,12 +153,14 @@
                     is vertically centered at zero.
                 </li>
                 <li>
-                    <strong>Oversample</strong> – Sets the multiple of the sample rate at which the processing will be
+                    <strong>Oversample</strong> – Sets the multiple of the sample rate at which the processing will
+                    be
                     done. This allows the plugin to filter out some harmonics that would otherwise cause aliasing
                     artifacts.
                 </li>
                 <li>
-                    <strong>Uni/Bi switch</strong> – Allows switching between symmetrical and asymmetrical waveshaping.
+                    <strong>Uni/Bi switch</strong> – Allows switching between symmetrical and asymmetrical
+                    waveshaping.
 
                 </li>
                 <li>
@@ -108,11 +188,13 @@
                     <strong>Remove a vertex</strong> – Double left-click on the vertex.
                 </li>
                 <li>
-                    <strong>Tweak the tension of an edge</strong> – Left-click and drag vertically the tension handle
+                    <strong>Tweak the tension of an edge</strong> – Left-click and drag vertically the tension
+                    handle
                     located at the center of the edge.
                 </li>
                 <li>
-                    <strong>Change the curve type</strong> - Right-click on a vertex, then select the curve type in the
+                    <strong>Change the curve type</strong> - Right-click on a vertex, then select the curve type in
+                    the
                     context menu.
                 </li>
             </ul>
