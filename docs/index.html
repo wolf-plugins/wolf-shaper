@@ -46,9 +46,7 @@
         }
 
         .block {
-            background-color: #2a2c2f;
             padding: 2.1rem;
-            border-radius: 0.5rem;
         }
 
         .presentation-section {
@@ -59,11 +57,11 @@
         h1 {
             font-size: 3rem;
             padding-left: 0.5em;
-            font-weight: 500;
+            font-weight: bold;
         }
 
         .logo {
-            height: 6em;
+            height: 5.5em;
         }
 
         .screenshot img {
@@ -99,10 +97,6 @@
             align-items: flex-start;
         }
 
-        .how-to-use-section {
-            margin-top: 2rem;
-        }
-
         .download-heading {
             margin-top: 2em;
             margin-bottom: 0.5em;
@@ -115,18 +109,23 @@
         li:not(:last-child) {
             margin-bottom: 1rem;
         }
+
+        hr {
+            color: #353535;
+        }
     </style>
 </head>
 
 <body>
 
     <div class="page">
-        <div class="block presentation-section">
-            <div class="header">
-                <img class="logo" src="images/wolf-logo.svg" />
-                <h1>Wolf Shaper</h1>
-            </div>
+        <div class="header">
+            <img class="logo" src="images/wolf-logo.svg" />
+            <h1>Wolf Shaper</h1>
+        </div>
 
+        <div class="block presentation-section">
+            
             <div class="screenshot">
                 <img src="images/screenshot.png" />
             </div>
@@ -141,11 +140,13 @@
 
             <div class="features">
                 <ul>
-                    <li><strong>Customizable graph</strong> – Design your own distortion functions using 4 different curve
+                    <li><strong>Customizable graph</strong> – Design your own distortion functions using 4 different
+                        curve
                         types.</li>
                     <li><strong>Warp modes</strong> – Use warping algorithms to alter the graph dynamically.</li>
-                    <li><strong>Uni/Bi mode</strong> – Switch between symmetrical and asymmetrical distortion.</li>
-                    <li><strong>Up to 16x oversampling</strong> – Get rid of aliasing artifacts for a cleaner sound.</li>
+                    <li><strong>Uni/Bi modes</strong> – Switch between symmetrical and asymmetrical distortion.</li>
+                    <li><strong>Up to 16x oversampling</strong> – Get rid of aliasing artifacts for a cleaner sound.
+                    </li>
                 </ul>
             </div>
 
@@ -164,6 +165,8 @@
         </div>
 
         <div class="block how-to-use-section">
+            <hr>
+
             <h2>How to use</h2>
 
             <h3>Parameters and controls</h3>
