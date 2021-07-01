@@ -24,6 +24,7 @@
             background-color: #1f2022;
             color: white;
             font-family: sans-serif;
+            font-size: 16px;
         }
 
         .header {
@@ -39,14 +40,20 @@
         }
 
         .page {
-            max-width: 71.25rem;
-            /* 1140px */
+            max-width: 1140px;
             margin: auto;
             margin-top: 2rem;
         }
 
+        .block {
+            background-color: #2a2c2f;
+            padding: 2.1rem;
+            border-radius: 0.5rem;
+        }
+
         .presentation-section {
             overflow: auto;
+            padding-top: 0.5em;
         }
 
         h1 {
@@ -96,10 +103,17 @@
             margin-top: 2rem;
         }
 
-        .block {
-            background-color: #2a2c2f;
-            padding: 1.7rem;
-            border-radius: 0.5rem;
+        .download-heading {
+            margin-top: 2em;
+            margin-bottom: 0.5em;
+        }
+
+        .features {
+            margin-top: 2rem;
+        }
+
+        li:not(:last-child) {
+            margin-bottom: 1rem;
         }
     </style>
 </head>
@@ -107,7 +121,7 @@
 <body>
 
     <div class="page">
-        <div class="presentation-section block">
+        <div class="block presentation-section">
             <div class="header">
                 <img class="logo" src="images/wolf-logo.svg" />
                 <h1>Wolf Shaper</h1>
@@ -118,29 +132,24 @@
             </div>
 
             <p>
-                Wolf Shaper is a <b>free, open-source distortion plugin</b>.
+                Wolf Shaper is a <b>free distortion plugin</b>.
             </p>
             <p>
                 It lets you create your own waveshaping
-                functions using a spline-based graph editor and 4 different curve types.
-            </p>
-            <h4>Creative sound mangling.</h4>
-            <p>
-                Use warping algorithms to alter the graph dynamically. Asymmetrical distortion lets you distort both
-                poles
-                of the signal separately.
+                functions using a spline-based graph editor.
             </p>
 
-            <h4>Free forever.</h4>
-            <p>
-                Wolf Shaper is free software. You are free to redistribute copies of this program, and to study and
-                change the source code.
-            </p>
-            <p>
-                <a href="https://www.gnu.org/philosophy/">Learn more about software freedom</a>
-            </p>
+            <div class="features">
+                <ul>
+                    <li><strong>Customizable graph</strong> – Design your own distortion functions using 4 different curve
+                        types.</li>
+                    <li><strong>Warp modes</strong> – Use warping algorithms to alter the graph dynamically.</li>
+                    <li><strong>Uni/Bi mode</strong> – Switch between symmetrical and asymmetrical distortion.</li>
+                    <li><strong>Up to 16x oversampling</strong> – Get rid of aliasing artifacts for a cleaner sound.</li>
+                </ul>
+            </div>
 
-            <h3>Download</h3>
+            <h3 class="download-heading">Download</h3>
             <div class="download-section">
                 <a class="button" href="#">Download for Windows</a>
                 <a class="button" href="#">Download for Linux</a>
@@ -150,11 +159,11 @@
                     Latest release: v0.1.8 (2020-10-01)
                 </p>
 
-                <a href="#">See other versions</a>
+                <a href="#">Source code</a>
             </div>
         </div>
 
-        <div class="how-to-use-section block">
+        <div class="block how-to-use-section">
             <h2>How to use</h2>
 
             <h3>Parameters and controls</h3>
