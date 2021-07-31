@@ -109,9 +109,9 @@ FILES_UI  = \
 
 UI_TYPE = opengl
 
-DPF_CUSTOM_PATH = ../dpf
-DPF_CUSTOM_TARGET_DIR = ../bin
-DPF_CUSTOM_BUILD_DIR = ../build/$(NAME)
+DPF_PATH = ../dpf
+DPF_TARGET_DIR = ../bin
+DPF_BUILD_DIR = ../build/$(NAME)
 
 include ../dpf/Makefile.plugins.mk
 
