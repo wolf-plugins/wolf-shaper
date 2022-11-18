@@ -89,7 +89,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 2.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
             break;
         case paramWet:
             parameter.name = "Wet";
@@ -97,7 +97,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomable;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramPostGain:
             parameter.name = "Post Gain";
@@ -105,7 +105,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
             break;
         case paramRemoveDC:
             parameter.name = "Remove DC Offset";
@@ -113,7 +113,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
+            parameter.hints = kParameterIsAutomatable | kParameterIsBoolean | kParameterIsInteger;
             break;
         case paramOversample:
             //None, 2x, 4x, 8x, 16x
@@ -122,7 +122,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 4.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+            parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
             break;
         case paramBipolarMode:
             parameter.name = "Bipolar Mode";
@@ -130,7 +130,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsBoolean | kParameterIsInteger;
+            parameter.hints = kParameterIsAutomatable | kParameterIsBoolean | kParameterIsInteger;
             break;
         case paramHorizontalWarpType:
             //None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
@@ -139,7 +139,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 6.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+            parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
             break;
         case paramHorizontalWarpAmount:
             parameter.name = "H Warp Amount";
@@ -147,7 +147,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramVerticalWarpType:
             //None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
@@ -156,7 +156,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 6.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable | kParameterIsInteger;
+            parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
             break;
         case paramVerticalWarpAmount:
             parameter.name = "V Warp Amount";
@@ -164,7 +164,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 0.0f;
-            parameter.hints = kParameterIsAutomable;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramOut:
             parameter.name = "Out";
@@ -201,17 +201,19 @@ protected:
         }
     }
 
-    void initState(uint32_t index, String &stateKey, String &defaultStateValue) override
+    void initState(uint32_t index, State &state) override
     {
         switch (index)
         {
         case 0:
-            stateKey = "graph";
+            state.key = "graph";
+            state.label = "Graph";
+            state.hints = kStateIsHostWritable;
+
+            // printf("%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
+            state.defaultValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
             break;
         }
-
-        //generated with fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
-        defaultStateValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
     }
 
     void setState(const char *key, const char *value) override

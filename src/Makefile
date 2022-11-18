@@ -4,6 +4,8 @@
 # Created by falkTX, Christopher Arndt, and Patrick Desaulniers
 #
 
+include ../dpf/Makefile.base.mk
+
 # --------------------------------------------------------------
 # Installation directories
 
@@ -12,6 +14,7 @@ BINDIR ?= $(PREFIX)/bin
 LIBDIR ?= $(PREFIX)/lib
 DSSI_DIR ?= $(LIBDIR)/dssi
 LADSPA_DIR ?= $(LIBDIR)/ladspa
+
 ifneq ($(MACOS_OR_WINDOWS),true)
 LV2_DIR ?= $(LIBDIR)/lv2
 VST_DIR ?= $(LIBDIR)/vst
