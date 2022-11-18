@@ -338,13 +338,13 @@ void WolfShaperUI::uiIdle()
 bool WolfShaperUI::onMouse(const MouseEvent &ev)
 {
     fGraphWidget->hideMenuOnMouseOut(ev.pos);
-    return false;
+    return UI::onMouse(ev);
 }
 
 bool WolfShaperUI::onMotion(const MotionEvent &ev)
 {
     fGraphWidget->hideMenuOnMouseOut(ev.pos);
-    return false;
+    return UI::onMotion(ev);
 }
 
 void WolfShaperUI::uiReshape(uint width, uint height)

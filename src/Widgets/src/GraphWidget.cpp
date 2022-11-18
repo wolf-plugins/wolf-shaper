@@ -935,22 +935,23 @@ bool GraphWidget::onMouse(const MouseEvent &ev)
     if (!mouseLeftDown && !mouseRightDown && fRightClickMenu->mouseEvent(ev, getAbsolutePos()))
     {
         // the above function ensures we can only get here if ev.press == true
-        if (ev.button == 1)
+        if (ev.button == kMouseButtonLeft)
             mouseLeftDown = ev.press;
-        else if (ev.button == 3)
+        else if (ev.button == kMouseButtonRight)
             mouseRightDown = ev.press;
         return true;
     }
 
     switch (ev.button)
     {
-    case 1:
+    case kMouseButtonLeft:
         return leftClick(ev);
-    case 2:
-        return middleClick(ev);
-    case 3:
+    case kMouseButtonRight:
         return rightClick(ev);
+    case kMouseButtonMiddle:
+        return middleClick(ev);
     }
+
     return false;
 }
 
