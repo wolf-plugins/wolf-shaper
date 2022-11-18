@@ -50,6 +50,7 @@ NAME = wolf-shaper
 
 BUILD_LV2 ?= true
 BUILD_VST2 ?= true
+BUILD_VST3 ?= true
 BUILD_JACK ?= true
 BUILD_DSSI ?= true
 BUILD_LADSPA ?= false
@@ -62,16 +63,16 @@ FILES_DSP = \
 	Structures/src/Graph.cpp \
 	Structures/src/Oversampler.cpp \
 	Structures/src/ParamSmooth.cpp \
-        ../libs/DSPFilters/source/Butterworth.cpp \
-        ../libs/DSPFilters/source/Biquad.cpp \
-        ../libs/DSPFilters/source/Cascade.cpp \
-        ../libs/DSPFilters/source/Filter.cpp \
-        ../libs/DSPFilters/source/Param.cpp \
-        ../libs/DSPFilters/source/Butterworth.cpp \
-        ../libs/DSPFilters/source/PoleFilter.cpp \
-        ../libs/DSPFilters/source/RBJ.cpp \
-        ../libs/DSPFilters/source/Bessel.cpp \
-        ../libs/DSPFilters/source/RootFinder.cpp \
+	../libs/DSPFilters/source/Butterworth.cpp \
+	../libs/DSPFilters/source/Biquad.cpp \
+	../libs/DSPFilters/source/Cascade.cpp \
+	../libs/DSPFilters/source/Filter.cpp \
+	../libs/DSPFilters/source/Param.cpp \
+	../libs/DSPFilters/source/Butterworth.cpp \
+	../libs/DSPFilters/source/PoleFilter.cpp \
+	../libs/DSPFilters/source/RBJ.cpp \
+	../libs/DSPFilters/source/Bessel.cpp \
+	../libs/DSPFilters/source/RootFinder.cpp \
 	WolfShaperPlugin.cpp
 
 FILES_UI  = \
@@ -122,8 +123,8 @@ BASE_FLAGS += -I. -I../../dpf/distrho -I../../dpf/dgl -I./Structures -I./Widgets
 
 BASE_FLAGS += $(CUSTOM_DEFINES)
 
-# Fix missing GL/gl.h include on FreeBSD
-BASE_FLAGS += $(shell $(PKG_CONFIG) --cflags-only-I gl)
+# Fix missing GL/gl.h include on FreeBSD (commented out for now since it breaks CI)
+# BASE_FLAGS += $(shell $(PKG_CONFIG) --cflags-only-I gl)
 
 LINK_FLAGS += -lpthread
 
@@ -143,7 +144,11 @@ endif
 endif
 
 ifeq ($(BUILD_VST2),true)
-TARGETS += vst
+TARGETS += vst2
+endif
+
+ifeq ($(BUILD_VST3),true)
+TARGETS += vst3
 endif
 
 ifeq ($(BUILD_JACK),true)
