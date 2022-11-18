@@ -51,6 +51,7 @@ NAME = wolf-shaper
 BUILD_LV2 ?= true
 BUILD_VST2 ?= true
 BUILD_VST3 ?= true
+BUILD_CLAP ?= true
 BUILD_JACK ?= true
 BUILD_DSSI ?= true
 BUILD_LADSPA ?= false
@@ -149,6 +150,10 @@ endif
 
 ifeq ($(BUILD_VST3),true)
 TARGETS += vst3
+endif
+
+ifeq ($(BUILD_CLAP),true)
+TARGETS += clap
 endif
 
 ifeq ($(BUILD_JACK),true)

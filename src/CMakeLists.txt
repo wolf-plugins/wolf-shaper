@@ -1,5 +1,5 @@
 dpf_add_plugin(wolf-shaper
-	TARGETS jack lv2 vst2 dssi vst3
+	TARGETS jack lv2 vst2 dssi vst3 clap
 	FILES_DSP
 		Utils/src/Mathf.cpp
 		Structures/src/Graph.cpp 
@@ -55,7 +55,7 @@ target_include_directories(wolf-shaper PUBLIC
 	"./Widgets"
 	"./Utils"
 	"./Resources"
-        "../libs/DSPFilters/include"
+	"../libs/DSPFilters/include"
 )
 
 target_link_libraries(wolf-shaper PUBLIC Threads::Threads)
