@@ -1,5 +1,5 @@
 # Wolf Shaper
-[![Build Status](https://img.shields.io/github/workflow/status/wolf-plugins/wolf-shaper/Wolf%20Shaper%20CI.svg?logo=github)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3A%22Wolf+Shaper+CI%22)
+[![Build Status](https://img.shields.io/github/workflow/status/wolf-plugins/wolf-shaper/dpf-makefile-action.yml)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3Adpf-makefile-action)
 
 ![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/docs/images/screenshot.png)
 
