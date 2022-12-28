@@ -4,21 +4,18 @@
 # Created by falkTX, Christopher Arndt, and Patrick Desaulniers
 #
 
+export DISTRHO_NAMESPACE = WolfShaperDISTRHO
+export DGL_NAMESPACE = WolfShaperDGL
+export FILE_BROWSER_DISABLED = true
+
 include dpf/Makefile.base.mk
 
 all: libs plugins gen
 
 # --------------------------------------------------------------
 
-DISTRHO_NAMESPACE = WolfShaperDISTRHO
-DGL_NAMESPACE = WolfShaperDGL
-
-export CUSTOM_DEFINES = -DDGL_FILE_BROWSER_DISABLED -DDISTRHO_NAMESPACE=$(DISTRHO_NAMESPACE) -DDGL_NAMESPACE=$(DGL_NAMESPACE)
-
-# --------------------------------------------------------------
-
 libs:
-	$(MAKE) -C dpf/dgl ../build/libdgl-opengl.a DGL_FLAGS="$(DGL_FLAGS) $(CUSTOM_DEFINES)"
+	$(MAKE) -C dpf/dgl opengl
 
 plugins: libs
 	$(MAKE) all -C src

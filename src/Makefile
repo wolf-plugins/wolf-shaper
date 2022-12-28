@@ -4,6 +4,10 @@
 # Created by falkTX, Christopher Arndt, and Patrick Desaulniers
 #
 
+export DISTRHO_NAMESPACE = WolfShaperDISTRHO
+export DGL_NAMESPACE = WolfShaperDGL
+export FILE_BROWSER_DISABLED = true
+
 include ../dpf/Makefile.base.mk
 
 # --------------------------------------------------------------
@@ -58,6 +62,9 @@ BUILD_CLAP ?= true
 BUILD_JACK ?= true
 BUILD_DSSI ?= true
 BUILD_LADSPA ?= false
+
+# required for modgui builds
+MODGUI_CLASS_NAME = wolf_plugins_wolf_shaper
 
 # --------------------------------------------------------------
 # Files to build
