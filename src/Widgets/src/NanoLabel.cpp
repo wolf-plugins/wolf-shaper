@@ -10,7 +10,7 @@ NanoLabel::NanoLabel(Widget *widget, Size<uint> size) noexcept
       fMargin(Margin(0, 0, 0, 0)),
       fAlign(ALIGN_LEFT | ALIGN_TOP),
       fColor(Color(255, 255, 255, 255)),
-      fFontSize(12.0f)
+      fFontSize(12.0f * getScaleFactor())
 {
     setSize(size);
 

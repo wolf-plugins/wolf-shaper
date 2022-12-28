@@ -19,8 +19,9 @@ void LabelBox::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
-    const float verticalMargin = 6.0f;
-    const float boxOutlineWidth = 2.0f;
+    const float scaleFactor = getScaleFactor();
+    const float verticalMargin = 6.0f * scaleFactor;
+    const float boxOutlineWidth = 2.0f * scaleFactor;
 
     //Box background
     beginPath();
@@ -49,11 +50,11 @@ void LabelBox::onNanoDisplay()
 
     //Text
     fontFace("chivo_bold");
-    fontSize(16.0f);
+    fontSize(16.0f * scaleFactor);
     fillColor(Color(255, 255, 255, 255));
     textAlign(ALIGN_CENTER | ALIGN_MIDDLE);
 
-    text(std::round(width / 2.0f), std::round(height / 2.0f + verticalMargin / 2.0f - 2), fText, NULL);
+    text(std::round(width / 2.0f), std::round(height / 2.0f + verticalMargin / 2.0f - 2 * scaleFactor), fText, NULL);
 
     closePath();
 }

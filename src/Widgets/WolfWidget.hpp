@@ -2,7 +2,6 @@
 #define WOLF_WIDGET_HPP_INCLUDED
 
 #include "NanoVG.hpp"
-#include "Widget.hpp"
 
 START_NAMESPACE_DISTRHO
 
@@ -12,9 +11,10 @@ public:
     WolfWidget(Widget *widget) noexcept;
 
     void setDescription(const char *description);
-    const char *getDescription();
+    const char *getDescription() const;
 
-    bool canBeFocused();
+    bool canBeFocused() const;
+    double getScaleFactor() const;
     void setFocus(bool focus);
 
 protected:
@@ -23,6 +23,7 @@ protected:
 private:
     uint *fFocusedWidgetId; //only one focused widget at a time
     const char *fDescription;
+    const double fScaleFactor;
 
     DISTRHO_LEAK_DETECTOR(WolfWidget)
 };

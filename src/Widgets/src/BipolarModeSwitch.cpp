@@ -11,12 +11,13 @@ void BipolarModeSwitch::drawSocket()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     const float centerX = width / 2.0f;
     const float centerY = height / 2.0f;
 
-    const float marginLeftRight = 1.0f;
-    const float marginTopBottom = 2.0f;
+    const float marginLeftRight = 1.0f * scaleFactor;
+    const float marginTopBottom = 2.0f * scaleFactor;
     const float halfMarginTopBottom = marginTopBottom / 2.0f;
 
     beginPath();
@@ -32,10 +33,11 @@ void BipolarModeSwitch::drawHandle()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     const float halfWidth = width / 2.0f;
 
-    const float radius = 6.0f;
+    const float radius = 6.0f * scaleFactor;
 
     beginPath();
 

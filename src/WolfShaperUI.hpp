@@ -43,7 +43,7 @@ public:
 protected:
     void parameterChanged(uint32_t, float value) override;
     void tryRememberSize();
-    void positionWidgets(uint width, uint height);
+    void positionWidgets(uint width, uint height, double scaleFactor);
 
     void nanoSwitchClicked(NanoSwitch *nanoSwitch) override;
     void nanoButtonClicked(NanoButton *nanoButton) override;
