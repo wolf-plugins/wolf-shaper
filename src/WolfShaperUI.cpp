@@ -18,7 +18,7 @@
 START_NAMESPACE_DISTRHO
 
 WolfShaperUI::WolfShaperUI()
-    : UI(611, 662)
+    : UI(DISTRHO_UI_DEFAULT_WIDTH, DISTRHO_UI_DEFAULT_HEIGHT)
 {
     const uint minWidth = 611;
     const uint minHeight = 438;
