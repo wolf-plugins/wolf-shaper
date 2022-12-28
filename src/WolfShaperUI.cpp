@@ -20,9 +20,6 @@ START_NAMESPACE_DISTRHO
 WolfShaperUI::WolfShaperUI()
     : UI(DISTRHO_UI_DEFAULT_WIDTH, DISTRHO_UI_DEFAULT_HEIGHT)
 {
-    const uint minWidth = 611;
-    const uint minHeight = 438;
-
     const uint knobsLabelBoxWidth = 66;
     const uint knobsLabelBoxHeight = 21;
 
@@ -122,9 +119,13 @@ WolfShaperUI::WolfShaperUI()
     fButtonRightArrowVerticalWarp->setId(paramVerticalWarpType);
     fButtonRightArrowVerticalWarp->setArrowDirection(ArrowButton::Right);
 
+#ifndef __EMSCRIPTEN__
+    const uint minWidth = 611;
+    const uint minHeight = 438;
     fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
     fHandleResize->setCallback(this);
     fHandleResize->setMinSize(minWidth, minHeight);
+#endif
 
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32, 32));
     fButtonResetGraph->setCallback(this);
@@ -221,7 +222,9 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     fButtonLeftArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() - fButtonLeftArrowVerticalWarp->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
     fButtonRightArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() + fLabelListVerticalWarpType->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
 
+#ifndef __EMSCRIPTEN__
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
+#endif
 }
 
 void WolfShaperUI::parameterChanged(uint32_t index, float value)
