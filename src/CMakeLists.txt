@@ -47,6 +47,9 @@ dpf_add_plugin(wolf-shaper
 		WolfShaperUI.cpp
 )
 
+set_target_properties("wolf-shaper-vst2" PROPERTIES
+    OUTPUT_NAME "wolf-shaper-vst")
+
 target_include_directories(wolf-shaper PUBLIC
 	"."
 	"../dpf/distrho"
