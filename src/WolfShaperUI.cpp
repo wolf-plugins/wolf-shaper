@@ -18,49 +18,56 @@
 START_NAMESPACE_DISTRHO
 
 WolfShaperUI::WolfShaperUI()
-    : UI(611, 662)
+    : UI(DISTRHO_UI_DEFAULT_WIDTH, DISTRHO_UI_DEFAULT_HEIGHT)
 {
+    loadSharedResources();
+
     const uint minWidth = 611;
     const uint minHeight = 438;
 
-    const uint knobsLabelBoxWidth = 66;
-    const uint knobsLabelBoxHeight = 21;
-
-    loadSharedResources();
-
     const float width = getWidth();
     const float height = getHeight();
+    const double scaleFactor = getScaleFactor();
 
-    fGraphWidget = new GraphWidget(this, Size<uint>(width - 4 * 2, height - 4 * 2 - 122));
+    const uint knobsLabelBoxWidth = 66 * scaleFactor;
+    const uint knobsLabelBoxHeight = 21 * scaleFactor;
 
-    const float graphBarHeight = 42;
+    setGeometryConstraints(minWidth * scaleFactor, minHeight * scaleFactor);
+
+    if (scaleFactor != 1.0)
+        setSize(DISTRHO_UI_DEFAULT_WIDTH * scaleFactor, DISTRHO_UI_DEFAULT_HEIGHT * scaleFactor);
+
+    fGraphWidget = new GraphWidget(this, Size<uint>(width - 4 * 2 * scaleFactor,
+                                                    height - (4 * 2 - 122) * scaleFactor));
+
+    const float graphBarHeight = 42 * scaleFactor;
 
     fGraphBar = new WidgetBar(this, Size<uint>(width, graphBarHeight));
     // fGraphBar->setStrokePaint();
-    fGraphBar->setStrokeWidth(4.0f);
+    fGraphBar->setStrokeWidth(4.0f * scaleFactor);
 
-    fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30, 29));
+    fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30 * scaleFactor, 29 * scaleFactor));
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
 
-    fLabelRemoveDC = new NanoLabel(this, Size<uint>(100, 29));
+    fLabelRemoveDC = new NanoLabel(this, Size<uint>(100 * scaleFactor, 29 * scaleFactor));
     fLabelRemoveDC->setText("CENTER");
     //fLabelRemoveDC->setFontId(chivoBoldId);
-    fLabelRemoveDC->setFontSize(14.0f);
+    fLabelRemoveDC->setFontSize(14.0f * scaleFactor);
     fLabelRemoveDC->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
-    fLabelRemoveDC->setMargin(Margin(3, 0, fSwitchRemoveDC->getWidth() / 2.0f, 0));
+    fLabelRemoveDC->setMargin(Margin(3 * scaleFactor, 0, fSwitchRemoveDC->getWidth() / 2.0f, 0));
 
-    fSwitchBipolarMode = new BipolarModeSwitch(this, Size<uint>(16, 34));
+    fSwitchBipolarMode = new BipolarModeSwitch(this, Size<uint>(16 * scaleFactor, 34 * scaleFactor));
     fSwitchBipolarMode->setCallback(this);
     fSwitchBipolarMode->setId(paramBipolarMode);
 
-    fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34, 42));
+    fLabelsBoxBipolarMode = new GlowingLabelsBox(this, Size<uint>(34 * scaleFactor, 42 * scaleFactor));
     fLabelsBoxBipolarMode->setLabels({"UNI", "BI"});
 
     fLabelPreGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPreGain->setText("PRE");
 
-    fKnobPreGain = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobPreGain = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobPreGain->setCallback(this);
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
@@ -69,7 +76,7 @@ WolfShaperUI::WolfShaperUI()
     fLabelWet = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelWet->setText("WET");
 
-    fKnobWet = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobWet = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobWet->setCallback(this);
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
@@ -78,28 +85,28 @@ WolfShaperUI::WolfShaperUI()
     fLabelPostGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPostGain->setText("POST");
 
-    fKnobPostGain = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobPostGain = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobPostGain->setCallback(this);
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(143, 255, 147, 255));
 
-    fKnobHorizontalWarp = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobHorizontalWarp = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobHorizontalWarp->setCallback(this);
     fKnobHorizontalWarp->setRange(0.0f, 1.0f);
     fKnobHorizontalWarp->setId(paramHorizontalWarpAmount);
     fKnobHorizontalWarp->setColor(Color(255, 225, 169, 255));
 
-    fLabelListHorizontalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
+    fLabelListHorizontalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3 * scaleFactor, knobsLabelBoxHeight));
     fLabelListHorizontalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
 
-    fKnobVerticalWarp = new VolumeKnob(this, Size<uint>(54, 54));
+    fKnobVerticalWarp = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobVerticalWarp->setCallback(this);
     fKnobVerticalWarp->setRange(0.0f, 1.0f);
     fKnobVerticalWarp->setId(paramVerticalWarpAmount);
     fKnobVerticalWarp->setColor(Color(255, 225, 169, 255));
 
-    fLabelListVerticalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3, knobsLabelBoxHeight));
+    fLabelListVerticalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3 * scaleFactor, knobsLabelBoxHeight));
     fLabelListVerticalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
 
     fButtonLeftArrowHorizontalWarp = new ArrowButton(this, Size<uint>(knobsLabelBoxHeight, knobsLabelBoxHeight));
@@ -122,46 +129,48 @@ WolfShaperUI::WolfShaperUI()
     fButtonRightArrowVerticalWarp->setId(paramVerticalWarpType);
     fButtonRightArrowVerticalWarp->setArrowDirection(ArrowButton::Right);
 
-    fHandleResize = new ResizeHandle(this, Size<uint>(18, 18));
+#ifndef __EMSCRIPTEN__
+    fHandleResize = new ResizeHandle(this, Size<uint>(18 * scaleFactor, 18 * scaleFactor));
     fHandleResize->setCallback(this);
-    fHandleResize->setMinSize(minWidth, minHeight);
+    fHandleResize->setMinSize(minWidth * scaleFactor, minHeight * scaleFactor);
+#endif
 
-    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32, 32));
+    fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32 * scaleFactor, 32 * scaleFactor));
     fButtonResetGraph->setCallback(this);
 
-    fLabelButtonResetGraph = new NanoLabel(this, Size<uint>(50, fButtonResetGraph->getHeight()));
+    fLabelButtonResetGraph = new NanoLabel(this, Size<uint>(50 * scaleFactor, fButtonResetGraph->getHeight()));
     fLabelButtonResetGraph->setText("RESET");
     // fLabelButtonResetGraph->setFontId(dejaVuSansId);
-    fLabelButtonResetGraph->setFontSize(15.0f);
+    fLabelButtonResetGraph->setFontSize(15.0f * scaleFactor);
     fLabelButtonResetGraph->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
-    fLabelButtonResetGraph->setMargin(Margin(6, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1, 0));
+    fLabelButtonResetGraph->setMargin(Margin(6 * scaleFactor, 0, std::round(fButtonResetGraph->getHeight() / 2.0f) + 1 * scaleFactor, 0));
 
-    fWheelOversample = new OversampleWheel(this, Size<uint>(47, 26));
+    fWheelOversample = new OversampleWheel(this, Size<uint>(47 * scaleFactor, 26 * scaleFactor));
     fWheelOversample->setCallback(this);
     fWheelOversample->setRange(0, 4);
 
-    fLabelWheelOversample = new NanoLabel(this, Size<uint>(85, 26));
+    fLabelWheelOversample = new NanoLabel(this, Size<uint>(85 * scaleFactor, 26 * scaleFactor));
     fLabelWheelOversample->setText("OVERSAMPLE");
     //fLabelWheelOversample->setFontId(chivoBoldId);
-    fLabelWheelOversample->setFontSize(14.0f);
+    fLabelWheelOversample->setFontSize(14.0f * scaleFactor);
     fLabelWheelOversample->setAlign(ALIGN_LEFT | ALIGN_MIDDLE);
     fLabelWheelOversample->setMargin(Margin(0, 0, fLabelWheelOversample->getHeight() / 2.0f, 0));
 
-    positionWidgets(width, height);
+    positionWidgets(width, height, scaleFactor);
 }
 
 WolfShaperUI::~WolfShaperUI()
 {
 }
 
-void WolfShaperUI::positionWidgets(uint width, uint height)
+void WolfShaperUI::positionWidgets(uint width, uint height, double scaleFactor)
 {
     //TODO: Clean that up
 
-    const float graphMargin = 8;
-    const float bottomBarSize = 102;
+    const float graphMargin = 8 * scaleFactor;
+    const float bottomBarSize = 102 * scaleFactor;
     const float graphBarHeight = fGraphBar->getHeight();
-    const float graphBarMargin = 6;
+    const float graphBarMargin = 6 * scaleFactor;
 
     const float graphWidth = width - graphMargin * 2;
     const float graphHeight = height - graphMargin * 2 - bottomBarSize - graphBarHeight;
@@ -174,54 +183,58 @@ void WolfShaperUI::positionWidgets(uint width, uint height)
     fGraphBar->setAbsolutePos(0, graphBottom + graphBarMargin);
     fGraphBar->setFillPaint(radialGradient(width / 2.0f, graphBarHeight / 2.0f, graphBarHeight, width / 2.0f, Color(71, 74, 80, 255), Color(40, 42, 46, 255)));
 
-    fSwitchRemoveDC->setAbsolutePos(24, height - 38);
-    fLabelRemoveDC->setAbsolutePos(24 + fSwitchRemoveDC->getWidth(), height - 38);
+    fSwitchRemoveDC->setAbsolutePos(24 * scaleFactor, height - 38 * scaleFactor);
+    fLabelRemoveDC->setAbsolutePos(24 * scaleFactor + fSwitchRemoveDC->getWidth(), height - 38 * scaleFactor);
 
-    fSwitchBipolarMode->setAbsolutePos(31, height - 86);
-    fLabelsBoxBipolarMode->setAbsolutePos(53, height - 90);
+    fSwitchBipolarMode->setAbsolutePos(31 * scaleFactor, height - 86 * scaleFactor);
+    fLabelsBoxBipolarMode->setAbsolutePos(53 * scaleFactor, height - 90 * scaleFactor);
 
     const float graphBarMiddleY = fGraphBar->getAbsoluteY() + fGraphBar->getHeight() / 2.0f;
 
-    fButtonResetGraph->setAbsolutePos(20, graphBarMiddleY - fButtonResetGraph->getHeight() / 2.0f);
+    fButtonResetGraph->setAbsolutePos(20 * scaleFactor, graphBarMiddleY - fButtonResetGraph->getHeight() / 2.0f);
     fLabelButtonResetGraph->setAbsolutePos(fButtonResetGraph->getAbsoluteX() + fButtonResetGraph->getWidth(), fButtonResetGraph->getAbsoluteY());
 
-    fWheelOversample->setAbsolutePos(width - fWheelOversample->getWidth() - 35, graphBarMiddleY - fWheelOversample->getHeight() / 2.0f);
+    fWheelOversample->setAbsolutePos(width - fWheelOversample->getWidth() - 35 * scaleFactor, graphBarMiddleY - fWheelOversample->getHeight() / 2.0f);
     fLabelWheelOversample->setAbsolutePos(fWheelOversample->getAbsoluteX() - fLabelWheelOversample->getWidth(), fWheelOversample->getAbsoluteY());
 
-    const float knobLabelMarginBottom = 12;
+    const float knobLabelMarginBottom = 12 * scaleFactor;
 
     float centerAlignDifference = (fLabelPreGain->getWidth() - fKnobPreGain->getWidth()) / 2.0f;
 
-    fKnobPreGain->setAbsolutePos(width - 225, height - 90);
-    fLabelPreGain->setAbsolutePos(width - 225 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPreGain->setAbsolutePos(width - 225 * scaleFactor, height - 90 * scaleFactor);
+    fLabelPreGain->setAbsolutePos(width - 225 * scaleFactor - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelWet->getWidth() - fKnobWet->getWidth()) / 2.0f;
 
-    fKnobWet->setAbsolutePos(width - 155, height - 90);
-    fLabelWet->setAbsolutePos(width - 155 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobWet->setAbsolutePos(width - 155 * scaleFactor, height - 90 * scaleFactor);
+    fLabelWet->setAbsolutePos(width - 155 * scaleFactor - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelPostGain->getWidth() - fKnobPostGain->getWidth()) / 2.0f;
 
-    fKnobPostGain->setAbsolutePos(width - 85, height - 90);
-    fLabelPostGain->setAbsolutePos(width - 85 - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
+    fKnobPostGain->setAbsolutePos(width - 85 * scaleFactor, height - 90 * scaleFactor);
+    fLabelPostGain->setAbsolutePos(width - 85 * scaleFactor - centerAlignDifference, height - fLabelPreGain->getHeight() - knobLabelMarginBottom);
 
     centerAlignDifference = (fLabelListHorizontalWarpType->getWidth() - fKnobHorizontalWarp->getWidth()) / 2.0f;
 
-    fKnobHorizontalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230, height - 90);
-    fLabelListHorizontalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230 - centerAlignDifference, height - fLabelListHorizontalWarpType->getHeight() - knobLabelMarginBottom);
+    fKnobHorizontalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230 * scaleFactor, height - 90 * scaleFactor);
+    fLabelListHorizontalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 230 * scaleFactor - centerAlignDifference,
+                                                 height - fLabelListHorizontalWarpType->getHeight() - knobLabelMarginBottom);
 
     fButtonLeftArrowHorizontalWarp->setAbsolutePos(fLabelListHorizontalWarpType->getAbsoluteX() - fButtonLeftArrowHorizontalWarp->getWidth(), fLabelListHorizontalWarpType->getAbsoluteY());
     fButtonRightArrowHorizontalWarp->setAbsolutePos(fLabelListHorizontalWarpType->getAbsoluteX() + fLabelListHorizontalWarpType->getWidth(), fLabelListHorizontalWarpType->getAbsoluteY());
 
     centerAlignDifference = (fLabelListVerticalWarpType->getWidth() - fKnobVerticalWarp->getWidth()) / 2.0f;
 
-    fKnobVerticalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110, height - 90);
-    fLabelListVerticalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110 - centerAlignDifference, height - fLabelListVerticalWarpType->getHeight() - knobLabelMarginBottom);
+    fKnobVerticalWarp->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110 * scaleFactor, height - 90 * scaleFactor);
+    fLabelListVerticalWarpType->setAbsolutePos(fKnobPreGain->getAbsoluteX() - 110 * scaleFactor - centerAlignDifference,
+                                               height - fLabelListVerticalWarpType->getHeight() - knobLabelMarginBottom);
 
     fButtonLeftArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() - fButtonLeftArrowVerticalWarp->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
     fButtonRightArrowVerticalWarp->setAbsolutePos(fLabelListVerticalWarpType->getAbsoluteX() + fLabelListVerticalWarpType->getWidth(), fLabelListVerticalWarpType->getAbsoluteY());
 
+#ifndef __EMSCRIPTEN__
     fHandleResize->setAbsolutePos(width - fHandleResize->getWidth(), height - fHandleResize->getHeight());
+#endif
 }
 
 void WolfShaperUI::parameterChanged(uint32_t index, float value)
@@ -294,6 +307,7 @@ void WolfShaperUI::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     //background
     beginPath();
@@ -308,11 +322,11 @@ void WolfShaperUI::onNanoDisplay()
     //shadow at the bottom of the graph
     beginPath();
 
-    const int shadowHeight = 8;
-    const int shadowMargin = 2;
+    const int shadowHeight = 8 * scaleFactor;
+    const int shadowMargin = 2 * scaleFactor;
 
-    const float graphMargin = 8;
-    const float bottomBarSize = 102;
+    const float graphMargin = 8 * scaleFactor;
+    const float bottomBarSize = 102 * scaleFactor;
     const float graphBarHeight = fGraphBar->getHeight();
 
     const float graphHeight = height - graphMargin * 2 - bottomBarSize - graphBarHeight;
@@ -349,8 +363,8 @@ bool WolfShaperUI::onMotion(const MotionEvent &ev)
 
 void WolfShaperUI::uiReshape(uint width, uint height)
 {
-    //setSize(width, height);
-    positionWidgets(width, height);
+    UI::uiReshape(width, height);
+    positionWidgets(width, height, getScaleFactor());
 }
 
 bool WolfShaperUI::onKeyboard(const KeyboardEvent &)

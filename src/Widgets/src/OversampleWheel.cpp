@@ -4,16 +4,17 @@
 START_NAMESPACE_DISTRHO
 
 //TODO: Put these in the config file
-const float trianglesVerticalMargin = 5.0f;
-const float trianglesHorizontalMargin = 4.0f;
-const float trianglesWidth = 8.0f;
-const float trianglesHeight = 6.0f;
-const float textMarginRight = 3.0f;
-const float outlineWidth = 2.0f;
+// NOTE: underscore names so we know these vars need scaleFactor multiplication
+const float _trianglesVerticalMargin = 5.0f;
+const float _trianglesHorizontalMargin = 4.0f;
+const float _trianglesWidth = 8.0f;
+const float _trianglesHeight = 6.0f;
+const float _textMarginRight = 3.0f;
+const float _outlineWidth = 2.0f;
 
 OversampleWheel::OversampleWheel(Widget *widget, Size<uint> size) noexcept
     : NanoWheel(widget, size),
-      fFontSize(18.0f)
+      fFontSize(18.0f * getScaleFactor())
 {
     using namespace WOLF_FONTS;
     createFontFromMemory("chivo_bold", (const uchar *)chivo_bold, chivo_bold_size, 0);
@@ -23,6 +24,12 @@ void OversampleWheel::drawTriangles()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
+
+    const float trianglesVerticalMargin = _trianglesVerticalMargin * scaleFactor;
+    const float trianglesHorizontalMargin = _trianglesHorizontalMargin * scaleFactor;
+    const float trianglesWidth = _trianglesWidth * scaleFactor;
+    const float trianglesHeight = _trianglesHeight * scaleFactor;
 
     const float rightPointXLocation = width - trianglesHorizontalMargin;
     const float leftPointXLocation = rightPointXLocation - trianglesWidth;
@@ -41,7 +48,7 @@ void OversampleWheel::drawTriangles()
 
     fillColor(Color(255, 255, 255, 255));
     strokeColor(Color(0, 0, 0, 255));
-    strokeWidth(1.0f);
+    strokeWidth(1.0f * scaleFactor);
 
     fill();
     stroke();
@@ -73,6 +80,9 @@ void OversampleWheel::drawBackground()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
+
+    const float outlineWidth = _outlineWidth * scaleFactor;
 
     beginPath();
 
@@ -89,6 +99,11 @@ void OversampleWheel::drawText()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
+
+    const float trianglesHorizontalMargin = _trianglesHorizontalMargin * scaleFactor;
+    const float trianglesWidth = _trianglesWidth * scaleFactor;
+    const float textMarginRight = _textMarginRight * scaleFactor;
 
     const char *oversamplingFactors[] = {"", "2x", "4x", "8x", "16x"};
 
@@ -131,6 +146,9 @@ void OversampleWheel::drawOutline()
 void OversampleWheel::draw()
 {
     const float width = getWidth();
+    const float scaleFactor = getScaleFactor();
+
+    const float outlineWidth = _outlineWidth * scaleFactor;
 
     //outline
     drawOutline();
@@ -141,7 +159,7 @@ void OversampleWheel::draw()
     //line at top of display
     beginPath();
 
-    const float widthLineTopDisplay = 1.4f;
+    const float widthLineTopDisplay = 1.4f * scaleFactor;
 
     strokeColor(Color(72, 137, 208, 150));
     strokeWidth(widthLineTopDisplay);

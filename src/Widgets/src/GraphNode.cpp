@@ -11,6 +11,7 @@ START_NAMESPACE_DISTRHO
 
 GraphNode::GraphNode(GraphWidget *parent)
     : parent(parent),
+      scaleFactor(parent->getScaleFactor()),
       grabbed(false)
 {
 }
@@ -34,7 +35,9 @@ void GraphNode::render()
 GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type)
     : GraphNode(parent),
       tensionHandle(parent, this),
-      surface(Circle<int>(0, 0, 8.0f)),
+      index(0),
+      scaleFactor(parent->getScaleFactor()),
+      surface(Circle<int>(0, 0, 8.0f * scaleFactor)),
       type(type),
       lastClickButton(0)
 {
@@ -42,17 +45,17 @@ GraphVertex::GraphVertex(GraphWidget *parent, GraphVertexType type)
     {
     case GraphVertexType::Left:
     case GraphVertexType::Middle:
-        surface = Circle<int>(0, 0, CONFIG_NAMESPACE::vertex_radius);
+        surface = Circle<int>(0, 0, CONFIG_NAMESPACE::vertex_radius * scaleFactor);
         break;
     case GraphVertexType::Right:
-        surface = Circle<int>(parent->getWidth(), parent->getHeight(), CONFIG_NAMESPACE::vertex_radius);
+        surface = Circle<int>(parent->getWidth(), parent->getHeight(), CONFIG_NAMESPACE::vertex_radius * scaleFactor);
         break;
     }
 }
 
 void GraphVertex::reset()
 {
-    surface = Circle<int>(0, 0, CONFIG_NAMESPACE::vertex_radius);
+    surface = Circle<int>(0, 0, CONFIG_NAMESPACE::vertex_radius * scaleFactor);
     type = GraphVertexType::Middle;
     grabbed = false;
 }
@@ -68,7 +71,7 @@ void GraphVertex::render()
 
     parent->beginPath();
 
-    parent->strokeWidth(CONFIG_NAMESPACE::vertex_stroke_width);
+    parent->strokeWidth(CONFIG_NAMESPACE::vertex_stroke_width * scaleFactor);
 
     if (focused)
     {
@@ -96,7 +99,7 @@ GraphVertexType GraphVertex::getType()
 
 bool GraphVertex::contains(Point<int> pos)
 {
-    Circle<int> surface(getX(), getY(), 8.0f);
+    Circle<int> surface(getX(), getY(), 8.0f * scaleFactor);
 
     return wolf::pointInCircle(surface, pos);
 }
@@ -106,7 +109,7 @@ bool GraphTensionHandle::contains(Point<int> pos)
     if (vertex->getType() == GraphVertexType::Right) //last vertex doesn't have a tension handle
         return false;
 
-    Circle<int> surface(getX(), getY(), 8.0f);
+    Circle<int> surface(getX(), getY(), 8.0f * scaleFactor);
 
     return wolf::pointInCircle(surface, pos);
 }
@@ -293,7 +296,7 @@ bool GraphTensionHandle::onMotion(const Widget::MotionEvent &ev)
         return true;
     }
 
-    const float resistance = 4.0f;
+    const float resistance = 4.0f * scaleFactor;
 
     const Point<int> pos = parent->projectCursorPos(ev.pos);
 
@@ -395,14 +398,14 @@ void GraphTensionHandle::render()
 
     parent->beginPath();
 
-    parent->strokeWidth(CONFIG_NAMESPACE::tension_handle_stroke_width);
+    parent->strokeWidth(CONFIG_NAMESPACE::tension_handle_stroke_width * scaleFactor);
 
     if (parent->edgeMustBeEmphasized(vertex->getIndex())) //TODO: make that a method on the vertex
         parent->strokeColor(CONFIG_NAMESPACE::tension_handle_focused);
     else
         parent->strokeColor(CONFIG_NAMESPACE::tension_handle_normal);
 
-    parent->circle(getX(), getY(), CONFIG_NAMESPACE::tension_handle_radius);
+    parent->circle(getX(), getY(), CONFIG_NAMESPACE::tension_handle_radius * scaleFactor);
 
     parent->stroke();
 

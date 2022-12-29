@@ -91,7 +91,7 @@ void NanoKnob::onNanoDisplay()
 
 bool NanoKnob::onMouse(const MouseEvent &ev)
 {
-    if (ev.button != 1)
+    if (ev.button != kMouseButtonLeft)
         return fLeftMouseDown;
 
     if (!ev.press)

@@ -30,11 +30,12 @@ void ResizeHandle::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
-    const float lineMarginSides = 5.0f;
+    const float scaleFactor = getScaleFactor();
+    const float lineMarginSides = 5.0f * getScaleFactor();
 
     beginPath();
 
-    strokeWidth(1.0f);
+    strokeWidth(1.0f * scaleFactor);
     strokeColor(Color(176, 176, 176, 255));
 
     const float linesBottom = height;

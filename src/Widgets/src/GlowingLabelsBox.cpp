@@ -15,6 +15,7 @@ void GlowingLabelsBox::onNanoDisplay()
 
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     //Box background
     beginPath();
@@ -26,10 +27,10 @@ void GlowingLabelsBox::onNanoDisplay()
 
     closePath();
 
-    const float labelSize = 14.0f;
-    const float labelMarginLeft = 4.0f;
-    const float labelMarginTop = 4.0f;
-    const float labelVerticalSpacing = labelSize + 7.0f;
+    const float labelSize = 14.0f * scaleFactor;
+    const float labelMarginLeft = 4.0f * scaleFactor;
+    const float labelMarginTop = 4.0f * scaleFactor;
+    const float labelVerticalSpacing = labelSize + 7.0f * scaleFactor;
 
     //Text
     for (int i = 0; i < getLabelCount(); ++i)

@@ -11,9 +11,9 @@ MenuWidget::MenuWidget(Widget *widget) noexcept
       max_item_w_px(0),
       hover_i(-1),
       selected_i(-1),
-      margin(Margin(7, 15, 7, 13)),
-      font_item_size(17.0f),
-      font_section_size(14.0f),
+      margin(Margin(7*getScaleFactor(), 15*getScaleFactor(), 7*getScaleFactor(), 13*getScaleFactor())),
+      font_item_size(17.0f*getScaleFactor()),
+      font_section_size(14.0f*getScaleFactor()),
       font_item_color(255, 255, 255),
       font_item_hover_color(0, 0, 0),
       font_section_color(100, 100, 100),
@@ -137,6 +137,7 @@ void MenuWidget::onNanoDisplay()
 
     const float h = NanoSubWidget::getHeight();
     const float w = NanoSubWidget::getWidth();
+    const float scaleFactor = getScaleFactor();
 
     beginPath();
 
@@ -150,7 +151,7 @@ void MenuWidget::onNanoDisplay()
 
     fillColor(background_color);
     strokeColor(border_color);
-    strokeWidth(3.0f);
+    strokeWidth(3.0f * scaleFactor);
 
     rect(0, 0, w, h);
     fill();

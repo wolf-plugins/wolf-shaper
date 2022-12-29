@@ -89,11 +89,11 @@ bool NanoButton::onMouse(const MouseEvent &ev)
 {
     switch (ev.button)
     {
-    case 1:
+    case kMouseButtonLeft:
         return leftClick(ev);
-    case 2:
+    case kMouseButtonMiddle:
         return middleClick(ev);
-    case 3:
+    case kMouseButtonRight:
         return rightClick(ev);
     }
 

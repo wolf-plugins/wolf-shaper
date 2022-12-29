@@ -15,10 +15,12 @@ RemoveDCSwitch::RemoveDCSwitch(Widget *widget, Size<uint> size) noexcept
       fMainRectColor(Color(73, 73, 73, 255)),
       fMainRectColorTransition(0.150f, &fMainRectColor, Color(234, 151, 39, 255))
 {
-    const float socketMargin = 2.0f; //how much we can see the socket behind the main square
+    const float scaleFactor = getScaleFactor();
+
+    const float socketMargin = 2.0f * scaleFactor; //how much we can see the socket behind the main square
     const float doubleSocketMargin = socketMargin * 2.0f;
 
-    const float glowMargin = 3.0f; //the space around the square we're keeping for glow
+    const float glowMargin = 3.0f * scaleFactor; //the space around the square we're keeping for glow
     const float doubleGlowMargin = glowMargin * 2.0f;
 
     const float mainRectTopLeft = glowMargin + socketMargin;
@@ -86,10 +88,12 @@ void RemoveDCSwitch::onStateChanged()
 
 void RemoveDCSwitch::draw()
 {
-    const float socketMargin = 2.0f; //how much we can see the socket behind the main square
+    const float scaleFactor = getScaleFactor();
+
+    const float socketMargin = 2.0f * scaleFactor; //how much we can see the socket behind the main square
     const float doubleSocketMargin = socketMargin * 2.0f;
 
-    const float glowMargin = 3.0f; //the space around the square we're keeping for glow
+    const float glowMargin = 3.0f * scaleFactor; //the space around the square we're keeping for glow
     const float doubleGlowMargin = glowMargin * 2.0f;
 
     const float mainRectTopLeft = glowMargin + socketMargin;
@@ -99,9 +103,10 @@ void RemoveDCSwitch::draw()
     //glow
     beginPath();
 
-    fillPaint(boxGradient(mainRectTopLeft, mainRectTopLeft, mainRectWidth, mainRectHeight, 4.0f, 12.6f, fGlowIcol, Color(210, 123, 30, 0)));
+    fillPaint(boxGradient(mainRectTopLeft, mainRectTopLeft, mainRectWidth, mainRectHeight,
+                          4.0f * scaleFactor, 12.6f * scaleFactor, fGlowIcol, Color(210, 123, 30, 0)));
 
-    roundedRect(0, 0, getWidth(), getHeight(), 6.0f);
+    roundedRect(0, 0, getWidth(), getHeight(), 6.0f * scaleFactor);
     fill();
 
     closePath();
@@ -111,7 +116,7 @@ void RemoveDCSwitch::draw()
 
     fillColor(fSocketColor);
 
-    roundedRect(glowMargin, glowMargin, getWidth() - doubleGlowMargin, getHeight() - doubleGlowMargin, 4.0f);
+    roundedRect(glowMargin, glowMargin, getWidth() - doubleGlowMargin, getHeight() - doubleGlowMargin, 4.0f * scaleFactor);
 
     fill();
 
@@ -122,7 +127,7 @@ void RemoveDCSwitch::draw()
 
     fillColor(fMainRectColor);
 
-    roundedRect(mainRectTopLeft, mainRectTopLeft, mainRectWidth, mainRectHeight, 2.0f);
+    roundedRect(mainRectTopLeft, mainRectTopLeft, mainRectWidth, mainRectHeight, 2.0f * scaleFactor);
     fill();
 
     closePath();

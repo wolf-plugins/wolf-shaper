@@ -57,6 +57,7 @@ protected:
 
     GraphWidget *parent;
     Color color;
+    double scaleFactor;
 
     bool grabbed;
 };
@@ -138,6 +139,7 @@ protected:
 
 private:
     int index;
+    double scaleFactor;
     Circle<int> surface;
 
     GraphVertexType type;

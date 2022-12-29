@@ -5,11 +5,11 @@ START_NAMESPACE_DISTRHO
 
 VolumeKnob::VolumeKnob(Widget *widget, Size<uint> size) noexcept
     : NanoKnob(widget, size)
-
 {
+    const float scaleFactor = getScaleFactor();
     const float radius = size.getHeight() / 2.0f;
-    const float gaugeWidth = 3.5f;
-    const float diameter = (radius - gaugeWidth) * 2.0f - 4;
+    const float gaugeWidth = 3.5f * scaleFactor;
+    const float diameter = (radius - gaugeWidth) * 2.0f - 4 * scaleFactor;
 
     fKnobICol = Color(86, 92, 95, 255);
 
@@ -18,7 +18,7 @@ VolumeKnob::VolumeKnob(Widget *widget, Size<uint> size) noexcept
 
     fKnobDiameter = diameter;
 
-    fGrowAnimation = new FloatTransition(0.100f, &fKnobDiameter, fKnobDiameter - 7);
+    fGrowAnimation = new FloatTransition(0.100f, &fKnobDiameter, fKnobDiameter - 7 * scaleFactor);
     fHoverAnimation = new ColorTransition(0.200f, &fKnobOCol, fKnobTargetOCol);
 
     getApp().addIdleCallback(this);
@@ -82,6 +82,7 @@ void VolumeKnob::onMouseUp()
 
 void VolumeKnob::draw()
 {
+    const float scaleFactor = getScaleFactor();
     const float height = getHeight();
     const Color color = getColor();
 
@@ -93,15 +94,15 @@ void VolumeKnob::draw()
 
     const float radius = height / 2.0f;
 
-    const float indicatorLineHeight = fKnobDiameter / 2.0f - 8;
-    const float indicatorLineWidth = 3.0f;
-    const float indicatorLineMarginTop = 4.0f;
+    const float indicatorLineHeight = fKnobDiameter / 2.0f - 8 * scaleFactor;
+    const float indicatorLineWidth = 3.0f * scaleFactor;
+    const float indicatorLineMarginTop = 4.0f * scaleFactor;
 
-    const float gaugeWidth = 3.5f;
+    const float gaugeWidth = 3.5f * scaleFactor;
     Color gaugeColor = Color(0, 0, 40, 255);
     gaugeColor.interpolate(color, 0.4f);
 
-    const float margin = 3.0f;
+    const float margin = 3.0f * scaleFactor;
 
     //Gauge (empty)
     beginPath();
@@ -123,7 +124,7 @@ void VolumeKnob::draw()
     beginPath();
 
     strokeWidth(2.0f);
-    strokePaint(linearGradient(0, 0, 0, height - 10, Color(190, 190, 190, 0.f), Color(23, 23, 23, 1.f)));
+    strokePaint(linearGradient(0, 0, 0, height - 10 * scaleFactor, Color(190, 190, 190, 0.f), Color(23, 23, 23, 1.f)));
 
     Paint knobPaint = linearGradient(radius, gaugeWidth, radius, fKnobDiameter, fKnobICol, fKnobOCol);
     fillPaint(knobPaint);

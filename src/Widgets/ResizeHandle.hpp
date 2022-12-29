@@ -1,8 +1,6 @@
 #ifndef WOLF_RESIZE_HANDLE_HPP_INCLUDED
 #define WOLF_RESIZE_HANDLE_HPP_INCLUDED
 
-#include "NanoVG.hpp"
-#include "Widget.hpp"
 #include "WolfWidget.hpp"
 
 START_NAMESPACE_DISTRHO
@@ -13,9 +11,7 @@ public:
     class Callback
     {
     public:
-        virtual ~Callback()
-        {
-        }
+        virtual ~Callback() {}
         virtual void resizeHandleMoved(const int width, const int height) = 0;
     };
 

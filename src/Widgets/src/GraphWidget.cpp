@@ -20,7 +20,7 @@ const char *graphDefaultState = "0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;"
 
 GraphWidget::GraphWidget(UI *ui, Size<uint> size)
     : WolfWidget(ui),
-      fMargin(16, 16, 16, 16),
+      fMargin(16*getScaleFactor(), 16*getScaleFactor(), 16*getScaleFactor(), 16*getScaleFactor()),
       ui(ui),
       graphVerticesPool(wolf::maxVertices, this, GraphVertexType::Middle),
       focusedElement(nullptr),
@@ -180,11 +180,12 @@ void GraphWidget::drawGrid()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
-    const float lineWidth = 1.0f;
+    const float lineWidth = 1.0f * scaleFactor;
 
-    const int squaresPerRow = 8.0f;
-    const int gridMiddleLineIndex = squaresPerRow / 2.0f;
+    const int squaresPerRow = 8;
+    const int gridMiddleLineIndex = squaresPerRow / 2;
 
     const float verticalStep = width / squaresPerRow;
     const float horizontalStep = height / squaresPerRow;
@@ -364,12 +365,13 @@ void GraphWidget::drawAlignmentLines()
     const int y = focusedElement->getY();
     const int width = getWidth();
     const int height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     translate(0.5f, 0.5f);
 
     beginPath();
 
-    strokeWidth(1.0f);
+    strokeWidth(1.0f * scaleFactor);
     strokeColor(CONFIG_NAMESPACE::alignment_lines);
 
     moveTo(x, 0);
@@ -477,6 +479,7 @@ void GraphWidget::drawInputIndicator()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     if (fInput <= 0.0f)
         return;
@@ -488,7 +491,7 @@ void GraphWidget::drawInputIndicator()
     beginPath();
 
     strokeColor(CONFIG_NAMESPACE::input_volume_indicator);
-    strokeWidth(1.0f);
+    strokeWidth(1.0f * scaleFactor);
 
     moveTo(inputIndicatorX, 0);
     lineTo(inputIndicatorX, height);
@@ -507,7 +510,7 @@ void GraphWidget::drawInputIndicator()
     fillColor(CONFIG_NAMESPACE::playhead_circle_fill);
     strokeColor(CONFIG_NAMESPACE::playhead_circle_stroke);
 
-    circle(inputIndicatorX, circleY, 3.5f);
+    circle(inputIndicatorX, circleY, 3.5f * scaleFactor);
     fill();
     stroke();
     closePath();
@@ -520,15 +523,17 @@ void GraphWidget::idleCallback()
 
 void GraphWidget::drawInOutLabels()
 {
+    const float scaleFactor = getScaleFactor();
+
     fontFace("chivo_italic");
-    fontSize(36.f);
+    fontSize(36.f * scaleFactor);
     fillColor(255, 255, 255, 125);
 
     textAlign(ALIGN_BOTTOM | ALIGN_RIGHT);
-    text(getWidth() - 5, getHeight(), "In", NULL);
+    text(getWidth() - 5 * scaleFactor, getHeight(), "In", NULL);
 
     textAlign(ALIGN_TOP | ALIGN_LEFT);
-    text(5, 0, "Out", NULL);
+    text(5 * scaleFactor, 0, "Out", NULL);
 }
 
 void GraphWidget::drawVertices()
@@ -548,12 +553,13 @@ void GraphWidget::onNanoDisplay()
 {
     const float width = getWidth();
     const float height = getHeight();
+    const float scaleFactor = getScaleFactor();
 
     beginPath();
 
     fillColor(CONFIG_NAMESPACE::graph_margin);
     strokeColor(CONFIG_NAMESPACE::side_borders);
-    strokeWidth(1.0f);
+    strokeWidth(1.0f * scaleFactor);
 
     rect(0.f, 0.f, width, height);
 
@@ -564,13 +570,13 @@ void GraphWidget::onNanoDisplay()
 
     beginPath();
 
-    const float topBorderWidth = 2.0f;
+    const float topBorderWidth = 2.0f * scaleFactor;
 
     strokeColor(CONFIG_NAMESPACE::top_border);
     strokeWidth(topBorderWidth);
 
-    moveTo(0, 1);
-    lineTo(width, 1);
+    moveTo(0, 1 * scaleFactor);
+    lineTo(width, 1 * scaleFactor);
 
     stroke();
 
@@ -589,7 +595,8 @@ void GraphWidget::onNanoDisplay()
         drawAlignmentLines();
 
     drawGradient();
-    drawGraphLine(CONFIG_NAMESPACE::graph_edges_stroke_width, CONFIG_NAMESPACE::graph_edges_foreground_normal, CONFIG_NAMESPACE::graph_edges_foreground_focused); //inner
+    drawGraphLine(CONFIG_NAMESPACE::graph_edges_stroke_width * scaleFactor,
+                  CONFIG_NAMESPACE::graph_edges_foreground_normal, CONFIG_NAMESPACE::graph_edges_foreground_focused); //inner
 
     drawInputIndicator();
 

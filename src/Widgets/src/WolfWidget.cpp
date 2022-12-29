@@ -4,7 +4,8 @@
 START_NAMESPACE_DISTRHO
 
 WolfWidget::WolfWidget(Widget *widget) noexcept
-    : NanoSubWidget(widget)
+    : NanoSubWidget(widget),
+      fScaleFactor(getTopLevelWidget()->getScaleFactor())
 {
 }
 
@@ -13,12 +14,17 @@ void WolfWidget::setDescription(const char *description)
     fDescription = description;
 }
 
-const char *WolfWidget::getDescription()
+const char *WolfWidget::getDescription() const
 {
     return fDescription;
 }
 
-bool WolfWidget::canBeFocused()
+double WolfWidget::getScaleFactor() const
+{
+    return fScaleFactor;
+}
+
+bool WolfWidget::canBeFocused() const
 {
     return true;
 }
