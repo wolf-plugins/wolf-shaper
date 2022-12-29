@@ -201,33 +201,19 @@ protected:
         }
     }
 
-    void initState(uint32_t index, String &stateKey, String &defaultStateValue) override
-    {
-        switch (index)
-        {
-        case 0:
-            stateKey = "graph";
-            break;
-        }
-
-        // generated using fprintf(stderr, "%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
-        defaultStateValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
-    }
-
-    /* void initState(uint32_t index, State &state) override
+    void initState(uint32_t index, State &state) override
     {
         switch (index)
         {
         case 0:
             state.key = "graph";
             state.label = "Graph";
-            state.hints = kStateIsHostWritable;
 
-            // printf("%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
+            // generated using printf("%A,%A,%A,%d;%A,%A,%A,%d;\n", 0.0f, 0.0f, 0.0f, wolf::CurveType::Exponential, 1.0f, 1.0f, 0.0f, wolf::CurveType::Exponential);
             state.defaultValue = String("0x0p+0,0x0p+0,0x0p+0,0;0x1p+0,0x1p+0,0x0p+0,0;");
             break;
         }
-    } */
+    }
 
     void setState(const char *key, const char *value) override
     {
