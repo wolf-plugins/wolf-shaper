@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   id="svg8"
+   version="1.1"
+   viewBox="0 0 33.866666 39.487513"
+   height="149.24414"
+   width="128"
+   sodipodi:docname="wolf-logo.svg"
+   inkscape:export-filename="/unfa/Projects/Patrick Desaulniers/Wolf Logo/Wolf clean 01.svg.png"
+   inkscape:export-xdpi="384"
+   inkscape:export-ydpi="384"
+   inkscape:version="1.1 (c4e8f9ed74, 2021-05-24)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:dc="http://purl.org/dc/elements/1.1/">
+  <title
+     id="title846">Wolf Logo</title>
+  <sodipodi:namedview
+     pagecolor="#000000"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1600"
+     inkscape:window-height="900"
+     id="namedview39"
+     showgrid="false"
+     inkscape:zoom="2.8284271"
+     inkscape:cx="44.017397"
+     inkscape:cy="88.918678"
+     inkscape:window-x="1920"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg8"
+     inkscape:pagecheckerboard="0"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs2" />
+  <metadata
+     id="metadata5">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>Wolf Logo</dc:title>
+        <dc:date>2018-09-15</dc:date>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Tobiasz 'unfa' Karoń</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:description>Logo design for the Wolf plug-in series by Patric Desaulniers</dc:description>
+        <dc:contributor>
+          <cc:Agent>
+            <dc:title>Designed with feedback from Patrick Desaulniers.</dc:title>
+          </cc:Agent>
+        </dc:contributor>
+        <cc:license
+           rdf:resource="http://creativecommons.org/publicdomain/zero/1.0/" />
+      </cc:Work>
+      <cc:License
+         rdf:about="http://creativecommons.org/publicdomain/zero/1.0/">
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Reproduction" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#Distribution" />
+        <cc:permits
+           rdf:resource="http://creativecommons.org/ns#DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <g
+     transform="translate(-76.464583,-213.12615)"
+     id="layer1">
+    <path
+       id="circle1038"
+       transform="matrix(0.26458333,0,0,0.26458333,59.53125,196.19385)"
+       d="m 128,63.996094 a 63.999857,63.999857 0 0 0 -0.12305,0.0078 C 92.587622,64.07065 63.999923,92.695025 64,128 c -6.8e-5,31.41392 22.639378,57.5226 52.48828,62.94727 l -0.76953,-1.65821 c -25.544987,-5.6786 -44.650233,-28.45766 -44.650391,-55.71289 8.4e-5,-14.42642 5.363737,-27.59247 14.189453,-37.642576 l 49.289068,117.306636 -1.69727,-109.77929 26.03711,75.14648 c 4.84012,-3.20557 9.03486,-7.23759 12.40234,-11.88867 l 2.79102,-67.050781 c 7.0133,9.482291 11.16594,21.208731 11.16601,33.908201 -1.5e-4,26.92846 -18.64995,49.48782 -43.73437,55.50195 l 0.008,1.47852 C 170.37085,184.35027 192.00007,158.70643 192,128 192.00008,92.698953 163.41868,64.076998 128.13477,64.003906 A 63.999857,63.999857 0 0 0 128,63.996094 Z m -9.56055,13.333984 3.26367,71.115232 -22.378901,-64.134763 c 5.796971,-3.399973 12.245581,-5.801712 19.115231,-6.980469 z m 19.59766,0.02734 c 8.45188,1.475387 16.2607,4.80611 22.99805,9.5625 l -1.29688,57.757812 z"
+       style="fill:#ffffff;stroke:none;stroke-width:0;stroke-miterlimit:4;stroke-dasharray:none"
+       inkscape:connector-curvature="0" />
+  </g>
+</svg>
