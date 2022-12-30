@@ -18,33 +18,41 @@ BINDIR ?= $(PREFIX)/bin
 LIBDIR ?= $(PREFIX)/lib
 DSSI_DIR ?= $(LIBDIR)/dssi
 LADSPA_DIR ?= $(LIBDIR)/ladspa
+CLAP_DIR ?= $(LIBDIR)/clap
 
 ifneq ($(MACOS_OR_WINDOWS),true)
 LV2_DIR ?= $(LIBDIR)/lv2
-VST_DIR ?= $(LIBDIR)/vst
+VST2_DIR ?= $(LIBDIR)/vst
+VST3_DIR ?= $(LIBDIR)/vst3
 endif
 ifeq ($(MACOS),true)
 LV2_DIR ?= /Library/Audio/Plug-Ins/LV2
-VST_DIR ?= /Library/Audio/Plug-Ins/VST
+VST2_DIR ?= /Library/Audio/Plug-Ins/VST
+VST3_DIR ?= /Library/Audio/Plug-Ins/VST3
 endif
 ifeq ($(WINDOWS),true)
 LV2_DIR ?= $(COMMONPROGRAMFILES)/LV2
-VST_DIR ?= $(COMMONPROGRAMFILES)/VST2
+VST2_DIR ?= $(COMMONPROGRAMFILES)/VST2
+VST3_DIR ?= $(COMMONPROGRAMFILES)/VST3
 endif
 
 USER_DSSI_DIR ?= $(HOME)/.dssi
 USER_LADSPA_DIR ?= $(HOME)/.ladspa
+USER_CLAP_DIR ?= $(HOME)/.clap
 ifneq ($(MACOS_OR_WINDOWS),true)
 USER_LV2_DIR ?= $(HOME)/.lv2
-USER_VST_DIR ?= $(HOME)/.vst
+USER_VST2_DIR ?= $(HOME)/.vst
+USER_VST3_DIR ?= $(HOME)/.vst3
 endif
 ifeq ($(MACOS),true)
 USER_LV2_DIR ?= $(HOME)/Library/Audio/Plug-Ins/LV2
-USER_VST_DIR ?= $(HOME)/Library/Audio/Plug-Ins/VST
+USER_VST2_DIR ?= $(HOME)/Library/Audio/Plug-Ins/VST
+USER_VST3_DIR ?= $(HOME)/Library/Audio/Plug-Ins/VST3
 endif
 ifeq ($(WINDOWS),true)
 USER_LV2_DIR ?= $(APPDATA)/LV2
-USER_VST_DIR ?= $(APPDATA)/VST
+USER_VST2_DIR ?= $(APPDATA)/VST
+USER_VST3_DIR ?= $(APPDATA)/VST3
 endif
 
 # --------------------------------------------------------------
@@ -204,8 +212,16 @@ ifeq ($(BUILD_LADSPA),true)
 	  install -m755 $(TARGET_DIR)/$(NAME)-ladspa$(LIB_EXT) $(DESTDIR)$(LADSPA_DIR)
 endif
 ifeq ($(BUILD_VST2),true)
-	@mkdir -p -m755 $(DESTDIR)$(VST_DIR) && \
-	  install -m755 $(TARGET_DIR)/$(NAME)-vst$(LIB_EXT) $(DESTDIR)$(VST_DIR)
+	@mkdir -p -m755 $(DESTDIR)$(VST2_DIR) && \
+	  install -m755 $(TARGET_DIR)/$(NAME)-vst$(LIB_EXT) $(DESTDIR)$(VST2_DIR)
+endif
+ifeq ($(BUILD_VST3),true)
+	@mkdir -p -m755 $(DESTDIR)$(VST3_DIR) && \
+	  cp -r $(TARGET_DIR)/$(NAME).vst3 $(DESTDIR)$(VST3_DIR)
+endif
+ifeq ($(BUILD_CLAP),true)
+	@mkdir -p -m755 $(DESTDIR)$(CLAP_DIR) && \
+	  install -m755 $(TARGET_DIR)/$(NAME).clap $(DESTDIR)$(CLAP_DIR)
 endif
 ifeq ($(BUILD_LV2),true)
 	@mkdir -p -m755 $(DESTDIR)$(LV2_DIR)/$(NAME).lv2 && \
@@ -235,8 +251,16 @@ ifeq ($(BUILD_LADSPA),true)
 	  install -m755 $(TARGET_DIR)/$(NAME)-ladspa$(LIB_EXT) $(USER_LADSPA_DIR)
 endif
 ifeq ($(BUILD_VST2),true)
-	@mkdir -p -m755 $(USER_VST_DIR) && \
-	  install -m755 $(TARGET_DIR)/$(NAME)-vst$(LIB_EXT) $(USER_VST_DIR)
+	@mkdir -p -m755 $(USER_VST2_DIR) && \
+	  install -m755 $(TARGET_DIR)/$(NAME)-vst$(LIB_EXT) $(USER_VST2_DIR)
+endif
+ifeq ($(BUILD_VST3),true)
+	@mkdir -p -m755 $(USER_VST3_DIR) && \
+	  cp -r $(TARGET_DIR)/$(NAME).vst3 $(USER_VST3_DIR)
+endif
+ifeq ($(BUILD_CLAP),true)
+	@mkdir -p -m755 $(USER_CLAP_DIR) && \
+	  install -m755 $(TARGET_DIR)/$(NAME).clap $(USER_CLAP_DIR)
 endif
 ifeq ($(BUILD_LV2),true)
 	@mkdir -p -m755 $(USER_LV2_DIR)/$(NAME).lv2 && \
