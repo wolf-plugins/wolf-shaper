@@ -32,10 +32,12 @@ WolfShaperUI::WolfShaperUI()
     const uint knobsLabelBoxWidth = 66 * scaleFactor;
     const uint knobsLabelBoxHeight = 21 * scaleFactor;
 
-    setGeometryConstraints(minWidth * scaleFactor, minHeight * scaleFactor);
+    setGeometryConstraints(minWidth * scaleFactor, minHeight * scaleFactor, false, false);
 
     if (scaleFactor != 1.0)
+    {
         setSize(DISTRHO_UI_DEFAULT_WIDTH * scaleFactor, DISTRHO_UI_DEFAULT_HEIGHT * scaleFactor);
+    }
 
     fGraphWidget = new GraphWidget(this, Size<uint>(width - 4 * 2 * scaleFactor,
                                                     height - (4 * 2 - 122) * scaleFactor));
@@ -134,6 +136,11 @@ WolfShaperUI::WolfShaperUI()
     fHandleResize->setCallback(this);
     fHandleResize->setMinSize(minWidth * scaleFactor, minHeight * scaleFactor);
 #endif
+
+    if (getWindow().isResizable())
+    {
+        fHandleResize->hide();
+    }
 
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32 * scaleFactor, 32 * scaleFactor));
     fButtonResetGraph->setCallback(this);
