@@ -1,5 +1,4 @@
-# Wolf Shaper
-[![Build Status](https://img.shields.io/github/actions/workflow/status/wolf-plugins/wolf-shaper/dpf-makefile-action.yml?branch=master)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3Adpf-makefile-action)
+# Wolf Shaper [![Build Status](https://img.shields.io/github/actions/workflow/status/wolf-plugins/wolf-shaper/dpf-makefile-action.yml?branch=master)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3Adpf-makefile-action)
 
 ![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/docs/images/screenshot.png)
 
@@ -41,24 +40,24 @@ Wolf Shaper is available in the [FreeBSD Ports collection](https://www.freshport
 
 ## Build manually
 
-First, clone the repo (note the "--recursive" argument):
+First, clone the repo (note the `--recursive` argument):
 
 ```
 git clone --recursive https://github.com/wolf-plugins/wolf-shaper.git
 cd wolf-shaper
 ```
 
-Then:
+Then, run the following command:
 
 ```
-BUILD_VST2=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
+BUILD_VST2=true BUILD_VST3=true BUILD_CLAP=true BUILD_LV2=true BUILD_DSSI=true BUILD_JACK=true make
 ```
 
-Prepend WIN32=true or MACOS=true to the command if applicable.
+You may also prepend `WIN32=true` or `MACOS=true` to the command, if applicable.
 
-All plugin builds will then be placed in the bin folder. Copy them to their appropriate place so that your plugin host can find them, and you're done :)
+All plugin builds will be placed in the bin folder. Copy them to an appropriate place so that your plugin host can find them, and you're done :)
 
-## Updating
+### Updating the source code
 
 This project uses git submodules. Thus, to update your local copy of the repo, you need to run the following commands:
 
