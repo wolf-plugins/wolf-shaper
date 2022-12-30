@@ -1,4 +1,4 @@
-# Wolf Shaper [![Build Status](https://img.shields.io/github/actions/workflow/status/wolf-plugins/wolf-shaper/dpf-makefile-action.yml?branch=master)](https://github.com/wolf-plugins/wolf-shaper/actions?query=workflow%3Adpf-makefile-action)
+# Wolf Shaper [![Build Status](https://img.shields.io/github/actions/workflow/status/wolf-plugins/wolf-shaper/dpf-makefile-action.yml?branch=master)](https://github.com/wolf-plugins/wolf-shaper/actions/workflows/dpf-makefile-action.yml)
 
 ![Wolf Shaper](https://raw.githubusercontent.com/wolf-plugins/wolf-shaper/master/docs/images/screenshot.png)
 
