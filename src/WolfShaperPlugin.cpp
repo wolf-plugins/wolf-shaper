@@ -89,7 +89,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 2.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramWet:
             parameter.name = "Wet";
@@ -105,7 +105,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramRemoveDC:
             parameter.name = "Remove DC Offset";
