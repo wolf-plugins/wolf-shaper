@@ -141,12 +141,12 @@ WolfShaperUI::WolfShaperUI()
     fHandleResize = new ResizeHandle(this, Size<uint>(18 * scaleFactor, 18 * scaleFactor));
     fHandleResize->setCallback(this);
     fHandleResize->setMinSize(minWidth * scaleFactor, minHeight * scaleFactor);
-#endif
-
+        
     if (getWindow().isResizable())
     {
         fHandleResize->hide();
     }
+#endif
 
     fButtonResetGraph = new ResetGraphButton(this, Size<uint>(32 * scaleFactor, 32 * scaleFactor));
     fButtonResetGraph->setCallback(this);
