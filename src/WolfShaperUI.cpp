@@ -49,6 +49,7 @@ WolfShaperUI::WolfShaperUI()
     fGraphBar->setStrokeWidth(4.0f * scaleFactor);
 
     fSwitchRemoveDC = new RemoveDCSwitch(this, Size<uint>(30 * scaleFactor, 29 * scaleFactor));
+    fSwitchRemoveDC->setDown(true);
     fSwitchRemoveDC->setCallback(this);
     fSwitchRemoveDC->setId(paramRemoveDC);
 
@@ -74,6 +75,7 @@ WolfShaperUI::WolfShaperUI()
     fKnobPreGain->setRange(0.0f, 2.0f);
     fKnobPreGain->setId(paramPreGain);
     fKnobPreGain->setColor(Color(255, 197, 246, 255));
+    fKnobPreGain->setValue(1.0f, false);
 
     fLabelWet = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelWet->setText("WET");
@@ -83,6 +85,7 @@ WolfShaperUI::WolfShaperUI()
     fKnobWet->setRange(0.0f, 1.0f);
     fKnobWet->setId(paramWet);
     fKnobWet->setColor(Color(136, 228, 255));
+    fKnobWet->setValue(1.0f, false);
 
     fLabelPostGain = new LabelBox(this, Size<uint>(knobsLabelBoxWidth, knobsLabelBoxHeight));
     fLabelPostGain->setText("POST");
@@ -92,12 +95,14 @@ WolfShaperUI::WolfShaperUI()
     fKnobPostGain->setRange(0.0f, 1.0f);
     fKnobPostGain->setId(paramPostGain);
     fKnobPostGain->setColor(Color(143, 255, 147, 255));
+    fKnobPostGain->setValue(1.0f, false);
 
     fKnobHorizontalWarp = new VolumeKnob(this, Size<uint>(54 * scaleFactor, 54 * scaleFactor));
     fKnobHorizontalWarp->setCallback(this);
     fKnobHorizontalWarp->setRange(0.0f, 1.0f);
     fKnobHorizontalWarp->setId(paramHorizontalWarpAmount);
     fKnobHorizontalWarp->setColor(Color(255, 225, 169, 255));
+    fKnobHorizontalWarp->setValue(0.0f, false);
 
     fLabelListHorizontalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3 * scaleFactor, knobsLabelBoxHeight));
     fLabelListHorizontalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});
@@ -107,6 +112,7 @@ WolfShaperUI::WolfShaperUI()
     fKnobVerticalWarp->setRange(0.0f, 1.0f);
     fKnobVerticalWarp->setId(paramVerticalWarpAmount);
     fKnobVerticalWarp->setColor(Color(255, 225, 169, 255));
+    fKnobVerticalWarp->setValue(0.f, false);
 
     fLabelListVerticalWarpType = new LabelBoxList(this, Size<uint>(knobsLabelBoxWidth + 3 * scaleFactor, knobsLabelBoxHeight));
     fLabelListVerticalWarpType->setLabels({"–", "BEND +", "BEND -", "BEND +/-", "SKEW +", "SKEW -", "SKEW +/-"});

@@ -89,7 +89,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 2.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramWet:
             parameter.name = "Wet";
@@ -105,7 +105,7 @@ protected:
             parameter.ranges.min = 0.0f;
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 1.0f;
-            parameter.hints = kParameterIsAutomatable | kParameterIsLogarithmic;
+            parameter.hints = kParameterIsAutomatable;
             break;
         case paramRemoveDC:
             parameter.name = "Remove DC Offset";
@@ -123,6 +123,22 @@ protected:
             parameter.ranges.max = 4.0f;
             parameter.ranges.def = 0.0f;
             parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
+            parameter.enumValues.count = 5;
+            parameter.enumValues.restrictedMode = true;
+            {
+                ParameterEnumerationValue* const values = new ParameterEnumerationValue[5];
+                parameter.enumValues.values = values;
+                values[0].label = "None";
+                values[0].value = 0.f;
+                values[1].label = "2x";
+                values[1].value = 1.f;
+                values[2].label = "4x";
+                values[2].value = 2.f;
+                values[3].label = "8x";
+                values[3].value = 3.f;
+                values[4].label = "16x";
+                values[4].value = 4.f;
+            }
             break;
         case paramBipolarMode:
             parameter.name = "Bipolar Mode";
@@ -131,6 +147,16 @@ protected:
             parameter.ranges.max = 1.0f;
             parameter.ranges.def = 0.0f;
             parameter.hints = kParameterIsAutomatable | kParameterIsBoolean | kParameterIsInteger;
+            parameter.enumValues.count = 2;
+            parameter.enumValues.restrictedMode = true;
+            {
+                ParameterEnumerationValue* const values = new ParameterEnumerationValue[2];
+                parameter.enumValues.values = values;
+                values[0].label = "Unipolar";
+                values[0].value = 0.f;
+                values[1].label = "Bipolar";
+                values[1].value = 1.f;
+            }
             break;
         case paramHorizontalWarpType:
             //None, Bend +, Bend -, Bend +/-, Skew +, Skew -, Skew +/-
@@ -140,6 +166,26 @@ protected:
             parameter.ranges.max = 6.0f;
             parameter.ranges.def = 0.0f;
             parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
+            parameter.enumValues.count = 7;
+            parameter.enumValues.restrictedMode = true;
+            {
+                ParameterEnumerationValue* const values = new ParameterEnumerationValue[7];
+                parameter.enumValues.values = values;
+                values[0].label = "None";
+                values[0].value = 0.f;
+                values[1].label = "Bend +";
+                values[1].value = 1.f;
+                values[2].label = "Bend -";
+                values[2].value = 2.f;
+                values[3].label = "Bend +/-";
+                values[3].value = 3.f;
+                values[4].label = "Skew +";
+                values[4].value = 4.f;
+                values[5].label = "Skew -";
+                values[5].value = 5.f;
+                values[6].label = "Skew +/-";
+                values[6].value = 6.f;
+            }
             break;
         case paramHorizontalWarpAmount:
             parameter.name = "H Warp Amount";
@@ -157,6 +203,26 @@ protected:
             parameter.ranges.max = 6.0f;
             parameter.ranges.def = 0.0f;
             parameter.hints = kParameterIsAutomatable | kParameterIsInteger;
+            parameter.enumValues.count = 7;
+            parameter.enumValues.restrictedMode = true;
+            {
+                ParameterEnumerationValue* const values = new ParameterEnumerationValue[7];
+                parameter.enumValues.values = values;
+                values[0].label = "None";
+                values[0].value = 0.f;
+                values[1].label = "Bend +";
+                values[1].value = 1.f;
+                values[2].label = "Bend -";
+                values[2].value = 2.f;
+                values[3].label = "Bend +/-";
+                values[3].value = 3.f;
+                values[4].label = "Skew +";
+                values[4].value = 4.f;
+                values[5].label = "Skew -";
+                values[5].value = 5.f;
+                values[6].label = "Skew +/-";
+                values[6].value = 6.f;
+            }
             break;
         case paramVerticalWarpAmount:
             parameter.name = "V Warp Amount";
