@@ -36,6 +36,7 @@
 #endif
 
 #define DISTRHO_PLUGIN_LV2_CATEGORY "lv2:WaveshaperPlugin"
+#define DISTRHO_PLUGIN_VST3_CATEGORIES "Fx|Distortion|Stereo"
 
 /*
  * See https://lv2plug.in/ns/lv2core#hardRTCapable
