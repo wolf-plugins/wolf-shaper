@@ -8,7 +8,6 @@ LabelContainer::LabelContainer(Widget *widget, Size<uint> size) noexcept
       fSelectedIndex(0)
 {
     setSize(size);
-
     loadSharedResources();
 }
 
@@ -25,6 +24,7 @@ float LabelContainer::getFontSize()
 void LabelContainer::setSelectedIndex(int index)
 {
     fSelectedIndex = wolf::clamp(index, 0, getLabelCount() - 1);
+    repaint();
 }
 
 int LabelContainer::getSelectedIndex()

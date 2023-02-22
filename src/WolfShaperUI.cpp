@@ -281,7 +281,6 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
 
         fGraphWidget->setHorizontalWarpType((wolf::WarpType)warpType);
         fLabelListHorizontalWarpType->setSelectedIndex(warpType);
-
         break;
     }
     case paramHorizontalWarpAmount:
@@ -293,7 +292,6 @@ void WolfShaperUI::parameterChanged(uint32_t index, float value)
 
         fGraphWidget->setVerticalWarpType((wolf::WarpType)warpType);
         fLabelListVerticalWarpType->setSelectedIndex(warpType);
-
         break;
     }
     case paramVerticalWarpAmount:
@@ -312,8 +310,6 @@ void WolfShaperUI::stateChanged(const char *key, const char *value)
 {
     if (std::strcmp(key, "graph") == 0)
         fGraphWidget->rebuildFromString(value);
-
-    repaint();
 }
 
 void WolfShaperUI::onNanoDisplay()
@@ -443,20 +439,9 @@ void WolfShaperUI::nanoButtonClicked(NanoButton *nanoButton)
     }
 }
 
-void WolfShaperUI::nanoWheelValueChanged(NanoWheel *nanoWheel, const int value)
+void WolfShaperUI::nanoWheelValueChanged(NanoWheel *, const int value)
 {
-    const uint id = nanoWheel->getId();
-
     setParameterValue(paramOversample, value);
-
-    if (id == paramHorizontalWarpType)
-    {
-        fGraphWidget->setHorizontalWarpType((wolf::WarpType)std::round(value));
-    }
-    else if (id == paramVerticalWarpType)
-    {
-        fGraphWidget->setVerticalWarpType((wolf::WarpType)std::round(value));
-    }
 }
 
 void WolfShaperUI::nanoKnobValueChanged(NanoKnob *nanoKnob, const float value)
