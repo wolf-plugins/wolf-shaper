@@ -68,7 +68,7 @@ protected:
 
     uint32_t getVersion() const noexcept override
     {
-        return d_version(1, 0, 1);
+        return d_version(1, 0, 2);
     }
 
     int64_t getUniqueId() const noexcept override
