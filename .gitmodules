@@ -1,4 +1,4 @@
 [submodule "dpf"]
 	path = dpf
-	url = https://github.com/pdesaulniers/DPF
+	url = https://github.com/DISTRHO/DPF
 	branch = develop
