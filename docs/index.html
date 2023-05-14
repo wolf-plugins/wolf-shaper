@@ -116,8 +116,18 @@
         }
 
         @media (max-width: 1130px) {
+            .presentation-section {
+                flex-direction: column;
+            }
+
             .screenshot img {
-                display: none;
+                max-width: 100%;
+                margin: 3rem 0 0 0;
+                filter: drop-shadow(0 0 0.5rem #110f0fa6);
+            }
+
+            .block {
+                padding: 0.75rem;
             }
         }
     </style>
