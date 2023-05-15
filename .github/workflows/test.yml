@@ -36,10 +36,11 @@ jobs:
         AR: x86_64-w64-mingw32-ar 
         CXX: x86_64-w64-mingw32-g++
       run: make
+      
     - name: "Upload artifacts"
       uses: actions/upload-artifact@v3
       with:
-        name: ${{ env.SHA8 }}
+        name: wolf-shaper-${{ github.sha }}
         path: |
           bin/*
           !bin/*-ladspa.dll
