@@ -1,0 +1,46 @@
+name: Wolf Shaper CI
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+    - '**.md'
+    - 'docs/**'
+
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+    - '**.md'
+    - 'docs/**'
+
+jobs:
+  build:
+
+    runs-on: ubuntu-20.04
+
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+
+    - name: "Install dependencies"
+      run: sudo apt install gcc g++ clang gcc-mingw-w64-x86-64 g++-mingw-w64-x86-64 libx11-dev libgl-dev liblo-dev libjack-dev cmake
+
+    - name: "Windows (MinGW)"
+      env: 
+        WIN32: true 
+        BUILD_DSSI: false
+        BUILD_LV2: false 
+        BUILD_JACK: false
+        CC: x86_64-w64-mingw32-gcc 
+        AR: x86_64-w64-mingw32-ar 
+        CXX: x86_64-w64-mingw32-g++
+      run: make
+    - name: "Upload artifacts"
+      uses: actions/upload-artifact@v3
+      with:
+        name: ${{ env.SHA8 }}
+        path: |
+          bin/*
+          !bin/*-ladspa.dll
+          !bin/*-dssi*
