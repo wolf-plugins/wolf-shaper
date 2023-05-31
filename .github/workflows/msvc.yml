@@ -2,7 +2,11 @@ name: msvc
 
 on:
   push:
-
+    branches: [ master ]
+    paths-ignore:
+    - '**.md'
+    - 'docs/**'
+    
 env:
   BUILD_TYPE: Release
 
@@ -21,7 +25,7 @@ jobs:
         setupOnly: true
         vcpkgTriplet: ${{env.vcpkg_triplet}}
         vcpkgGitCommitId: ${{env.vcpkg_git_commit_id}}
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         submodules: recursive
     - name: Create Build Environment
@@ -37,7 +41,7 @@ jobs:
     - name: Show built files
       working-directory: ${{runner.workspace}}/build/bin
       run: tree
-    - uses: actions/upload-artifact@v2
+    - uses: actions/upload-artifact@v3
       with:
-        name: Win64 artifacts
+        name: wolf-shaper-win64-${{ github.sha }}
         path: ${{runner.workspace}}/build/bin/
