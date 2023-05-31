@@ -2,10 +2,12 @@
 #include "Mathf.hpp"
 
 #include <cassert>
-#include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+
+#define _USE_MATH_DEFINES // required by MSVC
+#include <cmath>
 
 START_NAMESPACE_DISTRHO
 
