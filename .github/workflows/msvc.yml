@@ -9,7 +9,8 @@ on:
     
 env:
   BUILD_TYPE: Release
-
+  VCPKG_DEFAULT_TRIPLET: x64-windows-static
+  
 jobs:
   cmake_win64:
     runs-on: windows-2019
@@ -17,13 +18,11 @@ jobs:
     - name: Set environment
       run: |
         echo "release_arch=x64" >> "${Env:GITHUB_ENV}"
-        echo "vcpkg_triplet=x64-windows-static" >> "${Env:GITHUB_ENV}"
         echo "vcpkg_git_commit_id=5b1214315250939257ef5d62ecdcbca18cf4fb1c" >> "${Env:GITHUB_ENV}"
     - name: Restore from cache and install vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        setupOnly: true
-        vcpkgTriplet: ${{env.vcpkg_triplet}}
+        runVcpkgInstall: false
         vcpkgGitCommitId: ${{env.vcpkg_git_commit_id}}
     - uses: actions/checkout@v3
       with:
@@ -34,7 +33,7 @@ jobs:
     - name: Configure CMake
       working-directory: ${{runner.workspace}}/build
       run: |
-       cmake "${Env:GITHUB_WORKSPACE}" -G"Visual Studio 16 2019" -A"${Env:release_arch}" -DCMAKE_BUILD_TYPE="${Env:BUILD_TYPE}" -DVCPKG_TARGET_TRIPLET="${Env:vcpkg_triplet}" -DCMAKE_TOOLCHAIN_FILE="${Env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
+       cmake "${Env:GITHUB_WORKSPACE}" -G"Visual Studio 16 2019" -A"${Env:release_arch}" -DCMAKE_BUILD_TYPE="${Env:BUILD_TYPE}" -DVCPKG_TARGET_TRIPLET="${Env:VCPKG_DEFAULT_TRIPLET}" -DCMAKE_TOOLCHAIN_FILE="${Env:VCPKG_INSTALLATION_ROOT}/scripts/buildsystems/vcpkg.cmake"
     - name: Build all
       working-directory: ${{runner.workspace}}/build
       run: cmake --build . --config "${Env:BUILD_TYPE}" -j 2
