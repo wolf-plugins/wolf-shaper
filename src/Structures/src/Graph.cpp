@@ -9,6 +9,10 @@
 #define _USE_MATH_DEFINES // required by MSVC
 #include <cmath>
 
+#ifndef M_2_PI
+    #define M_2_PI 0.636619772367581343076
+#endif
+
 START_NAMESPACE_DISTRHO
 
 namespace wolf
