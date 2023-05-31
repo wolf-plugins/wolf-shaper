@@ -7,14 +7,13 @@
  */
 
 #include "DistrhoPlugin.hpp"
-#include "extra/Mutex.hpp"
-#include "extra/ScopedPointer.hpp"
 
 #include <cmath>
 #include <cstdio>
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
+#include <mutex>
 #include <sstream>
 
 #include "Graph.hpp"
@@ -283,7 +282,7 @@ protected:
 
     void setState(const char *key, const char *value) override
     {
-        const MutexLocker cml(mutex);
+        const std::lock_guard<std::mutex> lock(mutex);
 
         if (std::strcmp(key, "graph") == 0)
         {
@@ -367,7 +366,7 @@ protected:
 
     void run(const float **inputs, float **outputs, uint32_t frames) override
     {
-        const auto lockSucceeded = mutex.tryLock();
+        const auto lockSucceeded = mutex.try_lock();
 
         if (lockSucceeded)
         {
@@ -477,7 +476,7 @@ private:
     float inputIndicatorPos;
     float inputIndicatorAcceleration;
 
-    Mutex mutex;
+    std::mutex mutex;
 
     float removeDCPrev[2];
 
