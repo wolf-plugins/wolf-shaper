@@ -476,63 +476,6 @@ void validate (int numChannels, int numSamples, T const* const* src)
 
 //--------------------------------------------------------------------------
 
-#if 0
-/*
- * this stuff all depends on is_pod which is not always available
- *
- */
-namespace detail {
-
-template <typename Ty,
-          bool isPod>
-struct zero
-{
-  static void process (int samples,
-                       Ty* dest,
-                       int destSkip)
-  {
-    if (destSkip != 0)
-    {
-      ++destSkip;
-      while (--samples >= 0)
-      {
-        *dest = Ty();
-        dest += destSkip;
-      }
-    }
-    else
-    {
-      std::fill (dest, dest + samples, Ty());
-    }
-  }
-};
-
-template <typename Ty>
-struct zero<Ty, true>
-{
-  static void process (int samples,
-                       Ty* dest,
-                       int destSkip)
-  {
-    if (destSkip != 0)
-      zero<Ty,false>::process (samples, dest, destSkip);
-    else
-      ::memset (dest, 0, samples * sizeof(dest[0]));
-  }
-};
-
-}
-
-// Fill a channel with zeros. This works even if Ty is not a basic type.
-template <typename Ty>
-void zero (int samples,
-           Ty* dest,
-           int destSkip = 0)
-{
-  detail::zero<Ty, tr1::is_pod<Ty>::value>::process (samples, dest, destSkip );
-}
-
-#else
 // Fill a channel with zeros. This works even if Ty is not a basic type.
 template <typename Ty>
 void zero (int samples,
@@ -553,8 +496,6 @@ void zero (int samples,
     std::fill (dest, dest + samples, Ty());
   }
 }
-
-#endif
 
 // Fill a set of channels with zero.
 template <typename Ty>
