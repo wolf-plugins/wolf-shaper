@@ -7,6 +7,7 @@
  */
 
 #include "DistrhoPlugin.hpp"
+#include "extra/ScopedDenormalDisable.hpp"
 
 #include <cmath>
 #include <cstdio>
@@ -366,6 +367,8 @@ protected:
 
     void run(const float **inputs, float **outputs, uint32_t frames) override
     {
+        const ScopedDenormalDisable sdd;
+
         const auto lockSucceeded = mutex.try_lock();
 
         if (lockSucceeded)
