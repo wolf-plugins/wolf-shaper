@@ -8,6 +8,9 @@ export DISTRHO_NAMESPACE = WolfShaperDISTRHO
 export DGL_NAMESPACE = WolfShaperDGL
 export FILE_BROWSER_DISABLED = true
 
+export CFLAGS = -fno-fast-math
+export CXXFLAGS = -fno-fast-math
+
 include dpf/Makefile.base.mk
 
 all: libs plugins gen
