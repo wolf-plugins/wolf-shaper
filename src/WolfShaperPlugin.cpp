@@ -330,7 +330,7 @@ protected:
 
         if (absInput > 1.0f)
         {
-            return calculateValueOutsideGraph(input);
+            return calculateValueOutsideGraph(input < 0 ? -1.0f : 1.0f);
         }
 
         const bool bipolarMode = lineEditor.getBipolarMode();
