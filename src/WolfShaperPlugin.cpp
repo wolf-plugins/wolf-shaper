@@ -14,8 +14,13 @@
 #include <cstdlib>
 #include <iomanip>
 #include <iostream>
-#include <mutex>
 #include <sstream>
+
+#ifdef __MINGW32__
+#include "extra/Mutex.hpp"
+#else
+#include <mutex>
+#endif
 
 #include "Graph.hpp"
 #include "Mathf.hpp"
@@ -283,7 +288,11 @@ protected:
 
     void setState(const char *key, const char *value) override
     {
+#ifdef __MINGW32__
+        const MutexLocker cml(mutex);
+#else
         const std::lock_guard<std::mutex> lock(mutex);
+#endif
 
         if (std::strcmp(key, "graph") == 0)
         {
@@ -369,7 +378,11 @@ protected:
     {
         const ScopedDenormalDisable sdd;
 
+#ifdef __MINGW32__
+        const auto lockSucceeded = mutex.tryLock();
+#else
         const auto lockSucceeded = mutex.try_lock();
+#endif
 
         if (lockSucceeded)
         {
@@ -479,7 +492,11 @@ private:
     float inputIndicatorPos;
     float inputIndicatorAcceleration;
 
+#ifdef __MINGW32__
+    Mutex mutex;
+#else
     std::mutex mutex;
+#endif
 
     float removeDCPrev[2];
 
